@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Endermanbugzjfc\LazuliTeleport\Data;
 
 use Endermanbugzjfc\ConfigStruct\ListType;
+use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
 
 class PluginConfig
 {
@@ -15,29 +16,22 @@ class PluginConfig
     #[ListType(CommandProfile::class)]
     public array $commands;
 
-    /**
-     * @var int[]
-     * @phpstan-var array<string, int>
-     */
-    public array $waitDurationAfterAcceptRequest = [
-        "" => 60
-    ];
-
-    /**
-     * @var int[]
-     * @phpstan-var array<string, int>
-     */
-    public array $tpahereRequesteeLimit = [
-        "" => 0
-    ];
-
     public int $requestTimeout = 1200;
 
     public bool $repeatDurationMessage = false;
 
+    /**
+     * @var PermissionDependentOption[]
+     */
+    #[ListType(PermissionDependentOption::class)]
+    public array $permissionDependentOptions = [];
+
     public function __construct()
     {
+        $pluginName = LazuliTeleport::getInstance()->getName();
         $this->commands = self::getDefaultCommandProfiles();
+        $this->permissionDependentOptions[""] =
+        $this->permissionDependentOptions["$pluginName.group.name"] = PermissionDependentOption::getDefault();
     }
 
     /**
