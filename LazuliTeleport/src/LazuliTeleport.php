@@ -198,7 +198,7 @@ class LazuliTeleport extends PluginBase
             $groups,
             fn (
                 PermissionDependentOption $group,
-                string $permission
+                int|string $permission
              ) : bool => $player->hasPermission((string)$permission),
             ARRAY_FILTER_USE_BOTH
         );
