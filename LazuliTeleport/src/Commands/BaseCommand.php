@@ -19,6 +19,7 @@ abstract class BaseCommand extends CommandoBaseCommand
 {
     protected function prepare() : void
     {
+        LazuliTeleport::getInstance()->getSingletonsHolder()->register($this);
     }
 
     /**
@@ -64,6 +65,16 @@ abstract class BaseCommand extends CommandoBaseCommand
         if (!$sender instanceof Player) {
             throw new InGameCommandException("This command must be executed in-game");
         }
-        return LazuliTeleport::getInstance()->getPlayerSession($sender);
+        $session = LazuliTeleport::getInstance()->getPlayerSession($sender);
+        $force = LazuliTeleport::getInstance()->getSingletonsHolder()->get(TpaforceCommand::class);
+        if (
+            $session->getForceMode()
+            and
+            !$sender->hasPermission((string)$force->getPermission())
+        ) {
+            $session->setForceMode(false);
+        }
+
+        return $session;
     }
 }
