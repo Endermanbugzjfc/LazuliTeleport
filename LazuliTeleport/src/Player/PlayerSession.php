@@ -71,10 +71,8 @@ class PlayerSession
      */
     public function awaitTeleportationRequestToBeResolve() : Generator
     {
-        $request = $this->teleportationRequest;
-        if ($request !== null) {
-            yield from $request->receive();
-        }
+        yield from $this->teleportationRequest?->receive()
+            ?? [];
     }
 
     /**
