@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Commands;
 
-use CortexPE\Commando\BaseCommand as CommandoBaseCommand;
+use AssertionError;
 use CortexPE\Commando\args\BaseArgument;
+use CortexPE\Commando\BaseCommand as CommandoBaseCommand;
 use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
 use Generator;
-use SOFe\AwaitGenerator\Await;
-use Throwable;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
+use SOFe\AwaitGenerator\Await;
+use Throwable;
 
 abstract class BaseCommand extends CommandoBaseCommand
 {
@@ -29,7 +30,12 @@ abstract class BaseCommand extends CommandoBaseCommand
         array $args
     ) : void {
         $reject = [
-            InGameCommandException::class => fn(Throwable $err) => $sender->sendMessage($err->getMessage())
+            TerminateCommandException::class => function (Throwable $err) use ($sender) : void {
+                if (!$err instanceof TerminateCommandException) {
+                    throw new AssertionError("unreachable");
+                }
+                $err->handle($sender);
+            }
             // TODO: DisposableException::class
         ];
         Await::g2c($this->asyncRun(
@@ -41,7 +47,7 @@ abstract class BaseCommand extends CommandoBaseCommand
 
     /**
      * @param array<string, BaseArgument> $args
-     * @throws InGameCommandException
+     * @throws TerminateCommandException
      */
     abstract protected function asyncRun(
         CommandSender $sender,
