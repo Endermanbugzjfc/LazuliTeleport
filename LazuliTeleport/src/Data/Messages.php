@@ -66,7 +66,7 @@ class Messages
         $this->forceModeEnabled = MessageEntry::createChat(
             <<<EOT
             {Yellow}Force mode enabled.
-            {White}Teleportation wait duration: {Green}{ForceWaitDuration}
+            {White}Teleportation wait duration: {Green}{ForcedTeleportationWaitDuration}
             EOT
         );
         $this->gotBlocked = MessageEntry::createChat("{Yellow}Force mode disabled.");
