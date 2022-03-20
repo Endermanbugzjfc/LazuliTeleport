@@ -5,9 +5,10 @@ api: 4.0.0
 main: Endermanbugzjfc\LazuliTeleport\LazuliTeleport
 src-namespace-prefix: Endermanbugzjfc\LazuliTeleport
 website: https://github.com/Endermanbugzjfc/LazuliTeleport
+depend:
+  - InfoAPI
 softdepend:
   - Capital
-  - InfoAPI
 
 permissions:
   lazuliteleport.tpa:
