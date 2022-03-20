@@ -12,15 +12,18 @@ class PermissionDependentOption
      * Otherwise if the user does not set a value, the default value will be used.
      */
     public ?int $waitDurationAfterAcceptRequest = null;
+
+    public ?int $tpaCooldown = null;
+
     public ?int $tpahereRequesteeLimit = null;
-    public ?int $teleportCooldown = null;
+    public ?int $tpahereCooldown = null;
 
     public static function getDefault() : self
     {
         $self = new self();
         $self->waitDurationAfterAcceptRequest = 3;
         $self->tpahereRequesteeLimit = 0;
-        $self->teleportCooldown = 10;
+        $self->tpaCooldown = $self->tpahereCooldown = 10;
 
         return $self;
     }
