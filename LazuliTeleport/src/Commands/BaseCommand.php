@@ -9,6 +9,7 @@ use CortexPE\Commando\BaseCommand as CommandoBaseCommand;
 use Generator;
 use pocketmine\command\CommandSender;
 use SOFe\AwaitGenerator\Await;
+use Throwable;
 
 abstract class BaseCommand extends CommandoBaseCommand
 {
@@ -25,20 +26,19 @@ abstract class BaseCommand extends CommandoBaseCommand
         array $args
     ) : void {
         $reject = [
-            InGameCommandException::class => fn(InGameCommandException $err) => $sender->sendMessage($err->getMessage())
+            InGameCommandException::class => fn(Throwable $err) => $sender->sendMessage($err->getMessage())
             // TODO: DisposableException::class
         ];
         Await::g2c($this->asyncRun(
             $sender,
             $aliasUsed,
             $args
-        ), [], $reject);
+        ), null, $reject);
     }
 
     /**
      * @param array<string, BaseArgument> $args
      * @throws InGameCommandException
-     * @return Generator<mixed, mixed, mixed, void>
      */
     abstract protected function asyncRun(
         CommandSender $sender,
