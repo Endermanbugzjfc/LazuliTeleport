@@ -8,26 +8,27 @@ use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\PacketHooker;
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
-use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpablockCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpacceptCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaforceCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TparejectCommand;
 use Endermanbugzjfc\LazuliTeleport\Data\CommandProfile;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
-use RuntimeException;
-use const ARRAY_FILTER_USE_BOTH;
-use function array_filter;
-use function file_exists;
-use function file_put_contents;
-use function strtolower;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use RuntimeException;
+use function array_filter;
+use function file_exists;
+use function file_put_contents;
+use function strtolower;
+use const ARRAY_FILTER_USE_BOTH;
 
 class LazuliTeleport extends PluginBase
 {
@@ -123,6 +124,10 @@ class LazuliTeleport extends PluginBase
             $this->createCommandFromProfile(
                 TpablockCommand::class,
                 "tpablock"
+            ),
+            $this->createCommandFromProfile(
+                TpaforceCommand::class,
+                "tpaforce"
             )
         ];
         $this->getServer()->getCommandMap()->registerAll($pluginName, $commands);

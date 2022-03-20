@@ -72,6 +72,13 @@ class PluginConfig
                 [
                     "tpblock"
                 ]
+            ),
+            CommandProfile::create(
+                "tpaforce",
+                "(Admin command) Automatically accept teleportation request you send",
+                [
+                    "tpforce"
+                ]
             )
         ] as $profile) {
             $name = $profile->name;
