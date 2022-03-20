@@ -27,15 +27,19 @@ class LazuliTeleport extends PluginBase
         $config = new PluginConfig();
         $context = Parse::object($config, $data);
         $context->copyToObject($config, $path);
+        $pluginName = $this->getName();
 
-        $waitTimeDescription = "LazuliTeleport wait time permission";
+        $waitTimeDescription = $pluginName . " wait time permission";
         foreach ($config->waitTimeAfterAcceptRequest as $permission => $time) {
-            $permissionInstance = new Permission($permission, $waitTimeDescription);
-            PermissionManager::getInstance()->addPermission($permissionInstance);
+            $permissionInstances[] = new Permission($permission, $waitTimeDescription);
         }
-        $requesteeLimitDescription = "LazuliTeleport tpahere requestee limit permission";
+
+        $requesteeLimitDescription = $pluginName . " tpahere requestee limit permission";
         foreach ($config->tpahereRequesteeLimit as $permission => $limit) {
-            $permissionInstance = new Permission($permission, $requesteeLimitDescription);
+            $permissionInstances[] = new Permission($permission, $requesteeLimitDescription);
+        }
+        foreach ($permissionInstances ?? [] as $permissionInstance) {
+            PermissionManager::getInstance()->addPermission($permissionInstance);
         }
     }
 
