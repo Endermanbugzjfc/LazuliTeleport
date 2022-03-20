@@ -9,17 +9,20 @@ use CortexPE\Commando\PacketHooker;
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpacceptCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TparejectCommand;
 use Endermanbugzjfc\LazuliTeleport\Data\CommandProfile;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
-use pocketmine\permission\Permission;
-use pocketmine\permission\PermissionManager;
-use pocketmine\plugin\PluginBase;
-use pocketmine\utils\Config;
 use RuntimeException;
 use function file_exists;
 use function file_put_contents;
 use function strtolower;
+use pocketmine\permission\Permission;
+use pocketmine\permission\PermissionManager;
+use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
 
 class LazuliTeleport extends PluginBase
 {
@@ -102,11 +105,36 @@ class LazuliTeleport extends PluginBase
             PacketHooker::register($this);
         }
 
-        $commands[] = $this->createCommandFromProfile(
-            TpaCommand::class,
-            "tpa",
-            "Request teleportation to another player"
-        );
+        $commands = [
+            $this->createCommandFromProfile(
+                TpaCommand::class,
+                "tpa",
+                "Request teleportation to another player"
+            ),
+            $this->createCommandFromProfile(
+                TpahereCommand::class,
+                "tpahere",
+                "Request teleporting another player to you",
+                [
+                    "tphere"
+                ]
+            ),
+            $this->createCommandFromProfile(
+                TpacceptCommand::class,
+                "tpaccept",
+                "Accept a teleportation request"
+            ),
+            $this->createCommandFromProfile(
+                TparejectCommand::class,
+                "tpareject",
+                "Reject a teleportation request",
+                [
+                    "tpreject",
+                    "tpadeny",
+                    "tpdeny"
+                ]
+            ),
+        ];
         $this->getServer()->getCommandMap()->registerAll($pluginName, $commands);
     }
 
