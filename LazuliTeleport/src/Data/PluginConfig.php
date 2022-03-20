@@ -22,7 +22,7 @@ class PluginConfig
 
     /**
      * @var PermissionDependentOption[]
-     * @phpstan-var array<string|int, PermissionDependentOption> This is supposed to have only string keys. However, it is user-defined, so the actual value might be int.
+     * @phpstan-var array<int|string, PermissionDependentOption> This is supposed to have only string keys. However, it is user-defined, so the actual value might be int.
      */
     #[ListType(PermissionDependentOption::class)]
     public array $permissionDependentOptions = [];
