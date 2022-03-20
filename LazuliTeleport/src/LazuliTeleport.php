@@ -103,6 +103,40 @@ class LazuliTeleport extends PluginBase
         $this->getServer()->getCommandMap()->registerAll($pluginName, $commands);
     }
 
+    /**
+     * Default values will be used if the user-defined profile does not have it.
+     * @template T of BaseCommand
+     * @param string $class
+     * @phpstan-param class-string<T> $class
+     * @param string $name Default command / subcommand name. Also the key of a command profile in plugin config and the second node in command's permission.
+     * @param string $description Default description.
+     * @param string[] $aliases Default aliases.
+     * @return T
+     */
+    protected function createCommandFromProfile(
+        string $class,
+        string $name,
+        string $description,
+        array $aliases = []
+    ) : BaseCommand {
+        $profile = $this->getConfigObject()->commands[$name]
+            ?? new CommandProfile();
+        $profile->name ??= $name;
+        $profile->description ??= $description;
+        $profile->aliases ??= $aliases;
+
+        $command = new $class(
+            $this,
+            $profile->name,
+            $profile->description,
+            $profile->aliases
+        );
+        $lowerPluginName = strtolower($this->getName());
+        $command->setPermission("$lowerPluginName.$name");
+
+        return $command;
+    }
+
     public static function getInstance() : self
     {
         return self::$instance;
