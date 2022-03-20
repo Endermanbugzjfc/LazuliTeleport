@@ -12,17 +12,17 @@ softdepend:
 
 permissions:
   lazuliteleport.tpa:
-    description: "Control visibility of /tpa"
+    description: "Allow player to use /tpa"
     default: true
   lazuliteleport.tpaccept:
-    description: "Control visibility of /tpaccept"
+    description: "Allow player to use /tpaccept"
     default: true
   lazuliteleport.tpareject:
-    description: "Control visibility of /tpareject"
+    description: "Allow player to use /tpareject"
     default: true
   lazuliteleport.tpahere:
-    description: "Control visibility of /tpahere"
+    description: "Allow player to use /tpahere"
     default: true
   lazuliteleport.tpablock:
-    description: "Control visibility of /tpablock"
+    description: "Allow player to use /tpablock"
     default: true
