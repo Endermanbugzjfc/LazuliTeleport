@@ -3,7 +3,8 @@
   "type": "project",
   "license": "MIT",
   "require": {
-    "pocketmine/pocketmine-mp": "^4.0"
+    "pocketmine/pocketmine-mp": "^4.0",
+    "endermanbugzjfc/configstruct": "^2.0.0-BETA2"
   },
   "autoload": {
     "psr-4": {
