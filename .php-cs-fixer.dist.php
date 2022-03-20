@@ -41,7 +41,7 @@ return (function() {
                 "allow_single_line_closure" => false,
                 "position_after_anonymous_constructs" => "same",
                 "position_after_control_structures" => "same",
-                "position_after_functions_and_oop_constructs" => "same",
+                "position_after_functions_and_oop_constructs" => "next",
             ],
             "cast_spaces" => [
                 "space" => "single"
