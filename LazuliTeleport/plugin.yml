@@ -23,3 +23,6 @@ permissions:
   lazuliteleport.tpahere:
     description: "Control visibility of /tpahere"
     default: true
+  lazuliteleport.tpablock:
+    description: "Control visibility of /tpablock"
+    default: true

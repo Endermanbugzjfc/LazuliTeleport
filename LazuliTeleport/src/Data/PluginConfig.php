@@ -6,6 +6,7 @@ namespace Endermanbugzjfc\LazuliTeleport\Data;
 
 use Endermanbugzjfc\ConfigStruct\ListType;
 use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
+use function uasort;
 
 class PluginConfig
 {
@@ -64,6 +65,13 @@ class PluginConfig
                     "tpadeny",
                     "tpdeny"
                 ]
+            ),
+            CommandProfile::create(
+                "tpablock",
+                "Block another player from sending you teleportation request",
+                [
+                    "tpblock"
+                ]
             )
         ] as $profile) {
             $name = $profile->name;
@@ -78,7 +86,8 @@ class PluginConfig
      * @var PermissionDependentOption[]
      * @phpstan-var array<int|string, PermissionDependentOption>
      */
-    public function getOrderedPermissionDependentOptions() : array {
+    public function getOrderedPermissionDependentOptions() : array
+    {
         $clone = $this->permissionDependentOptions;
         uasort(
             $clone,
