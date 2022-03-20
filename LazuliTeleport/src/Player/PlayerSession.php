@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Player;
 
+use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use Generator;
-use pocketmine\player\Player;
 use Ramsey\Uuid\UuidInterface;
 use SOFe\AwaitGenerator\Channel;
+use pocketmine\player\Player;
 
 class PlayerSession
 {
@@ -61,6 +62,11 @@ class PlayerSession
      */
     public function awaitTpahereCoolDown() : Generator
     {
+    }
+
+    protected function close() : void {
+        $requestChannel = $this->getUnresolvedRequest();
+        Utils::closeChannel($requestChannel);
     }
 
     public function getPlayer() : Player
