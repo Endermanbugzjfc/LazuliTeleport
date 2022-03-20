@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport;
 
+use CortexPE\Commando\PacketHooker;
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
@@ -91,6 +92,10 @@ class LazuliTeleport extends PluginBase
         }
         foreach ($permissionInstances ?? [] as $permissionInstance) {
             PermissionManager::getInstance()->addPermission($permissionInstance);
+        }
+
+        if (!PacketHooker::isRegistered()) {
+            PacketHooker::register($this);
         }
     }
 
