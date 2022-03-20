@@ -24,6 +24,7 @@ class Messages
 
     public MessageEntry $teleportationCancelledRequstor;
     public MessageEntry $teleportationCancelledRequstee;
+    public MessageEntry $requestorHasUnresolvedRequest;
     public MessageEntry $requesteeHasUnresolvedRequest;
 
     public MessageEntry $requestSelf;
@@ -56,6 +57,7 @@ class Messages
 
         $this->teleportationCancelledRequstor = MessageEntry::createChat("{Yellow}Teleportation cancelled because you moved.");
         $this->teleportationCancelledRequstee = MessageEntry::createChat("{Aqua}{Requestor} {Yellow}cancelled the teleportation. {Italic}{DarkGray}(By accident?)");
+        $this->requestorHasUnresolvedRequest = MessageEntry::createChat("{Red}Sorry, you must wait until the previous requestee responses you!");
         $this->requesteeHasUnresolvedRequest = MessageEntry::createChat("{Red}This player has another teleportation request at the moment. Try again later!");
 
         $this->requestSelf = MessageEntry::createChat("{Red}Cannot send request to yourself!");
