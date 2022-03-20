@@ -19,6 +19,7 @@ use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
+use Endermanbugzjfc\LazuliTeleport\Player\PlayerSessionInfo;
 use Endermanbugzjfc\LazuliTeleport\Utils\SingletonsHolder;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
@@ -136,6 +137,8 @@ class LazuliTeleport extends PluginBase
             )
         ];
         $this->getServer()->getCommandMap()->registerAll($pluginName, $commands);
+
+        PlayerSessionInfo::init();
     }
 
     public function getSingletonsHolder() : SingletonsHolder
