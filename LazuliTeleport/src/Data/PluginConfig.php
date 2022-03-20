@@ -6,15 +6,22 @@ namespace Endermanbugzjfc\LazuliTeleport\Data;
 
 use Endermanbugzjfc\ConfigStruct\ListType;
 
-class PluginConfig {
+class PluginConfig
+{
 
-	/**
-	 * @var CommandProfile[]
-	 */
+    /**
+     * @var CommandProfile[]
+     */
     #[ListType(CommandProfile::class)]
     public array $commands;
 
-    public int $waitTimeAfterAcceptRequest = 60;
+    /**
+     * @var int[]
+     * @phpstan-var array<string, int>
+     */
+    public array $waitTimeAfterAcceptRequest = [
+        "" => 60
+    ];
 
     public int $requestTimeout = 1200;
 }
