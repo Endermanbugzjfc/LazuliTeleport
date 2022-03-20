@@ -82,6 +82,32 @@ class PlayerSession
     {
     }
 
+    protected bool $forceMode = false;
+
+    public function setForceMode(
+        bool $forceMode
+    ) : void {
+        $this->forceMode = $forceMode;
+    }
+
+    public function getForceMode() : bool
+    {
+        return $this->forceMode;
+    }
+
+    protected int $forceModeWaitDuration = 0;
+
+    public function getForceModeWaitDuration() : int
+    {
+        return $this->forceModeWaitDuration;
+    }
+
+    public function setForceModeWaitDuration(
+        int $forceModeWaitDuration
+    ) : void {
+        $this->forceModeWaitDuration = $forceModeWaitDuration;
+    }
+
     protected function close() : void
     {
         $this->resolveTeleportationRequest(true);
