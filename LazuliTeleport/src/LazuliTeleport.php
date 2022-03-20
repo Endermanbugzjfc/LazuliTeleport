@@ -19,6 +19,7 @@ use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
+use Endermanbugzjfc\LazuliTeleport\Utils\SingletonsHolder;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
@@ -71,8 +72,11 @@ class LazuliTeleport extends PluginBase
         $this->messages = $messages;
     }
 
+    protected SingletonsHolder $singletonsHolder;
+
     protected function onEnable() : void
     {
+        $this->singletonsHolder = new SingletonsHolder();
         $this->configObject = new PluginConfig();
         $path = $this->getDataFolder() . "config.yml";
         if (!file_exists($path)) {
@@ -132,6 +136,11 @@ class LazuliTeleport extends PluginBase
             )
         ];
         $this->getServer()->getCommandMap()->registerAll($pluginName, $commands);
+    }
+
+    public function getSingletonsHolder() : SingletonsHolder
+    {
+        return $this->singletonsHolder;
     }
 
     /**
