@@ -16,7 +16,7 @@ class PluginConfig
     #[ListType(CommandProfile::class)]
     public array $commands;
 
-    public int $requestTimeout = 1200;
+    public int $requestTimeout = 60;
 
     public bool $repeatDurationMessage = false;
 

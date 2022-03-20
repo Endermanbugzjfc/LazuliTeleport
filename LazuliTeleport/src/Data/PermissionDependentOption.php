@@ -18,9 +18,9 @@ class PermissionDependentOption
     public static function getDefault() : self
     {
         $self = new self();
-        $self->waitDurationAfterAcceptRequest = 60;
-        $self->tpahereRequesteeLimit = 1200;
-        $self->teleportCooldown = 200;
+        $self->waitDurationAfterAcceptRequest = 3;
+        $self->tpahereRequesteeLimit = 60;
+        $self->teleportCooldown = 10;
 
         return $self;
     }
