@@ -10,19 +10,16 @@ depend:
 softdepend:
   - Capital
 
+# I want the commands to be hidden by default.
+# So I removed all defaults.
 permissions:
   lazuliteleport.tpa:
     description: "Allow player to use /tpa"
-    default: true
   lazuliteleport.tpaccept:
     description: "Allow player to use /tpaccept"
-    default: true
   lazuliteleport.tpareject:
     description: "Allow player to use /tpareject"
-    default: true
   lazuliteleport.tpahere:
     description: "Allow player to use /tpahere"
-    default: true
   lazuliteleport.tpablock:
     description: "Allow player to use /tpablock"
-    default: true
