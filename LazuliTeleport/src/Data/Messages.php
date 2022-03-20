@@ -28,6 +28,7 @@ class Messages
     public MessageEntry $requesteeHasUnresolvedRequest;
 
     public MessageEntry $requestSelf;
+    public MessageEntry $internalServerError;
 
     public MessageEntry $blockPlayer;
     public MessageEntry $unblockPlayer;
@@ -61,6 +62,8 @@ class Messages
         $this->requesteeHasUnresolvedRequest = MessageEntry::createChat("{Red}This player has another teleportation request at the moment. Try again later!");
 
         $this->requestSelf = MessageEntry::createChat("{Red}Cannot send request to yourself!");
+        $this->internalServerError = MessageEntry::createChat("{Red}Sorry, an internal server error had occurred! Please report this problem to an admin.");
+
         $this->blockPlayer = MessageEntry::createChat("{Aqua}{Target} {Yellow}will not be able to send any tpa or tpahere requests from now on. {Aqua}You can unblock him by running the command again.");
         $this->unblockPlayer = MessageEntry::createChat("{Yellow}Unblocked {Aqua}{Target}.");
         $this->gotBlocked = MessageEntry::createChat("{Red}You have been blocked by this player!");
