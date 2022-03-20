@@ -24,6 +24,7 @@ class Messages
 
     public MessageEntry $teleportationCancelledRequstor;
     public MessageEntry $teleportationCancelledRequstee;
+    public MessageEntry $requesteeHasUnresolvedRequest;
 
     public MessageEntry $requestSelf;
 
@@ -52,6 +53,7 @@ class Messages
 
         $this->teleportationCancelledRequstor = MessageEntry::createChat("{Yellow}Teleportation cancelled because you moved.");
         $this->teleportationCancelledRequstee = MessageEntry::createChat("{Aqua}{Requestor} {Yellow}cancelled the teleportation. {Italic}{DarkGray}(By accident?)");
+        $this->requesteeHasUnresolvedRequest = MessageEntry::createChat("{Red}This player has another teleportation request at the moment. Try again later!");
 
         $this->requestSelf = MessageEntry::createChat("{Red}Cannot send request to yourself!");
         $this->blockPlayer = MessageEntry::createChat("{Aqua}{Target} {Yellow}will not be able to send any tpa or tpahere requests from now on. {Aqua}You can unblock him by running the command again.");
