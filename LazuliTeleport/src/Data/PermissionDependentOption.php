@@ -13,12 +13,14 @@ class PermissionDependentOption
      */
     public ?int $waitDurationAfterAcceptRequest = null;
     public ?int $tpahereRequesteeLimit = null;
+    public ?int $teleportCooldown = null;
 
     public static function getDefault() : self
     {
         $self = new self();
         $self->waitDurationAfterAcceptRequest = 60;
         $self->tpahereRequesteeLimit = 1200;
+        $self->teleportCooldown = 200;
 
         return $self;
     }
