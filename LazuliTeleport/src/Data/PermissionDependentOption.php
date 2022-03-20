@@ -6,6 +6,11 @@ namespace Endermanbugzjfc\LazuliTeleport\Data;
 
 class PermissionDependentOption
 {
+    /**
+     * @var int Bigger number = higher priorty. Overrides the option value with a lower priority.
+     */
+    public int $priority = 0;
+
     /*
      * To anyone who is using ConfigStruct:
      * Default value of a nullable property should always be null.
