@@ -3,4 +3,5 @@ author: Endermanbugzjfc
 version: 1.0.0
 api: 4.0.0
 main: Endermanbugzjfc\LazuliTeleport\LazuliTeleport
+src-namespace-prefix: Endermanbugzjfc\LazuliTeleport
 website: https://github.com/Endermanbugzjfc/LazuliTeleport
