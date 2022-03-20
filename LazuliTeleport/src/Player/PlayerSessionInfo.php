@@ -16,9 +16,11 @@ final class PlayerSessionInfo extends Info
     public function __construct(
         protected NumberInfo $tpaRequesteeLimit,
         protected DurationInfo $tpaCoolDown,
+        protected DurationInfo $tpaDefaultCoolDown,
 
         protected NumberInfo $tpahereRequesteeLimit,
         protected DurationInfo $tpahereCoolDown,
+        protected DurationInfo $tpahereDefaultCoolDown,
 
         protected DurationInfo $teleportationWaitDuration,
         protected DurationInfo $forcedTeleportationWaitDuration,
@@ -49,9 +51,27 @@ final class PlayerSessionInfo extends Info
         );
         InfoAPI::provideInfo(
             self::class,
+            DurationInfo::class,
+            "$pluginName.Player.TpaDefaultCoolDown",
+            fn(self $info) : DurationInfo => $info->tpaDefaultCoolDown
+        );
+        InfoAPI::provideInfo(
+            self::class,
             NumberInfo::class,
             "$pluginName.Player.TpahereRequesteeLimit",
             fn(self $info) : NumberInfo => $info->tpahereRequesteeLimit
+        );
+        InfoAPI::provideInfo(
+            self::class,
+            DurationInfo::class,
+            "$pluginName.Player.TpahereCoolDown",
+            fn(self $info) : DurationInfo => $info->tpahereCoolDown
+        );
+        InfoAPI::provideInfo(
+            self::class,
+            DurationInfo::class,
+            "$pluginName.Player.TpahereDefaultCoolDown",
+            fn(self $info) : DurationInfo => $info->tpahereDefaultCoolDown
         );
         InfoAPI::provideInfo(
             self::class,
