@@ -14,15 +14,19 @@ use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TparejectCommand;
 use Endermanbugzjfc\LazuliTeleport\Data\CommandProfile;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
+use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
+use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use RuntimeException;
+use function array_filter;
 use function file_exists;
 use function file_put_contents;
 use function strtolower;
+use const ARRAY_FILTER_USE_BOTH;
 
 class LazuliTeleport extends PluginBase
 {
@@ -159,6 +163,42 @@ class LazuliTeleport extends PluginBase
         $command->setPermission("$lowerPluginName.$name");
 
         return $command;
+    }
+
+    public function getPlayerOptions(
+        Player $player
+    ) : PermissionDependentOption {
+        $fallback = PermissionDependentOption::getDefault();
+        $groups = $this->getConfigObject()->getOrderedPermissionDependentOptions();
+        $groups = array_filter(
+            $groups,
+            fn (
+                PermissionDependentOption $group,
+                string $permission
+             ) : bool => $player->hasPermission((string)$permission),
+            ARRAY_FILTER_USE_BOTH
+        );
+        $return = $groups[""] ?? $fallback;
+        foreach ($groups as $permission => $group) {
+            $v = $group->waitDurationAfterAcceptRequest;
+            if ($v !== null) {
+                $return->waitDurationAfterAcceptRequest = $v;
+            }
+            $v = $group->tpaCooldown;
+            if ($v !== null) {
+                $return->waitDurationAfterAcceptRequest = $v;
+            }
+            $v = $group->tpahereRequesteeLimit;
+            if ($v !== null) {
+                $return->waitDurationAfterAcceptRequest = $v;
+            }
+            $v = $group->tpahereCooldown;
+            if ($v !== null) {
+                $return->waitDurationAfterAcceptRequest = $v;
+            }
+        }
+
+        return $return;
     }
 
     public static function getInstance() : self
