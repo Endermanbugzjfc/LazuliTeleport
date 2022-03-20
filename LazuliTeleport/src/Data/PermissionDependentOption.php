@@ -19,7 +19,7 @@ class PermissionDependentOption
     {
         $self = new self();
         $self->waitDurationAfterAcceptRequest = 3;
-        $self->tpahereRequesteeLimit = 60;
+        $self->tpahereRequesteeLimit = 0;
         $self->teleportCooldown = 10;
 
         return $self;
