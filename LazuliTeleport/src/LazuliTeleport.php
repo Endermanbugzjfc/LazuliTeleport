@@ -6,6 +6,7 @@ namespace Endermanbugzjfc\LazuliTeleport;
 
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
+use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
@@ -43,6 +44,18 @@ class LazuliTeleport extends PluginBase
         throw new RuntimeException("Use getConfigObject() instead");
     }
 
+    protected Messages $messages;
+
+    public function getMessages() : Messages
+    {
+        return $this->messages;
+    }
+
+    public function setMessages(Messages $messages) : void
+    {
+        $this->messages = $messages;
+    }
+
     protected function onEnable() : void
     {
         $this->configObject = new PluginConfig();
@@ -54,6 +67,16 @@ class LazuliTeleport extends PluginBase
             $data = (new Config($path))->getAll();
             $context = Parse::object($this->configObject, $data);
             $context->copyToObject($this->configObject, $path);
+        }
+        $this->messages = new Messages();
+        $messagesPath = $this->getDataFolder() . "messages.yml";
+        if (!file_exists($messagesPath)) {
+            $data = Emit::object($this->messages);
+            file_put_contents($path, $data);
+        } else {
+            $messagesData = (new Config($messagesPath))->getAll();
+            $context = Parse::object($this->messages, $messagesData);
+            $context->copyToObject($this->messages, $messagesPath);
         }
 
         $pluginName = $this->getName();
