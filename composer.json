@@ -4,7 +4,8 @@
   "license": "MIT",
   "require": {
     "pocketmine/pocketmine-mp": "^4.0",
-    "endermanbugzjfc/configstruct": "^2.0.0-BETA2"
+    "endermanbugzjfc/configstruct": "^2.0.0-BETA2",
+    "cortexpe/commando": "dev-PM4"
   },
   "autoload": {
     "psr-4": {
