@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport;
 
-use AssertionError;
 use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\PacketHooker;
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
-use Endermanbugzjfc\LazuliTeleport\Commands\InGameCommandException;
-use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpablockCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpacceptCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaforceCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TparejectCommand;
@@ -21,18 +19,17 @@ use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
-use RuntimeException;
-use const ARRAY_FILTER_USE_BOTH;
-use function array_filter;
-use function file_exists;
-use function file_put_contents;
-use function strtolower;
-use pocketmine\command\CommandSender;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use RuntimeException;
+use function array_filter;
+use function file_exists;
+use function file_put_contents;
+use function strtolower;
+use const ARRAY_FILTER_USE_BOTH;
 
 class LazuliTeleport extends PluginBase
 {
@@ -212,22 +209,6 @@ class LazuliTeleport extends PluginBase
     public function getPlayerSession(
         Player $player
     ) : PlayerSession {
-        try {
-            return $this->playerSession($player);
-        } catch (InGameCommandException) {
-            throw new AssertionError("unreachable");
-        }
-    }
-
-    /**
-     * @throws InGameCommandException
-     */
-    public static function playerSession(
-        CommandSender $sender
-    ) : PlayerSession {
-        if (!$sender instanceof Player) {
-            throw new InGameCommandException("This command must be executed in-game");
-        }
     }
 
     public static function getInstance() : self

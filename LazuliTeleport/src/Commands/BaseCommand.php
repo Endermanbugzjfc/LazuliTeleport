@@ -45,4 +45,16 @@ abstract class BaseCommand extends CommandoBaseCommand
         string $aliasUsed,
         array $args
     ) : Generator;
+
+    /**
+     * @throws InGameCommandException
+     */
+    final protected function playerSession(
+        CommandSender $sender
+    ) : PlayerSession {
+        if (!$sender instanceof Player) {
+            throw new InGameCommandException("This command must be executed in-game");
+        }
+        LazuliTeleport::getInstance()->getPlayerSession($sender);
+    }
 }
