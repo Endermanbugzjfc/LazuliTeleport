@@ -34,4 +34,47 @@ class PluginConfig
     public int $requestTimeout = 1200;
 
     public bool $repeatDurationMessage = false;
+
+    public function __construct()
+    {
+        $this->commands = self::getDefaultCommandProfiles();
+    }
+
+    /**
+     * @return CommandProfile[]
+     */
+    public static function getDefaultCommandProfiles() : array
+    {
+        foreach ([
+            CommandProfile::create(
+                "tpa",
+                "Request teleportation to another player"
+            ),
+            CommandProfile::create(
+                "tpahere",
+                "Request teleporting another player to you",
+                [
+                    "tphere"
+                ]
+            ),
+            CommandProfile::create(
+                "tpaccept",
+                "Accept a teleportation request"
+            ),
+            CommandProfile::create(
+                "tpareject",
+                "Reject a teleportation request",
+                [
+                    "tpreject",
+                    "tpadeny",
+                    "tpdeny"
+                ]
+            )
+        ] as $profile) {
+            $name = $profile->name;
+            $return[$name] = $profile;
+        }
+
+        return $return;
+    }
 }

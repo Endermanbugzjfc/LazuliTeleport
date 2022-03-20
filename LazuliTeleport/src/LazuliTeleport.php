@@ -8,21 +8,21 @@ use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\PacketHooker;
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
-use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpacceptCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TparejectCommand;
 use Endermanbugzjfc\LazuliTeleport\Data\CommandProfile;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
-use RuntimeException;
-use function file_exists;
-use function file_put_contents;
-use function strtolower;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use RuntimeException;
+use function file_exists;
+use function file_put_contents;
+use function strtolower;
 
 class LazuliTeleport extends PluginBase
 {
@@ -108,32 +108,20 @@ class LazuliTeleport extends PluginBase
         $commands = [
             $this->createCommandFromProfile(
                 TpaCommand::class,
-                "tpa",
-                "Request teleportation to another player"
+                "tpa"
             ),
             $this->createCommandFromProfile(
                 TpahereCommand::class,
-                "tpahere",
-                "Request teleporting another player to you",
-                [
-                    "tphere"
-                ]
+                "tpahere"
             ),
             $this->createCommandFromProfile(
                 TpacceptCommand::class,
-                "tpaccept",
-                "Accept a teleportation request"
+                "tpaccept"
             ),
             $this->createCommandFromProfile(
                 TparejectCommand::class,
-                "tpareject",
-                "Reject a teleportation request",
-                [
-                    "tpreject",
-                    "tpadeny",
-                    "tpdeny"
-                ]
-            ),
+                "tpareject"
+            )
         ];
         $this->getServer()->getCommandMap()->registerAll($pluginName, $commands);
     }
@@ -142,22 +130,24 @@ class LazuliTeleport extends PluginBase
      * Default values will be used if the user-defined profile does not have it.
      * @template T of BaseCommand
      * @phpstan-param class-string<T> $class
-     * @param string $name Default command / subcommand name. Also the key of a command profile in plugin config and the second node in command's permission.
-     * @param string $description Default description.
-     * @param string[] $aliases Default aliases.
+     * @param CommandProfile $default Default command profile. Also used for the command's permission.
      * @return T
      */
     protected function createCommandFromProfile(
         string $class,
-        string $name,
-        string $description,
-        array $aliases = []
+        CommandProfile $default
     ) : BaseCommand {
+        $name = $default->name;
         $profile = $this->getConfigObject()->commands[$name]
-            ?? new CommandProfile();
-        $profile->name ??= $name;
-        $profile->description ??= $description;
-        $profile->aliases ??= $aliases;
+            ?? null;
+        if ($profile !== null) {
+            $profile = new CommandProfile();
+            $default->name ??= $profile->name;
+            $default->description ??= $profile->description;
+            $default->aliases ??= $profile->aliases;
+        } else {
+            $profile = $default;
+        }
 
         $command = new $class(
             $this,
