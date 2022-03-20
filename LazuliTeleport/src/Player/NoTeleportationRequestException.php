@@ -6,6 +6,6 @@ namespace Endermanbugzjfc\LazuliTeleport\Player;
 
 use Exception;
 
-final class NoRequestException extends Exception
+final class NoTeleportationRequestException extends Exception
 {
 }
