@@ -4,24 +4,20 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Commands;
 
-use CortexPE\Commando\BaseCommand;
+use Generator;
 use pocketmine\command\CommandSender;
 
 class TpablockCommand extends BaseCommand
 {
-    protected function prepare() : void
-    {
-    }
-
     /**
      * @param array|array<string,mixed|array<mixed>> $args
      * @phpstan-param array<string,mixed|array<mixed>> $args
      */
-    public function onRun(
+    protected function asyncRun(
         CommandSender $sender,
         string $aliasUsed,
         array $args
-    ) : void {
+    ) : Generator {
         // TODO: Implement onRun() method.
     }
 }
