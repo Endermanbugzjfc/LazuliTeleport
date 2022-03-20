@@ -23,5 +23,13 @@ class PluginConfig
         "" => 60
     ];
 
+    /**
+     * @var int[]
+     * @phpstan-var array<string, int>
+     */
+    public array $tpahereRequesteeLimit = [
+        "" => 0
+    ];
+
     public int $requestTimeout = 1200;
 }
