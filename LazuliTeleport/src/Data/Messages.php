@@ -10,11 +10,13 @@ class Messages
     public MessageEntry $tpaRequestSend;
     public MessageEntry $tpaRequestAccepted;
     public MessageEntry $tpaRequestRejected;
+    public MessageEntry $tpaExceedRequesteeLimit;
 
     public MessageEntry $tpahereRequestRecieve;
     public MessageEntry $tpahereRequestSend;
     public MessageEntry $tpahereRequestAccepted;
     public MessageEntry $tpahereRequestRejected;
+    public MessageEntry $tpahereExceedRequesteeLimit;
 
     public MessageEntry $waitingToTeleport;
     public MessageEntry $teleportationCancelledRequstor;
