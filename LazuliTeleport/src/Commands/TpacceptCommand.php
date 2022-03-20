@@ -17,8 +17,11 @@ class TpacceptCommand extends BaseCommand
      * @param array|array<string,mixed|array<mixed>> $args
      * @phpstan-param array<string,mixed|array<mixed>> $args
      */
-    public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void
-    {
+    public function onRun(
+        CommandSender $sender,
+        string $aliasUsed,
+        array $args
+    ) : void {
         // TODO: Implement onRun() method.
     }
 }
