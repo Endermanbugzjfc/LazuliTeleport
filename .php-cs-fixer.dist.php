@@ -5,12 +5,10 @@ use PhpCsFixer\Finder;
 
 return (function() {
     $finder = Finder::create();
-    foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__ . "/src")) as $file) {
+    $dir = __DIR__ . "/";
+    $project = basename($dir);
+    foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir . $project . "/src")) as $file) {
         $file = realpath($file);
-        if($file === __DIR__ . "/src/SOFe/Capital/Database/RawQueries.php") {
-            continue;
-        }
-
         if(substr($file, -4) === ".php") {
             $finder->append([$file]);
         }
