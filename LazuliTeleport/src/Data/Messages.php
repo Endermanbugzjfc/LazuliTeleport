@@ -32,6 +32,9 @@ class Messages
     public MessageEntry $unblockPlayer;
     public MessageEntry $gotBlocked;
 
+    public MessageEntry $forceModeEnabled;
+    public MessageEntry $forceModeDisabled;
+
     public function __construct()
     {
         $this->tpaRequestRecieve = MessageEntry::createChat("{Aqua}{Requestor} {Gold}wants to teleport to you. {Italic}{DarkGray}(/tpaccept or /tpareject)");
@@ -59,5 +62,13 @@ class Messages
         $this->blockPlayer = MessageEntry::createChat("{Aqua}{Target} {Yellow}will not be able to send any tpa or tpahere requests from now on. {Aqua}You can unblock him by running the command again.");
         $this->unblockPlayer = MessageEntry::createChat("{Yellow}Unblocked {Aqua}{Target}.");
         $this->gotBlocked = MessageEntry::createChat("{Red}You have been blocked by this player!");
+
+        $this->forceModeEnabled = MessageEntry::createChat(
+            <<<EOT
+            {Yellow}Force mode enabled.
+            {White}Teleportation wait duration: {Green}{ForceWaitDuration}
+            EOT
+        );
+        $this->gotBlocked = MessageEntry::createChat("{Yellow}Force mode disabled.");
     }
 }
