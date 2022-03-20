@@ -76,7 +76,7 @@ return (function() {
                 "sort_algorithm" => "alpha"
             ],
             "phpdoc_line_span" => [
-                "property" => "single",
+                "property" => null,
                 "method" => null,
                 "const" => null
             ],
