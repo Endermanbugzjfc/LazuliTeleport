@@ -8,3 +8,13 @@ website: https://github.com/Endermanbugzjfc/LazuliTeleport
 softdepend:
   - Capital
   - InfoAPI
+
+permissions:
+  lazuliteleport.tpa:
+    description: "Control visibility of /tpa"
+    default: true
+  lazuliteleport.tpaccept:
+    description: "Control visibility of /tpaccept"
+    default: true
+  lazuliteleport.tpahere:
+    description: "Control visibility of /tpahere"
