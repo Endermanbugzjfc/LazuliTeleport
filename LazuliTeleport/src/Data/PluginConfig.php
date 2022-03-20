@@ -32,4 +32,6 @@ class PluginConfig
     ];
 
     public int $requestTimeout = 1200;
+
+    public bool $repeatDurationMessage = false;
 }
