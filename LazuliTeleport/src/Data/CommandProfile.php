@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Endermanbugzjfc\LazuliTeleport\Data;
 
 class CommandProfile
@@ -8,8 +10,6 @@ class CommandProfile
 
     public string $description;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     public array $aliases;
 }
