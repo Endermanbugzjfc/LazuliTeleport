@@ -65,5 +65,10 @@ final class PlayerSessionInfo extends Info
             "$pluginName.Player.ForcedTeleportationWaitDuration",
             fn(self $info) : DurationInfo => $info->forcedTeleportationWaitDuration
         );
+        InfoAPI::provideFallback(
+        	self::class,
+        	PlayerInfo::class,
+        	fn(self $info) : PlayerInfo => $info->playerInfo
+        );
     }
 }
