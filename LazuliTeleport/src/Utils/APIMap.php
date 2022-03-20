@@ -2,7 +2,7 @@
 
 namespace Endermanbugzjfc\LazuliTeleport\Utils;
 
-class SingletonsHolder {
+class APIMap {
 
 	/**
 	 * @var array<class-string, object>
