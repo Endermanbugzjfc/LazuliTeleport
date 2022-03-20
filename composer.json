@@ -1,0 +1,24 @@
+{
+  "name": "endermanbugzjfc/lazuliteleport",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "pocketmine/pocketmine-mp": "^4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Endermanbugzjfc\\LazuliTeleport\\": [
+        "src"
+      ]
+    }
+
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Endermanbugzjfc\\LazuliTeleport\\": [
+        "tests/",
+        "tools/"
+      ]
+    }
+  }
+}
