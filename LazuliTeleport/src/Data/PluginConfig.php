@@ -92,8 +92,8 @@ class PluginConfig
 
     /**
      * Ascending priority.
-     * @var PermissionDependentOption[]
-     * @phpstan-var array<int|string, PermissionDependentOption>
+     * @return PermissionDependentOption[]
+     * @phpstan-return array<int|string, PermissionDependentOption>
      */
     public function getOrderedPermissionDependentOptions() : array
     {
