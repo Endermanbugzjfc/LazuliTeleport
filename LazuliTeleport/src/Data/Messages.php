@@ -12,6 +12,7 @@ class Messages
     public MessageEntry $tpaRequestAcceptedWaiting;
     public MessageEntry $tpaRequestRejected;
     public MessageEntry $tpaExceedRequesteeLimit;
+    public MessageEntry $tpaCoolDown;
 
     public MessageEntry $tpahereRequestRecieve;
     public MessageEntry $tpahereRequestSend;
@@ -19,6 +20,7 @@ class Messages
     public MessageEntry $tpahereRequestAcceptedWaiting;
     public MessageEntry $tpahereRequestRejected;
     public MessageEntry $tpahereExceedRequesteeLimit;
+    public MessageEntry $tpahereCoolDown;
 
     public MessageEntry $teleportationCancelledRequstor;
     public MessageEntry $teleportationCancelledRequstee;
@@ -34,6 +36,7 @@ class Messages
         $this->tpaRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting to {Aqua}{Requestee}...");
         $this->tpaRequestRejected = MessageEntry::createChat("{Red}{Requestee} rejected your tpa request.");
         $this->tpaExceedRequesteeLimit = MessageEntry::createChat("{Red}You cannot teleport to more than {TpaRequesteeLimit} players!");
+        $this->tpaCoolDown = $coolDown = MessageEntry::createChat("{Red}You must wait for {CoolDown} more.");
 
         $this->tpahereRequestRecieve = MessageEntry::createChat("{Aqua}{Requestor} {Gold}wants to teleport you to him.");
         $this->tpahereRequestSend = MessageEntry::createChat("{Yellow}Waiting for {Gold}{Requestee}{Yellow}'s response to your {Green}tpahere {Yellow}request...");
@@ -41,6 +44,7 @@ class Messages
         $this->tpahereRequestAcceptedWaiting = MessageEntry::createChat("{Aqua}{Requestee} {Yellow}will be teleporting to you after {Green}{WaitDuration}...");
         $this->tpahereRequestRejected = MessageEntry::createChat("{Red}{Requestee} rejected your tpahere request.");
         $this->tpahereExceedRequesteeLimit = MessageEntry::createChat("{Red}Your teleport-license only allows teleporting at most {Green}{TpahereRequesteeLimit} {Red}players at the same time!");
+        $this->tpahereCoolDown = $coolDown;
 
         $this->teleportationCancelledRequstor = MessageEntry::createChat("{Yellow}Teleportation cancelled because you moved.");
         $this->teleportationCancelledRequstee = MessageEntry::createChat("{Aqua}{Requestor} {Yellow}cancelled the teleportation. {Italic}{DarkGray}(By accident?)");
