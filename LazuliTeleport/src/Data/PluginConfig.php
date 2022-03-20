@@ -21,6 +21,8 @@ class PluginConfig
 
     public bool $repeatDurationMessage = false;
 
+    public bool $canSendRequestBeforeResolve = true;
+
     /**
      * @var PermissionDependentOption[]
      * @phpstan-var array<int|string, PermissionDependentOption> This is supposed to have only string keys. However, it is user-defined, so the actual value might be int.
