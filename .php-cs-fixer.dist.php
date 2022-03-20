@@ -51,7 +51,7 @@ return (function() {
             "global_namespace_import" => [
                 "import_constants" => true,
                 "import_functions" => true,
-                "import_classes" => null,
+                "import_classes" => true,
             ],
             "indentation_type" => true,
             "native_function_invocation" => [
