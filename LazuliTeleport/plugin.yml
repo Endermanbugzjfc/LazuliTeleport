@@ -16,5 +16,8 @@ permissions:
   lazuliteleport.tpaccept:
     description: "Control visibility of /tpaccept"
     default: true
+  lazuliteleport.tpareject:
+    description: "Control visibility of /tpareject"
+    default: true
   lazuliteleport.tpahere:
     description: "Control visibility of /tpahere"
