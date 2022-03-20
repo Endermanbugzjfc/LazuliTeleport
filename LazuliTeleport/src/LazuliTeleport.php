@@ -134,14 +134,15 @@ class LazuliTeleport extends PluginBase
      * Default values will be used if the user-defined profile does not have it.
      * @template T of BaseCommand
      * @phpstan-param class-string<T> $class
-     * @param CommandProfile $default Default command profile. Also used for the command's permission.
+     * @param string $name Command name to retrieve the profile and generate the permission.
      * @return T
      */
     protected function createCommandFromProfile(
         string $class,
-        CommandProfile $default
+        string $name
     ) : BaseCommand {
-        $name = $default->name;
+        $defaults = PluginConfig::getDefaultCommandProfiles();
+        $default = $defaults[$name];
         $profile = $this->getConfigObject()->commands[$name]
             ?? null;
         if ($profile !== null) {
