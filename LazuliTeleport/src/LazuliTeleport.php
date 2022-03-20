@@ -143,6 +143,11 @@ class LazuliTeleport extends PluginBase
         return $this->singletonsHolder;
     }
 
+    protected function onDisable() : void
+    {
+        unset($this->singletonsHolder);
+    }
+
     /**
      * Default values will be used if the user-defined profile does not have it.
      * @template T of BaseCommand
