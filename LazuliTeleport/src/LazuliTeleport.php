@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport;
 
+use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\PacketHooker;
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
+use Endermanbugzjfc\LazuliTeleport\Data\CommandProfile;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
 use pocketmine\permission\Permission;
@@ -16,6 +19,7 @@ use pocketmine\utils\Config;
 use RuntimeException;
 use function file_exists;
 use function file_put_contents;
+use function strtolower;
 
 class LazuliTeleport extends PluginBase
 {
@@ -98,15 +102,17 @@ class LazuliTeleport extends PluginBase
             PacketHooker::register($this);
         }
 
-        $commands = [
-        ];
+        $commands[] = $this->createCommandFromProfile(
+            TpaCommand::class,
+            "tpa",
+            "Request teleportation to another player"
+        );
         $this->getServer()->getCommandMap()->registerAll($pluginName, $commands);
     }
 
     /**
      * Default values will be used if the user-defined profile does not have it.
      * @template T of BaseCommand
-     * @param string $class
      * @phpstan-param class-string<T> $class
      * @param string $name Default command / subcommand name. Also the key of a command profile in plugin config and the second node in command's permission.
      * @param string $description Default description.
