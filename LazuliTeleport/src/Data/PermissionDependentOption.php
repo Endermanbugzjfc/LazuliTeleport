@@ -18,17 +18,17 @@ class PermissionDependentOption
      */
     public ?int $waitDurationAfterAcceptRequest = null;
 
-    public ?int $tpaCooldown = null;
+    public ?int $tpaCoolDown = null;
 
     public ?int $tpahereRequesteeLimit = null;
-    public ?int $tpahereCooldown = null;
+    public ?int $tpahereCoolDown = null;
 
     public static function getDefault() : self
     {
         $self = new self();
         $self->waitDurationAfterAcceptRequest = 3;
         $self->tpahereRequesteeLimit = 0;
-        $self->tpaCooldown = $self->tpahereCooldown = 10;
+        $self->tpaCoolDown = $self->tpahereCoolDown = 10;
 
         return $self;
     }

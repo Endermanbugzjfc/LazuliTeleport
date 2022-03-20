@@ -178,7 +178,7 @@ class LazuliTeleport extends PluginBase
             if ($v !== null) {
                 $return->waitDurationAfterAcceptRequest = $v;
             }
-            $v = $group->tpaCooldown;
+            $v = $group->tpaCoolDown;
             if ($v !== null) {
                 $return->waitDurationAfterAcceptRequest = $v;
             }
@@ -186,7 +186,7 @@ class LazuliTeleport extends PluginBase
             if ($v !== null) {
                 $return->waitDurationAfterAcceptRequest = $v;
             }
-            $v = $group->tpahereCooldown;
+            $v = $group->tpahereCoolDown;
             if ($v !== null) {
                 $return->waitDurationAfterAcceptRequest = $v;
             }
