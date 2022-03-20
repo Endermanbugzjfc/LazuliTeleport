@@ -29,9 +29,9 @@ class LazuliTeleport extends PluginBase
         $context->copyToObject($config, $path);
         $pluginName = $this->getName();
 
-        $waitTimeDescription = $pluginName . " wait time permission";
-        foreach ($config->waitTimeAfterAcceptRequest as $permission => $time) {
-            $permissionInstances[] = new Permission($permission, $waitTimeDescription);
+        $waitDurationDescription = $pluginName . " wait duration permission";
+        foreach ($config->waitDurationAfterAcceptRequest as $permission => $time) {
+            $permissionInstances[] = new Permission($permission, $waitDurationDescription);
         }
 
         $requesteeLimitDescription = $pluginName . " tpahere requestee limit permission";

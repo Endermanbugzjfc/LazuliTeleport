@@ -19,7 +19,7 @@ class PluginConfig
      * @var int[]
      * @phpstan-var array<string, int>
      */
-    public array $waitTimeAfterAcceptRequest = [
+    public array $waitDurationAfterAcceptRequest = [
         "" => 60
     ];
 
