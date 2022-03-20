@@ -8,9 +8,9 @@ use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\PacketHooker;
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
-use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpablockCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpacceptCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaforceCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TparejectCommand;
@@ -22,17 +22,17 @@ use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSessionInfo;
 use Endermanbugzjfc\LazuliTeleport\Player\TeleportationRequestContextInfo;
 use Endermanbugzjfc\LazuliTeleport\Utils\SingletonsHolder;
-use RuntimeException;
-use const ARRAY_FILTER_USE_BOTH;
-use function array_filter;
-use function file_exists;
-use function file_put_contents;
-use function strtolower;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use RuntimeException;
+use function array_filter;
+use function file_exists;
+use function file_put_contents;
+use function strtolower;
+use const ARRAY_FILTER_USE_BOTH;
 
 class LazuliTeleport extends PluginBase
 {
@@ -107,6 +107,8 @@ class LazuliTeleport extends PluginBase
             PermissionManager::getInstance()->addPermission($permissionInstance);
         }
 
+        $listener = new EventListener();
+        $this->getPluginManager()->registerEvents($this, $listener);
         if (!PacketHooker::isRegistered()) {
             PacketHooker::register($this);
         }
