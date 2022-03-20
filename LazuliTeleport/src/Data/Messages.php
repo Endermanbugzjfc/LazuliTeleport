@@ -20,7 +20,6 @@ class Messages
     public MessageEntry $tpahereRequestRejected;
     public MessageEntry $tpahereExceedRequesteeLimit;
 
-    public MessageEntry $waitingToTeleport;
     public MessageEntry $teleportationCancelledRequstor;
     public MessageEntry $teleportationCancelledRequstee;
 }
