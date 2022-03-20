@@ -6,9 +6,9 @@ namespace Endermanbugzjfc\LazuliTeleport\Player;
 
 use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use Generator;
+use pocketmine\player\Player;
 use Ramsey\Uuid\UuidInterface;
 use SOFe\AwaitGenerator\Channel;
-use pocketmine\player\Player;
 
 class PlayerSession
 {
@@ -51,10 +51,30 @@ class PlayerSession
     }
 
     /**
+     * @throws NoTeleportationRequestException
+     */
+    public function resolveTeleportationRequest(
+        bool $silent = false
+    ) : void {
+        $request = $this->teleportationRequest;
+        Utils::closeChannel($request)
+            ?? throw new NoTeleportationRequestException("Try to resolve a teleportation request when there is no");
+    }
+
+    /**
+     * @var Channel<null>|null
+     */
+    protected ?Channel $teleportationRequest;
+
+    /**
      * @return Generator<mixed, mixed, mixed, void>
      */
-    public function getUnresolvedRequest() : ?Channel
+    public function awaitTeleportationRequestToBeResolve() : Generator
     {
+        $request = $this->teleportationRequest;
+        if ($request !== null) {
+            yield from $request->receive();
+        }
     }
 
     /**
@@ -64,9 +84,9 @@ class PlayerSession
     {
     }
 
-    protected function close() : void {
-        $requestChannel = $this->getUnresolvedRequest();
-        Utils::closeChannel($requestChannel);
+    protected function close() : void
+    {
+        $this->resolveTeleportationRequest(true);
     }
 
     public function getPlayer() : Player
