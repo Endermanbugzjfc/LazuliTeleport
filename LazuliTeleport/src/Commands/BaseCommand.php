@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Commands;
 
-use CortexPE\Commando\args\BaseArgument;
 use CortexPE\Commando\BaseCommand as CommandoBaseCommand;
+use CortexPE\Commando\args\BaseArgument;
+use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
+use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
 use Generator;
-use pocketmine\command\CommandSender;
 use SOFe\AwaitGenerator\Await;
 use Throwable;
+use pocketmine\command\CommandSender;
+use pocketmine\player\Player;
 
 abstract class BaseCommand extends CommandoBaseCommand
 {
@@ -55,6 +58,6 @@ abstract class BaseCommand extends CommandoBaseCommand
         if (!$sender instanceof Player) {
             throw new InGameCommandException("This command must be executed in-game");
         }
-        LazuliTeleport::getInstance()->getPlayerSession($sender);
+        return LazuliTeleport::getInstance()->getPlayerSession($sender);
     }
 }
