@@ -97,6 +97,10 @@ class LazuliTeleport extends PluginBase
         if (!PacketHooker::isRegistered()) {
             PacketHooker::register($this);
         }
+
+        $commands = [
+        ];
+        $this->getServer()->getCommandMap()->registerAll($pluginName, $commands);
     }
 
     public static function getInstance() : self
