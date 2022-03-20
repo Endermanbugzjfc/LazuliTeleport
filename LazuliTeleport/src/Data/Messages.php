@@ -23,6 +23,8 @@ class Messages
     public MessageEntry $teleportationCancelledRequstor;
     public MessageEntry $teleportationCancelledRequstee;
 
+    public MessageEntry $requestSelf;
+
     public function __construct()
     {
         $this->tpaRequestRecieve = MessageEntry::createChat("{Aqua}{Requestor} {Gold}wants to teleport to you. {Italic}{DarkGray}(/tpaccept or /tpareject)");
@@ -42,5 +44,7 @@ class Messages
 
         $this->teleportationCancelledRequstor = MessageEntry::createChat("{Yellow}Teleportation cancelled because you moved.");
         $this->teleportationCancelledRequstee = MessageEntry::createChat("{Aqua}{Requestor} {Yellow}cancelled the teleportation. {Italic}{DarkGray}(By accident?)");
+
+        $this->requestSelf = MessageEntry::createChat("{Red}Cannot send request to yourself!");
     }
 }
