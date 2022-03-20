@@ -72,4 +72,18 @@ class PluginConfig
 
         return $return;
     }
+
+    /**
+     * Ascending priority.
+     * @var PermissionDependentOption[]
+     * @phpstan-var array<int|string, PermissionDependentOption>
+     */
+    public function getOrderedPermissionDependentOptions() : array {
+        $clone = $this->permissionDependentOptions;
+        uasort(
+            $clone,
+            fn(PermissionDependentOption $a, PermissionDependentOption $b) : int => $a->priority <=> $b->priority
+         );
+        return $clone;
+    }
 }
