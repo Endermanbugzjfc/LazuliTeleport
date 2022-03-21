@@ -36,7 +36,7 @@ final class Utils
      * @param T $toBeOverriden To be overriden.
      * @param T $valuesProvider
      */
-    public function override(
+    public static function override(
         object $toBeOverriden,
         object $valuesProvider
     ) : void {
