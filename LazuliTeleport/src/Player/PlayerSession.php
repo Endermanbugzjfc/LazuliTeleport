@@ -9,6 +9,7 @@ use Generator;
 use pocketmine\player\Player;
 use Ramsey\Uuid\UuidInterface;
 use SOFe\AwaitGenerator\Channel;
+use function bin2hex;
 
 class PlayerSession
 {
@@ -85,9 +86,11 @@ class PlayerSession
     protected bool $forceMode = false;
 
     public function setForceMode(
-        bool $forceMode
+        bool $forceMode,
+        bool $sendMessage = true
     ) : void {
         $this->forceMode = $forceMode;
+        $this->getPlayer()->sendMessage();
     }
 
     public function getForceMode() : bool
@@ -106,6 +109,17 @@ class PlayerSession
         int $forceModeWaitDuration
     ) : void {
         $this->forceModeWaitDuration = $forceModeWaitDuration;
+    }
+
+    public function arrayKey() : string
+    {
+        return $this->getPlayer()->getUniqueId()->getBytes();
+    }
+
+    protected function dbKey() : string
+    {
+        $arrayKey = $this->arrayKey();
+        return bin2hex($arrayKey);
     }
 
     protected function close() : void
