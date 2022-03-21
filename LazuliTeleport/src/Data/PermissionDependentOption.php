@@ -26,6 +26,27 @@ class PermissionDependentOption
     public ?string $formFile = null;
     public ?string $messagesFile = null;
 
+    public function override(
+        PermissionDependentOption $group
+    ) : void {
+        $v = $group->waitDurationAfterAcceptRequest;
+        if ($v !== null) {
+            $this->waitDurationAfterAcceptRequest = $v;
+        }
+        $v = $group->tpaCoolDown;
+        if ($v !== null) {
+            $this->waitDurationAfterAcceptRequest = $v;
+        }
+        $v = $group->tpahereRequesteeLimit;
+        if ($v !== null) {
+            $this->waitDurationAfterAcceptRequest = $v;
+        }
+        $v = $group->tpahereCoolDown;
+        if ($v !== null) {
+            $this->waitDurationAfterAcceptRequest = $v;
+        }
+    }
+
     public static function getDefault() : self
     {
         $self = new self();

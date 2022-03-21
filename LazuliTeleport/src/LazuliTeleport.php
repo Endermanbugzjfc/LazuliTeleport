@@ -240,22 +240,7 @@ class LazuliTeleport extends PluginBase
         $return = $groups[""] ?? $fallback;
         $return = clone $return;
         foreach ($groups as $permission => $group) {
-            $v = $group->waitDurationAfterAcceptRequest;
-            if ($v !== null) {
-                $return->waitDurationAfterAcceptRequest = $v;
-            }
-            $v = $group->tpaCoolDown;
-            if ($v !== null) {
-                $return->waitDurationAfterAcceptRequest = $v;
-            }
-            $v = $group->tpahereRequesteeLimit;
-            if ($v !== null) {
-                $return->waitDurationAfterAcceptRequest = $v;
-            }
-            $v = $group->tpahereCoolDown;
-            if ($v !== null) {
-                $return->waitDurationAfterAcceptRequest = $v;
-            }
+            $return->override($group);
         }
 
         return $return;
