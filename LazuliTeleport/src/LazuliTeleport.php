@@ -8,13 +8,14 @@ use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\PacketHooker;
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpablockCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpacceptCommand;
-use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaforceCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TparejectCommand;
 use Endermanbugzjfc\LazuliTeleport\Data\Commands;
+use Endermanbugzjfc\LazuliTeleport\Data\Form;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
@@ -23,17 +24,17 @@ use Endermanbugzjfc\LazuliTeleport\Player\PlayerSessionInfo;
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSessionManager;
 use Endermanbugzjfc\LazuliTeleport\Player\TeleportationRequestContextInfo;
 use Endermanbugzjfc\LazuliTeleport\Utils\SingletonsHolder;
+use RuntimeException;
+use const ARRAY_FILTER_USE_BOTH;
+use function array_filter;
+use function file_exists;
+use function file_put_contents;
+use function strtolower;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
-use RuntimeException;
-use function array_filter;
-use function file_exists;
-use function file_put_contents;
-use function strtolower;
-use const ARRAY_FILTER_USE_BOTH;
 
 class LazuliTeleport extends PluginBase
 {
@@ -63,28 +64,44 @@ class LazuliTeleport extends PluginBase
         throw new RuntimeException("Use getConfigObject() instead");
     }
 
-    protected Messages $messages;
+    /**
+     * @var Messages[]
+     * @phpstan-var array<string, Messages> Key = permission.
+     */
+    protected $permissionToMessagesMap = [];
 
-    public function getMessages() : Messages
-    {
-        return $this->messages;
+    public function setMessagesByPermission(
+        string $permission,
+        Messages $messages
+    ) : void {
+        $this->permissionToMessagesMap[$permission] = $messages;
     }
 
-    public function setMessages(Messages $messages) : void
-    {
-        $this->messages = $messages;
+    public function getMessagesByPermission(
+        string $permission
+    ) : ?Messages {
+        return $this->permissionToMessagesMap[$permission]
+            ?? null;
     }
 
-    protected Commands $commands;
+    /**
+     * @var Form[]
+     * @phpstan-var array<string, Form> Key = permission.
+     */
+    protected $permissionToFormMap = [];
 
-    public function getCommands() : Commands
-    {
-        return $this->commands;
+    public function setFormByPermission(
+        string $permission,
+        Form $form
+    ) : void {
+        $this->permissionToFormMap[$permission] = $form;
     }
 
-    public function setCommands(Commands $commands) : void
-    {
-        $this->commands = $commands;
+    public function getFormByPermission(
+        string $permission
+    ) : ?Form {
+        return $this->permissionToFormMap[$permission]
+            ?? null;
     }
 
     protected SingletonsHolder $singletonsHolder;
@@ -92,10 +109,10 @@ class LazuliTeleport extends PluginBase
     protected function onEnable() : void
     {
         $this->singletonsHolder = new SingletonsHolder();
+        $dataFolder = $this->getDataFolder();
         $files = [
-            PluginConfig::class => $this->getDataFolder() . "config.yml",
-            Messages::class => $this->getDataFolder() . "messages.yml",
-            Commands::class => $this->getDataFolder() . "commands.yml"
+            PluginConfig::class => $dataFolder . "config.yml",
+            Commands::class => $dataFolder . "commands.yml",
         ];
         foreach ($files as $class => $path) {
             $object = new $class();
@@ -110,11 +127,10 @@ class LazuliTeleport extends PluginBase
             $objects[] = $object;
         }
         /**
-         * @var array{PluginConfig, Messages, Commands} $objects
+         * @var array{PluginConfig, Commands} $objects
          */
         [
             $this->configObject,
-            $this->messages,
             $this->commands
         ] = $objects;
 

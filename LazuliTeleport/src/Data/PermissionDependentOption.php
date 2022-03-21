@@ -23,6 +23,9 @@ class PermissionDependentOption
     public ?int $tpahereRequesteeLimit = null;
     public ?int $tpahereCoolDown = null;
 
+    public ?string $formFile = null;
+    public ?string $messagesFile = null;
+
     public static function getDefault() : self
     {
         $self = new self();
