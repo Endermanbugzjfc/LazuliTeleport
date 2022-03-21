@@ -92,26 +92,31 @@ class LazuliTeleport extends PluginBase
     protected function onEnable() : void
     {
         $this->singletonsHolder = new SingletonsHolder();
-        $this->configObject = new PluginConfig();
-        $path = $this->getDataFolder() . "config.yml";
-        if (!file_exists($path)) {
-            $data = Emit::object($this->configObject);
-            file_put_contents($path, $data);
-        } else {
-            $data = (new Config($path))->getAll();
-            $context = Parse::object($this->configObject, $data);
-            $context->copyToObject($this->configObject, $path);
+        $files = [
+            PluginConfig::class => $this->getDataFolder() . "config.yml",
+            Messages::class => $this->getDataFolder() . "messages.yml",
+            Commands::class => $this->getDataFolder() . "commands.yml"
+        ];
+        foreach ($files as $class => $path) {
+            $object = new $class();
+            if (!file_exists($path)) {
+                $data = Emit::object($object);
+                file_put_contents($path, $data);
+            } else {
+                $data = (new Config($path))->getAll();
+                $context = Parse::object($object, $data);
+                $context->copyToObject($object, $path);
+            }
+            $objects[] = $object;
         }
-        $this->messages = new Messages();
-        $messagesPath = $this->getDataFolder() . "messages.yml";
-        if (!file_exists($messagesPath)) {
-            $data = Emit::object($this->messages);
-            file_put_contents($path, $data);
-        } else {
-            $messagesData = (new Config($messagesPath))->getAll();
-            $context = Parse::object($this->messages, $messagesData);
-            $context->copyToObject($this->messages, $messagesPath);
-        }
+        /**
+         * @var array{PluginConfig, Messages, Commands} $objects
+         */
+        [
+            $this->configObject,
+            $this->messages,
+            $this->commands
+        ] = $objects;
 
         $pluginName = $this->getName();
         $description = $pluginName . " permission dependent option group";
