@@ -109,7 +109,7 @@ class LazuliTeleport extends PluginBase
         }
 
         $listener = new PlayerSessionManager();
-        $this->getServer()->getPluginManager()->registerEvents($this, $listener);
+        $this->getServer()->getPluginManager()->registerEvents($listener, $this);
         if (!PacketHooker::isRegistered()) {
             PacketHooker::register($this);
         }
