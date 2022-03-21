@@ -27,7 +27,7 @@ class PermissionDependentOption
     public ?string $messagesFile = null;
 
     public function override(
-        PermissionDependentOption $group
+        self $group
     ) : void {
         $v = $group->waitDurationAfterAcceptRequest;
         if ($v !== null) {
