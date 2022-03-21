@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Player;
 
+use Closure;
 use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use Generator;
 use pocketmine\player\Player;
@@ -14,7 +15,8 @@ use function bin2hex;
 class PlayerSession
 {
     public function __construct(
-        protected Player $player
+        protected Player $player,
+        protected Closure $onClose
     ) {
     }
 
@@ -125,6 +127,7 @@ class PlayerSession
     protected function close() : void
     {
         $this->resolveTeleportationRequest(true);
+        ($this->onClose)();
     }
 
     public function getPlayer() : Player
