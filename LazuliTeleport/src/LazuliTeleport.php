@@ -238,6 +238,7 @@ class LazuliTeleport extends PluginBase
             ARRAY_FILTER_USE_BOTH
         );
         $return = $groups[""] ?? $fallback;
+        $return = clone $return;
         foreach ($groups as $permission => $group) {
             $v = $group->waitDurationAfterAcceptRequest;
             if ($v !== null) {
