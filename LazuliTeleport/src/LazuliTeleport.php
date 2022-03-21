@@ -8,9 +8,9 @@ use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\PacketHooker;
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
-use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpablockCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpacceptCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaforceCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TparejectCommand;
@@ -24,17 +24,18 @@ use Endermanbugzjfc\LazuliTeleport\Player\PlayerSessionInfo;
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSessionManager;
 use Endermanbugzjfc\LazuliTeleport\Player\TeleportationRequestContextInfo;
 use Endermanbugzjfc\LazuliTeleport\Utils\SingletonsHolder;
-use RuntimeException;
-use const ARRAY_FILTER_USE_BOTH;
-use function array_filter;
-use function file_exists;
-use function file_put_contents;
-use function strtolower;
+use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use RuntimeException;
+use function array_filter;
+use function file_exists;
+use function file_put_contents;
+use function strtolower;
+use const ARRAY_FILTER_USE_BOTH;
 
 class LazuliTeleport extends PluginBase
 {
@@ -232,8 +233,6 @@ class LazuliTeleport extends PluginBase
      * Groups that do not matchc the player's permission will be omitted.
      * Clone the fallback group or the group with least priority if there is no fallback group. Now this becomes the group instance specifically for this player.
      * Then, loop through all other groups by ascending priority order. And {@link PermissionDependentOption::override()} the the properties in player-specific group with values in those group.
-     * @param Player $player
-     * @return PermissionDependentOption
      */
     public function getPlayerOptions(
         Player $player
@@ -251,7 +250,7 @@ class LazuliTeleport extends PluginBase
         $return = $groups[""] ?? $fallback;
         $return = clone $return;
         foreach ($groups as $permission => $group) {
-            $return->override($group);
+            Utils::override($return, $group);
         }
 
         return $return;
