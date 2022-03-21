@@ -228,34 +228,6 @@ class LazuliTeleport extends PluginBase
         return $command;
     }
 
-    /**
-     * Group refers to {@link PermissionDependentOption} here.
-     * Groups that do not matchc the player's permission will be omitted.
-     * Clone the fallback group or the group with least priority if there is no fallback group. Now this becomes the group instance specifically for this player.
-     * Then, loop through all other groups by ascending priority order. And {@link PermissionDependentOption::override()} the the properties in player-specific group with values in those group.
-     */
-    public function getPlayerOptions(
-        Player $player
-    ) : PermissionDependentOption {
-        $fallback = PermissionDependentOption::getDefault();
-        $groups = $this->getConfigObject()->getOrderedPermissionDependentOptions();
-        $groups = array_filter(
-            $groups,
-            fn (
-                PermissionDependentOption $group,
-                int|string $permission
-             ) : bool => $player->hasPermission((string)$permission),
-            ARRAY_FILTER_USE_BOTH
-        );
-        $return = $groups[""] ?? $fallback;
-        $return = clone $return;
-        foreach ($groups as $permission => $group) {
-            Utils::override($return, $group);
-        }
-
-        return $return;
-    }
-
     public function getPlayerSession(
         Player $player
     ) : PlayerSession {

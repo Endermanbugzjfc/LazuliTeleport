@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Endermanbugzjfc\LazuliTeleport\Player;
 
 use Closure;
+use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
+use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
 use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use Generator;
 use pocketmine\player\Player;
 use Ramsey\Uuid\UuidInterface;
 use SOFe\AwaitGenerator\Channel;
+use function array_filter;
 use function bin2hex;
 
 class PlayerSession
@@ -18,6 +21,44 @@ class PlayerSession
         protected Player $player,
         protected Closure $onClose
     ) {
+        /**
+         * Group refers to {@link PermissionDependentOption} here.
+         * Groups that do not matchc the player's permission will be omitted.
+         * Clone the fallback group or the group with least priority if there is no fallback group. Now this becomes the group instance specifically for this player.
+         */
+        $fallback = PermissionDependentOption::getDefault();
+        $groups = LazuliTeleport::getInstance()->getConfigObject()->getOrderedPermissionDependentOptions();
+        $groups = array_filter(
+            $groups,
+            fn (
+                PermissionDependentOption $group,
+                int|string $permission
+             ) : bool => $player->hasPermission((string)$permission),
+            ARRAY_FILTER_USE_BOTH
+        );
+        $return = $groups[""] ?? $fallback;
+        $return = clone $return;
+        /**
+         * Then, loop through all other groups by ascending priority order. And {@link PermissionDependentOption::override()} the the properties in player-specific group with values in those group.
+         */
+        foreach ($groups as $permission => $group) {
+            Utils::override($return, $group);
+        }
+        $this->specificOptions = $return;
+    }
+
+    protected PermissionDependentOption $specificOptions;
+
+    public function getSpecificOptions() : PermissionDependentOption
+    {
+        return $this->specificOptions;
+    }
+
+    public function setSpecificOptions(
+        PermissionDependentOption $specificOptions
+    ) : void
+    {
+        $this->specificOptions = $specificOptions;
     }
 
     /**
@@ -133,5 +174,25 @@ class PlayerSession
     public function getPlayer() : Player
     {
         return $this->player;
+    }
+
+    /**
+     * @return Channel<null>|null
+     */
+    public function getTeleportationRequest()
+    {
+        return $this->teleportationRequest;
+    }
+
+    /**
+     * @param Channel<null>|null $teleportationRequest
+     *
+     * @return self
+     */
+    public function setTeleportationRequest($teleportationRequest)
+    {
+        $this->teleportationRequest = $teleportationRequest;
+
+        return $this;
     }
 }
