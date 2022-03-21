@@ -17,10 +17,7 @@ class Commands
     public CommandProfile $tpablock;
     public CommandProfile $tpaforce;
 
-    /**
-     * @return CommandProfile[]
-     */
-    public static function getDefaultCommandProfiles() : array
+    public function __construct()
     {
         $reflection = new ReflectionClass(self::class);
         $filter = ReflectionProperty::IS_PUBLIC;
@@ -36,8 +33,11 @@ class Commands
                 "tpaforce" => "(Admin command) Automatically accept teleportation request you send",
                 default => throw new RuntimeException("Unknown command \"$name\"")
             };
-            $return[] = CommandProfile::create($name, $description);
+            $profile = CommandProfile::create($name, $description);
+            $property->setValue(
+                $this,
+                $profile
+            );
         }
-        return $return ?? [];
     }
 }
