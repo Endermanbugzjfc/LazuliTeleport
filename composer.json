@@ -7,7 +7,8 @@
     "endermanbugzjfc/configstruct": "^2.0.0-BETA2",
     "cortexpe/commando": "dev-PM4",
     "sof3/await-generator": "^3.4",
-    "sof3/infoapi": "^1.2"
+    "sof3/infoapi": "^1.2",
+    "vecnavium/formsui": "^1.1"
   },
   "autoload": {
     "psr-4": {
