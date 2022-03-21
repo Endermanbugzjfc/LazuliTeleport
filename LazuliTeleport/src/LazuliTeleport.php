@@ -187,6 +187,9 @@ class LazuliTeleport extends PluginBase
     protected function onDisable() : void
     {
         unset($this->singletonsHolder);
+        unset($this->configObject);
+        unset($this->permissionToMessagesMap);
+        unset($this->permissionToFormMap);
     }
 
     /**
@@ -254,5 +257,17 @@ class LazuliTeleport extends PluginBase
     public static function getInstance() : self
     {
         return self::$instance;
+    }
+
+    /**
+     * @param mixed $singletonsHolder
+     *
+     * @return self
+     */
+    public function setSingletonsHolder($singletonsHolder)
+    {
+        $this->singletonsHolder = $singletonsHolder;
+
+        return $this;
     }
 }
