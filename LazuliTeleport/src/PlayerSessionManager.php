@@ -10,7 +10,7 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerLoginEvent;
 use SOFe\AwaitGenerator\Await;
 
-class EventListener implements Listener
+class PlayerSessionManager implements Listener
 {
     /**
      * @var PlayerSession[]
