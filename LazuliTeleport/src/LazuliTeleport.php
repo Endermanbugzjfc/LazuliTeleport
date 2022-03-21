@@ -20,6 +20,7 @@ use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSessionInfo;
+use Endermanbugzjfc\LazuliTeleport\Player\PlayerSessionManager;
 use Endermanbugzjfc\LazuliTeleport\Player\TeleportationRequestContextInfo;
 use Endermanbugzjfc\LazuliTeleport\Utils\SingletonsHolder;
 use pocketmine\permission\Permission;
@@ -107,7 +108,7 @@ class LazuliTeleport extends PluginBase
             PermissionManager::getInstance()->addPermission($permissionInstance);
         }
 
-        $listener = new EventListener();
+        $listener = new PlayerSessionManager();
         $this->getPluginManager()->registerEvents($this, $listener);
         if (!PacketHooker::isRegistered()) {
             PacketHooker::register($this);

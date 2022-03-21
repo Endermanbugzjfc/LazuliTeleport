@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Endermanbugzjfc\LazuliTeleport;
+namespace Endermanbugzjfc\LazuliTeleport\Player;
 
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
 use Generator;
