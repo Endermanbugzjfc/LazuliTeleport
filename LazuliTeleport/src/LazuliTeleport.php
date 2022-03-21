@@ -14,7 +14,7 @@ use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaforceCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TparejectCommand;
-use Endermanbugzjfc\LazuliTeleport\Data\CommandProfile;
+use Endermanbugzjfc\LazuliTeleport\Data\Commands;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
 use Endermanbugzjfc\LazuliTeleport\Data\PluginConfig;
@@ -73,6 +73,18 @@ class LazuliTeleport extends PluginBase
     public function setMessages(Messages $messages) : void
     {
         $this->messages = $messages;
+    }
+
+    protected Commands $commands;
+
+    public function getCommands() : Commands
+    {
+        return $this->commands;
+    }
+
+    public function setCommands(Commands $commands) : void
+    {
+        $this->commands = $commands;
     }
 
     protected SingletonsHolder $singletonsHolder;
@@ -167,15 +179,14 @@ class LazuliTeleport extends PluginBase
         string $class,
         string $name
     ) : BaseCommand {
-        $defaults = PluginConfig::getDefaultCommandProfiles();
-        $default = $defaults[$name];
-        $profile = $this->getConfigObject()->commands[$name]
-            ?? null;
+        $defaults = new Commands();
+        $default = $defaults->$name;
+        $profiles = $this->getCommands();
+        $profile = $profiles->$name ?? null;
         if ($profile !== null) {
-            $profile = new CommandProfile();
-            $default->name ??= $profile->name;
-            $default->description ??= $profile->description;
-            $default->aliases ??= $profile->aliases;
+            $profile->name ??= $default->name;
+            $profile->description ??= $default->description;
+            $profile->aliases ??= $default->aliases;
         } else {
             $profile = $default;
         }
