@@ -37,16 +37,16 @@ class Messages
     public ?MessageEntry $forceModeEnabled = null;
     public ?MessageEntry $forceModeDisabled = null;
 
-    public ?MessageEntry $playerFinderTitle = null;
-    public ?MessageEntry $playerFinderLabel = null;
-    public ?MessageEntry $playerFinderPlaceholder = null;
-    public ?MessageEntry $playerFinderSearchResultHeader = null;
-    public ?MessageEntry $playerFinderSearchResultEntry = null;
-    public ?MessageEntry $playerFinderActionSelectorLabel = null;
-    public ?MessageEntry $playerFinderActionTpahere = null;
-    public ?MessageEntry $playerFinderActionTpa = null;
-    public ?MessageEntry $playerFinderActionBlock = null;
-    public ?MessageEntry $playerFinderActionUnblock = null;
+    public ?string $playerFinderTitle = null;
+    public ?string $playerFinderLabel = null;
+    public ?string $playerFinderPlaceholder = null;
+    public ?string $playerFinderSearchResultHeader = null;
+    public ?string $playerFinderSearchResultEntry = null;
+    public ?string $playerFinderActionSelectorLabel = null;
+    public ?string $playerFinderActionTpahere = null;
+    public ?string $playerFinderActionTpa = null;
+    public ?string $playerFinderActionBlock = null;
+    public ?string $playerFinderActionUnblock = null;
 
     public static function getDefault() : self {
         $self = new self();
