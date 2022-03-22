@@ -13,9 +13,19 @@ use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use SOFe\AwaitGenerator\Await;
 use Throwable;
+use function strtolower;
 
 trait BaseCommandTrait
 {
+    protected function prepare() : void
+    {
+        LazuliTeleport::getInstance()->getSingletonsHolder()->register($this);
+        $pluginName = LazuliTeleport::getInstance()->getName();
+        $lowerPluginName = strtolower($pluginName);
+        $internalName = $this->getInternalName();
+        $this->setPermission("$lowerPluginName.$internalName");
+    }
+
     /**
      * @param array<string, scalar|Vector3> $args
      */
