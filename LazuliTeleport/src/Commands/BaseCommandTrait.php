@@ -17,13 +17,18 @@ use function strtolower;
 
 trait BaseCommandTrait
 {
-    protected function prepare() : void
+    final protected function prepare() : void
     {
         LazuliTeleport::getInstance()->getSingletonsHolder()->register($this);
         $pluginName = LazuliTeleport::getInstance()->getName();
         $lowerPluginName = strtolower($pluginName);
         $internalName = $this->getInternalName();
         $this->setPermission("$lowerPluginName.$internalName");
+        $this->pre();
+    }
+
+    protected function pre() : void
+    {
     }
 
     /**
