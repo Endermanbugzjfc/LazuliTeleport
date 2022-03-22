@@ -327,7 +327,21 @@ class PlayerSession
         });
     }
 
+    protected bool $errorRecursionLock = false;
+
     public function error(Throwable $err) : void
     {
+        if ($this->errorRecursionLock) {
+            $this->errorRecursionLock = false;
+            return;
+        }
+        $this->errorRecursionLock = true;
+
+        $logger = LazuliTeleport::getInstance()->getLogger();
+        $logger->logException($err);
+        $message = $this->getMessages()->internalServerError;
+        $this->displayMessage($message);
+
+        $this->errorRecursionLock = false;
     }
 }
