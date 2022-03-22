@@ -14,6 +14,11 @@ class MessageEntry
     public ?int $stay = null;
     public ?int $fadeOut = null;
 
+    public string $formTitle = "";
+    public string $formBody = "";
+    public string $acceptButton = "";
+    public string $rejectButton = "";
+
     public static function createChat(
         string $content
     ) : self {
