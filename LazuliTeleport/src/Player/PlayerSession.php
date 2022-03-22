@@ -197,11 +197,18 @@ class PlayerSession
         return $this->lastTpahereUseTime;
     }
 
-    /**
-     * @return Generator<mixed, mixed, mixed, void>
-     */
-    public function awaitTpahereCoolDown() : Generator
+    public function getTpaCoolDown() : float
     {
+        $options = $this->getSpecificOptions();
+        $duration = $options->tpaCoolDown ?? time();
+        return time() - (float)$duration;
+    }
+
+    public function getTpahereCoolDown() : float
+    {
+        $options = $this->getSpecificOptions();
+        $duration = $options->tpahereCoolDown ?? time();
+        return time() - (float)$duration;
     }
 
     protected bool $forceMode = false;
@@ -372,19 +379,13 @@ class PlayerSession
     public function getInfo() : PlayerSessionInfo
     {
         $options = $this->getSpecificOptions();
-        $tpaDefaultCoolDown = (float)$options->tpaCoolDown;
-        $tpahereDefaultCoolDown = (float)$options->tpahereCoolDown;
-        $tpaLastUse = $this->getLastTpaUseTime() ?? time();
-        $tpahereLastUse = $this->getLastTpahereUseTime() ?? time();
-        $tpaCoolDown = time() - $tpaDefaultCoolDown;
-        $tpahereCoolDown = time() - $tpahereDefaultCoolDown;
         return new PlayerSessionInfo(
             new NumberInfo(1.0),
-            new DurationInfo($tpaCoolDown),
-            new DurationInfo($tpaDefaultCoolDown),
+            new DurationInfo((float)$options->tpaCoolDown),
+            new DurationInfo($this->getTpaCoolDown()),
             new NumberInfo((float)$options->tpahereRequesteeLimit),
-            new DurationInfo($tpahereCoolDown),
-            new DurationInfo($tpahereDefaultCoolDown),
+            new DurationInfo($this->getTpahereCoolDown()),
+            new DurationInfo((float)$options->tpahereCoolDown),
             new DurationInfo((float)$options->waitDurationAfterAcceptRequest),
             new DurationInfo((float)$this->getForceModeWaitDuration()),
             new PlayerInfo($this->getPlayer())
