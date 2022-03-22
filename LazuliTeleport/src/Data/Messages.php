@@ -83,6 +83,7 @@ class Messages
 
         $self->requestSelf = MessageEntry::createChat("{Red}Cannot send request to yourself!");
         $self->internalServerError = MessageEntry::createChat("{Red}Sorry, an internal server error had occurred! Please report this problem to an admin.");
+        $self->noTeleportationRequest = MessageEntry::createActionbar("{Red}You have no teleportation request.");
 
         $target = "{Aqua}{Target}";
         $block = "{Yellow}will not be able to send any tpa or tpahere requests";
