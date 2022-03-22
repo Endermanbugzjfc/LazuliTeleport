@@ -37,6 +37,17 @@ class Messages
     public ?MessageEntry $forceModeEnabled = null;
     public ?MessageEntry $forceModeDisabled = null;
 
+    public ?MessageEntry $playerFinderTitle = null;
+    public ?MessageEntry $playerFinderLabel = null;
+    public ?MessageEntry $playerFinderPlaceholder = null;
+    public ?MessageEntry $playerFinderSearchResultHeader = null;
+    public ?MessageEntry $playerFinderSearchResultEntry = null;
+    public ?MessageEntry $playerFinderActionSelectorLabel = null;
+    public ?MessageEntry $playerFinderActionTpahere = null;
+    public ?MessageEntry $playerFinderActionTpa = null;
+    public ?MessageEntry $playerFinderActionBlock = null;
+    public ?MessageEntry $playerFinderActionUnblock = null;
+
     public static function getDefault() : self {
         $self = new self();
         $formTitle = "{Bold}{DarkAqua}Teleportation Request";
