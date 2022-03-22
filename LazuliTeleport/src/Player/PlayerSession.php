@@ -169,9 +169,6 @@ class PlayerSession
      */
     protected ?int $lastTpaUseTime = null;
 
-    /**
-     * @param int|null $time Null = current time.
-     */
     public function setLastTpaUseTime(
         ?int $time = null
     ) : void {
@@ -188,9 +185,6 @@ class PlayerSession
      */
     protected ?int $lastTpahereUseTime = null;
 
-    /**
-     * @param int|null $time Null = current time.
-     */
     public function setLastTpahereUseTime(
         ?int $time = null
     ) : void {
