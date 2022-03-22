@@ -104,6 +104,8 @@ class Messages
         $self->actionTpa = "Tpa";
         $self->actionBlock = "Block";
         $self->actionUnblock = "Unblock";
+        $self->forceModeToggleLabel = "{Aqua}(Admin) Force-accept request";
+        $self->forceModeWaitDurationSliderLabel = "{Aqua}Teleportation wait duration";
 
         return $self;
     }
