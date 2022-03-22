@@ -41,7 +41,18 @@ class Commands
                 "tpaforce" => "(Admin command) Automatically accept teleportation request you send",
                 default => throw new RuntimeException("Unknown command \"$name\"")
             };
-            $profile = CommandProfile::create($name, $description);
+            $aliases = match ($name) {
+                "tpahere" => [
+                    "tphere"
+                ],
+                "tpareject" => [
+                    "tpreject",
+                    "tpadeny",
+                    "tpdeny"
+                ],
+                default => []
+            };
+            $profile = CommandProfile::create($name, $description, $aliases);
             $property->setValue(
                 $this,
                 $profile
