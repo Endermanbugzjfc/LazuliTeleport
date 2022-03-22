@@ -28,7 +28,7 @@ class PlayerSessionManager implements Listener
         Await::f2c(function() use ($event) : Generator {
             $player = $event->getPlayer();
             $arrayKey = "";
-            yield from Await::promise(function($then, $catch) use ($player, &$arrayKey) {
+            yield from Await::promise(function($then) use ($player, &$arrayKey) {
                 $session = new PlayerSession($player, $then);
                 $arrayKey = $session->arrayKey();
                 $this->playerSessions[$arrayKey] = $session;
