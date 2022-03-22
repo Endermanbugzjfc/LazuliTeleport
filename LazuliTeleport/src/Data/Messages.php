@@ -89,7 +89,7 @@ class Messages
         $block = "{Yellow}will not be able to send any tpa or tpahere requests";
         $blockFormTitle = "{Bold}{Red}Block Confirmation";
         $blockFormBody = "{Yellow}Are you sure that you want to block $target? $block.";
-        $blockCommandHint = " from now on. {Aqua}You can unblock him by running the command again.";
+        $blockCommandHint = " from now on. {Aqua}You can unblock him / them by running the command again.";
         $cancelBlock = new MessageEntry();
         $self->blockPlayer = MessageEntry::createForm($blockFormTitle, $blockFormBody, $block . $blockCommandHint, $cancelBlock);
         $self->unblockPlayer = MessageEntry::createChat("{Yellow}Unblocked $target.");
