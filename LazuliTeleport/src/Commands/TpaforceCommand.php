@@ -13,7 +13,7 @@ class TpaforceCommand extends BaseCommand
 {
     public const WAIT_DURATION = "Teleportation wait duration";
 
-    protected function prepare() : void
+    protected function pre() : void
     {
         $this->registerArgument(0, new IntegerArgument(
             self::WAIT_DURATION,
