@@ -154,6 +154,17 @@ class PlayerSession
     }
 
     /**
+     * @throws TooManyTeleportationRequestException
+     */
+    public function newTeleportationRequestToBeResolve() : void
+    {
+        if ($this->teleportationRequest !== null) {
+            throw new TooManyTeleportationRequestException("Try to create a new teleportation request when there is already one");
+        }
+        $this->teleportationRequest = new Channel();
+    }
+
+    /**
      * @return Generator<mixed, mixed, mixed, void>
      */
     public function awaitTpahereCoolDown() : Generator
@@ -327,7 +338,7 @@ class PlayerSession
     }
 
     /**
-     * @return PlayerSessionInfo Do NOT reuse the same info instance. 
+     * @return PlayerSessionInfo Do NOT reuse the same info instance.
      */
     public function getInfo() : PlayerSessionInfo
     {
