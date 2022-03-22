@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Endermanbugzjfc\LazuliTeleport\Player;
 
 use Closure;
+use Endermanbugzjfc\LazuliTeleport\Data\MessageEntry;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
 use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
@@ -13,6 +14,7 @@ use Generator;
 use pocketmine\player\Player;
 use Ramsey\Uuid\UuidInterface;
 use SOFe\AwaitGenerator\Channel;
+use Vecnavium\FormsUI\ModalForm;
 use function array_filter;
 use function bin2hex;
 
@@ -146,7 +148,11 @@ class PlayerSession
         bool $sendMessage = true
     ) : void {
         $this->forceMode = $forceMode;
-        $this->getPlayer()->sendMessage();
+        $messages = $this->getMessages();
+        $message = $forceMode
+            ? $messages->forceModeEnabled
+            : $messages->forceModeDisabled;
+        $this->displayMessage($message);
     }
 
     public function getForceMode() : bool
@@ -207,5 +213,53 @@ class PlayerSession
         $this->teleportationRequest = $teleportationRequest;
 
         return $this;
+    }
+
+    public function displayMessage(
+        ?MessageEntry $message,
+        ?callable $formCallback = null
+    ) : void {
+        if ($message === null) {
+            return;
+        }
+        $player = $this->getPlayer();
+
+        $chat = $message->chat;
+        if ($chat !== "") {
+            $player->sendMessage($chat);
+        }
+
+        $title = $message->title;
+        $subtitle = $message->subtitle;
+        $actionbar = $message->actionbar;
+        if (
+            $title !== ""
+            or
+            $subtitle !== ""
+        ) {
+            $fadeIn = $message->fadeIn = -1;
+            $stay = $message->stay = -1;
+            $fadeOut = $message->fadeOut = -1;
+            $player->sendTitle($title, $subtitle, $fadeIn, $stay, $fadeOut);
+        }
+
+        $actionbar = $message->actionbar;
+        if ($actionbar !== "") {
+            $player->sendActionBarMessage($actionbar);
+        }
+
+        $formTitle = $message->formTitle;
+        $formBody = $message->formBody;
+        $acceptButton = $message->acceptButton;
+        $rejectButton = $message->rejectButton;
+        if (
+            $formTitle !== ""
+            or
+            $formBody !== ""
+        ) {
+            $formCallback ??= fn() => null;
+            $form = new ModalForm($formCallback);
+            $player->sendForm($form);
+        }
     }
 }
