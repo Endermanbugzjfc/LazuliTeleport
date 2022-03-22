@@ -20,4 +20,9 @@ class TpaCommand extends BaseCommand
     ) : Generator {
         // TODO: Implement onRun() method.
     }
+
+    public static function getInternalName() : string
+    {
+        return "tpa";
+    }
 }

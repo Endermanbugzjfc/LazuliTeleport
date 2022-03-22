@@ -35,4 +35,9 @@ class TpaforceCommand extends BaseCommand
 
         yield from [];
     }
+
+    public static function getInternalName() : string
+    {
+        return "tpaforce";
+    }
 }
