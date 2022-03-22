@@ -43,10 +43,10 @@ class Messages
     public ?string $playerFinderSearchResultHeader = null;
     public ?string $playerFinderSearchResultEntry = null;
     public ?string $playerFinderActionSelectorLabel = null;
-    public ?string $playerFinderActionTpahere = null;
-    public ?string $playerFinderActionTpa = null;
-    public ?string $playerFinderActionBlock = null;
-    public ?string $playerFinderActionUnblock = null;
+    public ?string $actionTpahere = null;
+    public ?string $actionTpa = null;
+    public ?string $actionBlock = null;
+    public ?string $actionUnblock = null;
 
     public static function getDefault() : self {
         $self = new self();
