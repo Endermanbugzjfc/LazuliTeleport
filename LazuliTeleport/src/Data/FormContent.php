@@ -13,6 +13,12 @@ class FormPage {
 	public ?string $pageViewTeleportationRequest = null;
 	public ?string $pageExit = null;
 
+	public ?bool $enablePageDropdownLabel = null;
+	public ?bool $enablePageFindPlayer = null;
+	public ?bool $enablePageListPlayer = null;
+	public ?bool $enablePageViewTeleportationRequest = null;
+	public ?bool $enablePageExit = null;
+
 	public ?string $playerSearchBarLabel = null;
 	public ?string $playerSearchPlaceholder = null;
 	public ?string $playerSearchDefaultValue = null;
