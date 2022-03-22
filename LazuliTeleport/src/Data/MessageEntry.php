@@ -18,6 +18,7 @@ class MessageEntry
     public string $formBody = "";
     public ?string $acceptButton = null;
     public ?string $rejectButton = null;
+    public ?self $messageOnReject = null;
 
     public static function createChat(
         string $content
@@ -49,6 +50,7 @@ class MessageEntry
         string $formTitle,
         string $formBody,
         string $chat = "",
+        ?self $messageOnReject = null,
         ?string $acceptButton = null,
         ?string $rejectButton = null,
     ) : self {
@@ -56,6 +58,7 @@ class MessageEntry
         $self->formTitle = $formTitle;
         $self->formBody = $formBody;
         $self->chat = $chat;
+        $self->messageOnReject = $messageOnReject;
         $self->acceptButton = $acceptButton;
         $self->rejectButton = $rejectButton;
 
