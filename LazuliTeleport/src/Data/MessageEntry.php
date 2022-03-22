@@ -16,8 +16,8 @@ class MessageEntry
 
     public string $formTitle = "";
     public string $formBody = "";
-    public string $acceptButton = "";
-    public string $rejectButton = "";
+    public ?string $acceptButton = null;
+    public ?string $rejectButton = null;
 
     public static function createChat(
         string $content
@@ -48,16 +48,16 @@ class MessageEntry
     public static function createForm(
         string $formTitle,
         string $formBody,
-        string $acceptButton,
-        string $rejectButton,
-        string $chat = ""
+        string $chat = "",
+        ?string $acceptButton = null,
+        ?string $rejectButton = null,
     ) : self {
         $self = new self();
         $self->formTitle = $formTitle;
         $self->formBody = $formBody;
+        $self->chat = $chat;
         $self->acceptButton = $acceptButton;
         $self->rejectButton = $rejectButton;
-        $self->chat = $chat;
 
         return $self;
     }
