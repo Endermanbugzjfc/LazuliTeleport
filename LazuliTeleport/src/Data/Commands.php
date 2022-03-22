@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Data;
 
+use Endermanbugzjfc\ConfigStruct\KeyName;
 use ReflectionClass;
 use ReflectionProperty;
 use RuntimeException;
@@ -14,8 +15,15 @@ class Commands
     public CommandProfile $tpahere;
     public CommandProfile $tpaccept;
     public CommandProfile $tpareject;
-    public CommandProfile $tpablock;
     public CommandProfile $tpaforce;
+
+    public CommandProfile $tpablock;
+    #[KeyName("tpablock.list")]
+    public CommandProfile $list;
+    #[KeyName("tpablock.block")]
+    public CommandProfile $block;
+    #[KeyName("tpablock.unblock")]
+    public CommandProfile $unblock;
 
     public function __construct()
     {
