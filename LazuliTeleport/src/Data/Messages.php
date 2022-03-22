@@ -102,7 +102,7 @@ class Messages
         $self->playerFinderPlaceholder = "Enter first few letters in player's name";
         $self->playerFinderSearchResultHeader = "{Bold}{Gold}Found {Green}{ResultCount} {Gold}players:";
         $self->playerFinderSearchResultEntry = "{Gold}{ResultPlayer}";
-        $self->playerFinderActionSelectorLabel = "{Aqua}Action: ";
+        $self->playerFinderActionSelectorLabel = "{Aqua}Action";
         $self->actionTpahere = "Tpahere";
         $self->actionTpa = "Tpa";
         $self->actionBlock = "Block";
