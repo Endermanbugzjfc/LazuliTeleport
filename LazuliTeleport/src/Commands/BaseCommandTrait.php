@@ -27,7 +27,7 @@ trait BaseCommandTrait
         Await::g2c($this->asyncPrepare());
     }
 
-    protected function asyncPrepare() : void
+    protected function asyncPrepare() : Generator
     {
     }
 
