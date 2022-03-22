@@ -83,8 +83,14 @@ class Messages
         $self->requestSelf = MessageEntry::createChat("{Red}Cannot send request to yourself!");
         $self->internalServerError = MessageEntry::createChat("{Red}Sorry, an internal server error had occurred! Please report self problem to an admin.");
 
-        $self->blockPlayer = MessageEntry::createChat("{Aqua}{Target} {Yellow}will not be able to send any tpa or tpahere requests from now on. {Aqua}You can unblock him by running the command again.");
-        $self->unblockPlayer = MessageEntry::createChat("{Yellow}Unblocked {Aqua}{Target}.");
+        $target = "{Aqua}{Target}";
+        $block = "{Yellow}will not be able to send any tpa or tpahere requests";
+        $blockFormTitle = "{Bold}{Red}Block Confirmation";
+        $blockFormBody = "{Yellow}Are you sure that you want to block $target? $block.";
+        $blockCommandHint = " from now on. {Aqua}You can unblock him by running the command again.";
+        $cancelBlock = new MessageEntry();
+        $self->blockPlayer = MessageEntry::createForm($blockFormTitle, $blockFormBody, $block . $blockCommandHint, $cancelBlock);
+        $self->unblockPlayer = MessageEntry::createChat("{Yellow}Unblocked $target.");
         $self->gotBlocked = MessageEntry::createChat("{Red}You have been blocked by self player!");
 
         $self->forceModeEnabled = MessageEntry::createChat(
