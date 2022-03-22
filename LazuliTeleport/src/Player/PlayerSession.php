@@ -13,10 +13,16 @@ use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use Generator;
 use pocketmine\player\Player;
 use Ramsey\Uuid\UuidInterface;
+use RuntimeException;
+use SOFe\AwaitGenerator\Await;
 use SOFe\AwaitGenerator\Channel;
+use Throwable;
 use Vecnavium\FormsUI\ModalForm;
 use function array_filter;
 use function bin2hex;
+use function implode;
+use function in_array;
+use function spl_object_id;
 
 class PlayerSession
 {
@@ -39,6 +45,9 @@ class PlayerSession
              ) : bool => $player->hasPermission((string)$permission),
             ARRAY_FILTER_USE_BOTH
         );
+        foreach ($groups as $permission => $group) {
+            $this->inheritedGroupsPermission[] = (string)$permission;
+        }
         $return = $groups[""] ?? $fallback;
         $return = clone $return;
         /**
@@ -49,6 +58,11 @@ class PlayerSession
         }
         $this->specificOptions = $return;
     }
+
+    /**
+     * @var string[] Permissions.
+     */
+    protected array $inheritedGroupsPermission = [];
 
     protected PermissionDependentOption $specificOptions;
 
@@ -215,51 +229,91 @@ class PlayerSession
         return $this;
     }
 
+    /**
+     * @param callable(bool $data) : void|null $formCallback Calls right after player submits the form, before any other messages are sent.
+     * @param int[] $trace Recursion guard for {@link MessageEntry::$messageOnReject}. Holds SPL object IDs.
+     */
     public function displayMessage(
         ?MessageEntry $message,
-        ?callable $formCallback = null
+        ?callable $formCallback = null,
+        array $trace
     ) : void {
-        if ($message === null) {
-            return;
-        }
-        $player = $this->getPlayer();
+        Await::f2c(function () use (
+            $message,
+            $formCallback,
+            $trace
+        ) : Generator {
+            if ($message === null) {
+                return;
+            }
+            $player = $this->getPlayer();
 
-        $chat = $message->chat;
-        if ($chat !== "") {
-            $player->sendMessage($chat);
-        }
+            $formTitle = $message->formTitle;
+            $formBody = $message->formBody;
+            $acceptButton = $message->acceptButton;
+            $rejectButton = $message->rejectButton;
+            if (
+                $formTitle !== ""
+                or
+                $formBody !== ""
+            ) {
+                /**
+                 * @var array{Player, bool}
+                 */
+                $formResult = yield from Await::promise(function ($then) use (
+                    $player
+                ) {
+                    $form = new ModalForm($then);
+                    $player->sendForm($form);
+                });
+                [, $data] = $formResult;
+                if ($formCallback !== null) {
+                    $formCallback($data);
+                }
+                $messageOnReject = $message->messageOnReject;
+                if ($messageOnReject !== null) {
+                    $id = spl_object_id($messageOnReject);
+                    if (in_array(
+                        $id,
+                        $trace,
+                        true
+                    )) {
+                        $permissionsList = implode(", ", $this->inheritedGroupsPermission);
+                        $err = new RuntimeException("Recursive message detected, the problemetic config is among $permissionsList");
+                        $this->error($err);
+                        return;
+                    }
+                    return;
+                }
+            }
 
-        $title = $message->title;
-        $subtitle = $message->subtitle;
-        $actionbar = $message->actionbar;
-        if (
-            $title !== ""
-            or
-            $subtitle !== ""
-        ) {
-            $fadeIn = $message->fadeIn = -1;
-            $stay = $message->stay = -1;
-            $fadeOut = $message->fadeOut = -1;
-            $player->sendTitle($title, $subtitle, $fadeIn, $stay, $fadeOut);
-        }
+            $chat = $message->chat;
+            if ($chat !== "") {
+                $player->sendMessage($chat);
+            }
 
-        $actionbar = $message->actionbar;
-        if ($actionbar !== "") {
-            $player->sendActionBarMessage($actionbar);
-        }
+            $title = $message->title;
+            $subtitle = $message->subtitle;
+            $actionbar = $message->actionbar;
+            if (
+                $title !== ""
+                or
+                $subtitle !== ""
+            ) {
+                $fadeIn = $message->fadeIn = -1;
+                $stay = $message->stay = -1;
+                $fadeOut = $message->fadeOut = -1;
+                $player->sendTitle($title, $subtitle, $fadeIn, $stay, $fadeOut);
+            }
 
-        $formTitle = $message->formTitle;
-        $formBody = $message->formBody;
-        $acceptButton = $message->acceptButton;
-        $rejectButton = $message->rejectButton;
-        if (
-            $formTitle !== ""
-            or
-            $formBody !== ""
-        ) {
-            $formCallback ??= fn() => null;
-            $form = new ModalForm($formCallback);
-            $player->sendForm($form);
-        }
+            $actionbar = $message->actionbar;
+            if ($actionbar !== "") {
+                $player->sendActionBarMessage($actionbar);
+            }
+        });
+    }
+
+    public function error(Throwable $err) : void
+    {
     }
 }
