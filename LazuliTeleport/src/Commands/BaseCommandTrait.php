@@ -31,6 +31,11 @@ trait BaseCommandTrait
     {
     }
 
+    public static function getInstance() : static
+    {
+        return LazuliTeleport::getInstance()->getSingletonsHolder()->get(static::class);
+    }
+
     /**
      * @param array<string, scalar|Vector3> $args
      */
@@ -77,7 +82,7 @@ trait BaseCommandTrait
             throw new InGameCommandException("This command must be executed in-game");
         }
         $session = LazuliTeleport::getInstance()->getPlayerSession($sender);
-        $force = LazuliTeleport::getInstance()->getSingletonsHolder()->get(TpaforceCommand::class);
+        $force = TpaforceCommand::getInstance();
         if (
             $session->getForceMode()
             and
