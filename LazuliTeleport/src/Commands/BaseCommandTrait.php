@@ -24,10 +24,10 @@ trait BaseCommandTrait
         $lowerPluginName = strtolower($pluginName);
         $internalName = $this->getInternalName();
         $this->setPermission("$lowerPluginName.$internalName");
-        $this->pre();
+        Await::g2c($this->asyncPrepare());
     }
 
-    protected function pre() : void
+    protected function asyncPrepare() : void
     {
     }
 
