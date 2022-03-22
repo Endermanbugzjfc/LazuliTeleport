@@ -44,6 +44,11 @@ class PermissionDependentOption
         $self->tpahereRequesteeLimit = 0;
         $self->tpaCoolDown = $self->tpahereCoolDown = 10;
         $self->enablePlayerFinder = true;
+        $self->waitDurationAfterAcceptRequest
+
+        $self->waitDurationFormSliderMin = 0;
+        $self->waitDurationFormSliderStep = 1;
+        $self->waitDurationFormSliderTotalSteps = 20;
 
         return $self;
     }
