@@ -36,7 +36,8 @@ class FormPage {
 	public ?int $forceModeWaitDurationStep = null;
 	public ?int $forceModeWaitDurationTotalSteps = null;
 
-	public ?string $requestDetails = null;
+	public ?string $requestDetailsTpa = null;
+	public ?string $requestDetailsTpahere = null;
 
 	public ?string $requestResponseSliderLabel = null;
 	public ?string $requestAccept = null;
