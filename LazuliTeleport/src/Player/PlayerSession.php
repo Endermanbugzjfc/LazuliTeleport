@@ -133,24 +133,24 @@ class PlayerSession
      * @throws NoTeleportationRequestException
      */
     public function resolveTeleportationRequest(
-        bool $silent = false
+        bool $accept
     ) : void {
         $request = $this->teleportationRequest;
-        Utils::closeChannel($request)
+        Utils::closeChannel($request, $accept)
             ?? throw new NoTeleportationRequestException("Try to resolve a teleportation request when there is no");
     }
 
     /**
-     * @var Channel<null>|null
+     * @var Channel<bool>|null
      */
     protected ?Channel $teleportationRequest;
 
     /**
-     * @return Generator<mixed, mixed, mixed, void>
+     * @return Generator<mixed, mixed, mixed, bool|null> Null = there is no teleportation request.
      */
     public function awaitTeleportationRequestToBeResolve() : Generator
     {
-        yield from $this->teleportationRequest?->receive()
+        return yield from $this->teleportationRequest?->receive()
             ?? [];
     }
 
@@ -243,7 +243,9 @@ class PlayerSession
 
     protected function close() : void
     {
-        $this->resolveTeleportationRequest(true);
+        if ($this->teleportationRequest !== null) {
+            $this->resolveTeleportationRequest(false);
+        }
         ($this->onClose)();
     }
 
