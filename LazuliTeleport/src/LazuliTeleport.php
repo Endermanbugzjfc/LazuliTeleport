@@ -216,16 +216,4 @@ class LazuliTeleport extends PluginBase
     {
         return self::$instance;
     }
-
-    /**
-     * @param mixed $singletonsHolder
-     *
-     * @return self
-     */
-    public function setSingletonsHolder($singletonsHolder)
-    {
-        $this->singletonsHolder = $singletonsHolder;
-
-        return $this;
-    }
 }
