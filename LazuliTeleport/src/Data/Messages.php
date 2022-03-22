@@ -55,8 +55,9 @@ class Messages
         $self = new self();
         $formTitle = "{Bold}{DarkAqua}Teleportation Request";
         $receiveTpa = "{Aqua}{Requestor} {Gold}wants to teleport to you.";
+        $currentlyAt = "\nHe is currently at {Green}{Requestor Player Position}";
         $commandHint = " {Italic}{DarkGray}(/tpaccept or /tpareject)";
-        $self->tpaRequestRecieve = MessageEntry::createForm($formTitle, $receiveTpa, $receiveTpa . $commandHint);
+        $self->tpaRequestRecieve = MessageEntry::createForm($formTitle, $receiveTpa . $currentlyAt, $receiveTpa . $commandHint);
         $self->tpaRequestSend = $requestSend = MessageEntry::createChat("{Yellow}Waiting for {Gold}{Requestee}{Yellow}'s response to your {Green}{RequestType} {Yellow}request...");
         $self->tpaRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting to {Aqua}{Requestee}...");
         $self->tpaRequestAcceptedWaiting = MessageEntry::createChat("{Yellow}You will be teleporting to {Aqua}{Requestee} after {Green}{TeleportationWaitDuration}...");
@@ -66,7 +67,7 @@ class Messages
         $self->tpaCoolDown = MessageEntry::createChat("{Red}You must wait for {TpaCoolDown} more.");
 
         $receiveTpahere = "{Aqua}{Requestor} {Gold}wants to teleport you to him.";
-        $self->tpahereRequestRecieve = MessageEntry::createForm($formTitle, $receiveTpahere, $receiveTpahere . $commandHint);
+        $self->tpahereRequestRecieve = MessageEntry::createForm($formTitle, $receiveTpahere . $currentlyAt, $receiveTpahere . $commandHint);
         $self->tpahereRequestSend = $requestSend;
         $self->tpahereRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting {Aqua}{Requestee} {Yellow}to you...");
         $self->tpahereRequestAcceptedWaiting = MessageEntry::createChat("{Aqua}{Requestee} {Yellow}will be teleporting to you after {Green}{WaitDuration}...");
