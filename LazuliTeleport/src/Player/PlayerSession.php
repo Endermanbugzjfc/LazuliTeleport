@@ -237,9 +237,18 @@ class PlayerSession
         $this->forceModeWaitDuration = $forceModeWaitDuration;
     }
 
+    /**
+     * @return string Player's unique ID in 16 bytes.
+     */
     public function arrayKey() : string
     {
-        return $this->getPlayer()->getUniqueId()->getBytes();
+        return self::staticArrayKey($this->getPlayer());
+    }
+
+    public static function staticArrayKey(
+        Player $player
+    ) : string {
+        return $player->getUniqueId()->getBytes();
     }
 
     protected function dbKey() : string
