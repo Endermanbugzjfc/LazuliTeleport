@@ -21,7 +21,6 @@ class FormPage {
 
 	public ?string $playerSearchBarLabel = null;
 	public ?string $playerSearchPlaceholder = null;
-	public ?string $playerSearchDefaultValue = null;
 
 	public ?string $playerToggleLabel = null;
 
