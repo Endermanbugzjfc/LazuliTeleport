@@ -31,12 +31,15 @@ class PermissionDependentOption
     #[NoOverride]
     public ?string $messagesFile = null;
 
+    public ?bool $enablePlayerFinder = null;
+
     public static function getDefault() : self
     {
         $self = new self();
         $self->waitDurationAfterAcceptRequest = 3;
         $self->tpahereRequesteeLimit = 0;
         $self->tpaCoolDown = $self->tpahereCoolDown = 10;
+        $self->enablePlayerFinder = true;
 
         return $self;
     }
