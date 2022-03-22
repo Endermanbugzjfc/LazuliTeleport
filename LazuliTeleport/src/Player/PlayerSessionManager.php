@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Player;
 
-use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
 use Generator;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerLoginEvent;
@@ -25,10 +24,15 @@ class PlayerSessionManager implements Listener
     public function onPlayerLoginEvent(
         PlayerLoginEvent $event
     ) : void {
-        Await::f2c(function() use ($event) : Generator {
+        Await::f2c(function () use (
+            $event
+        ) : Generator {
             $player = $event->getPlayer();
             $arrayKey = "";
-            yield from Await::promise(function($then) use ($player, &$arrayKey) {
+            yield from Await::promise(function ($then) use (
+                $player,
+                &$arrayKey
+            ) {
                 $session = new PlayerSession($player, $then);
                 $arrayKey = $session->arrayKey();
                 $this->playerSessions[$arrayKey] = $session;

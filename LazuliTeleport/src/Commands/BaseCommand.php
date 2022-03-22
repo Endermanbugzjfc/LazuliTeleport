@@ -36,7 +36,9 @@ abstract class BaseCommand extends CommandoBaseCommand
         array $args
     ) : void {
         $reject = [
-            TerminateCommandException::class => function (Throwable $err) use ($sender) : void {
+            TerminateCommandException::class => function (Throwable $err) use (
+                $sender
+            ) : void {
                 if (!$err instanceof TerminateCommandException) {
                     throw new AssertionError("unreachable");
                 }
