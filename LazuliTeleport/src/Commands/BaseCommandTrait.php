@@ -31,9 +31,12 @@ trait BaseCommandTrait
     {
     }
 
-    public static function getInstance() : static
+    /**
+     * @return Generator<mixed, mixed, mixed, static>
+     */
+    public static function getInstance() : Generator
     {
-        return LazuliTeleport::getInstance()->getSingletonsHolder()->get(static::class);
+        return yield from LazuliTeleport::getInstance()->getSingletonsHolder()->waitFor(static::class);
     }
 
     /**
