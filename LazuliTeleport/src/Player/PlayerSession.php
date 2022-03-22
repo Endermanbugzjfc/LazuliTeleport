@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Endermanbugzjfc\LazuliTeleport\Player;
 
 use Closure;
-use Endermanbugzjfc\LazuliTeleport\Data\Form;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
 use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
 use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use Generator;
+use pocketmine\player\Player;
 use Ramsey\Uuid\UuidInterface;
 use SOFe\AwaitGenerator\Channel;
 use function array_filter;
 use function bin2hex;
-use pocketmine\player\Player;
 
 class PlayerSession
 {
@@ -58,8 +57,7 @@ class PlayerSession
 
     public function setSpecificOptions(
         PermissionDependentOption $specificOptions
-    ) : void
-    {
+    ) : void {
         $this->specificOptions = $specificOptions;
     }
 
@@ -72,23 +70,8 @@ class PlayerSession
 
     public function setMessages(
         Messages $messages
-    ) : void
-    {
+    ) : void {
         $this->messages = $messages;
-    }
-
-    protected Form $form;
-
-    public function getForm() : Form
-    {
-        return $this->form;
-    }
-
-    public function setForm(
-        Form $form
-    ) : void
-    {
-        $this->form = $form;
     }
 
     /**
