@@ -34,8 +34,8 @@ class PermissionDependentOption
     public ?bool $enablePlayerFinder = null;
 
     public ?int $waitDurationFormSliderMin = null;
-    public int $waitDurationFormSliderStep = null;
-    public int $waitDurationFormSliderTotalSteps = null;
+    public ?int $waitDurationFormSliderStep = null;
+    public ?int $waitDurationFormSliderTotalSteps = null;
 
     public static function getDefault() : self
     {
