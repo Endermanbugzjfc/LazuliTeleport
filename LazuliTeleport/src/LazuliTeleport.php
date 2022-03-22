@@ -9,7 +9,7 @@ use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
 use Endermanbugzjfc\LazuliTeleport\Commands\BaseCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
-use Endermanbugzjfc\LazuliTeleport\Commands\TpablockCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\TpablockCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpacceptCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaforceCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
