@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Endermanbugzjfc\LazuliTeleport\Commands;
 
 use CortexPE\Commando\args\IntegerArgument;
-use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
 use Generator;
 use pocketmine\command\CommandSender;
+use function is_int;
 
 class TpaforceCommand extends BaseCommand
 {
@@ -27,11 +27,19 @@ class TpaforceCommand extends BaseCommand
         array $args
     ) : Generator {
         $session = $this->playerSession($sender);
-        $session->setForceMode(!$session->getForceMode());
+
         $duration = $args[self::WAIT_DURATION] ?? null;
         if (is_int($duration)) {
             $session->setForceModeWaitDuration($duration);
         }
+        $forceMode = !$session->getForceMode();
+        $session->setForceMode($forceMode);
+
+        $messages = $session->getMessages();
+        $message = $forceMode
+            ? $messages->forceModeEnabled
+            : $messages->forceModeDisabled;
+        $session->displayMessage($message);
 
         yield from [];
     }

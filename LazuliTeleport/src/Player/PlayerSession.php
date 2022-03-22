@@ -208,14 +208,8 @@ class PlayerSession
 
     public function setForceMode(
         bool $forceMode,
-        bool $sendMessage = true
     ) : void {
         $this->forceMode = $forceMode;
-        $messages = $this->getMessages();
-        $message = $forceMode
-            ? $messages->forceModeEnabled
-            : $messages->forceModeDisabled;
-        $this->displayMessage($message);
     }
 
     public function getForceMode() : bool
