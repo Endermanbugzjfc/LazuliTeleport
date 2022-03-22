@@ -23,3 +23,9 @@ permissions:
     description: "Allow player to use /tpahere"
   lazuliteleport.tpablock:
     description: "Allow player to use /tpablock"
+  lazuliteleport.tpablock.list:
+    description: "Allow player to use /tpablock list"
+  lazuliteleport.tpablock.block:
+    description: "Allow player to use /tpablock block"
+  lazuliteleport.tpablock.unblock:
+    description: "Allow player to use /tpablock unblock"
