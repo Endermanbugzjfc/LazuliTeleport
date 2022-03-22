@@ -85,26 +85,6 @@ class LazuliTeleport extends PluginBase
             ?? null;
     }
 
-    /**
-     * @var Form[]
-     * @phpstan-var array<string, Form> Key = permission.
-     */
-    protected $permissionToFormMap = [];
-
-    public function setFormByPermission(
-        string $permission,
-        Form $form
-    ) : void {
-        $this->permissionToFormMap[$permission] = $form;
-    }
-
-    public function getFormByPermission(
-        string $permission
-    ) : ?Form {
-        return $this->permissionToFormMap[$permission]
-            ?? null;
-    }
-
     protected SingletonsHolder $singletonsHolder;
 
     protected function onEnable() : void
@@ -190,7 +170,6 @@ class LazuliTeleport extends PluginBase
         unset($this->singletonsHolder);
         unset($this->configObject);
         unset($this->permissionToMessagesMap);
-        unset($this->permissionToFormMap);
     }
 
     /**
