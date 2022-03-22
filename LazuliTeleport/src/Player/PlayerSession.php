@@ -146,7 +146,7 @@ class PlayerSession
     protected ?Channel $teleportationRequest;
 
     /**
-     * @return Generator<mixed, mixed, mixed, bool|null> Null = there is no teleportation request.
+     * @return Generator<mixed, mixed, mixed, bool|null> Null = there is no teleportation request. True = accepted.
      */
     public function awaitTeleportationRequestToBeResolve() : Generator
     {
