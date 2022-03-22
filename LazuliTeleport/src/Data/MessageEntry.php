@@ -44,4 +44,21 @@ class MessageEntry
         $self->actionbar = $content;
         return $self;
     }
+
+    public static function createForm(
+        string $formTitle,
+        string $formBody,
+        string $acceptButton,
+        string $rejectButton,
+        string $chat = ""
+    ) : self {
+        $self = new self();
+        $self->formTitle = $formTitle;
+        $self->formBody = $formBody;
+        $self->acceptButton = $acceptButton;
+        $self->rejectButton = $rejectButton;
+        $self->chat = $chat;
+
+        return $self;
+    }
 }
