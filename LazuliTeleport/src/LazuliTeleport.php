@@ -201,8 +201,6 @@ class LazuliTeleport extends PluginBase
             $profile->description,
             $profile->aliases
         );
-        $lowerPluginName = strtolower($this->getName());
-        $command->setPermission("$lowerPluginName.$name");
 
         return $command;
     }

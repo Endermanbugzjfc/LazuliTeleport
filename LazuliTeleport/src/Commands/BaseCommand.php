@@ -21,6 +21,10 @@ abstract class BaseCommand extends CommandoBaseCommand
     protected function prepare() : void
     {
         LazuliTeleport::getInstance()->getSingletonsHolder()->register($this);
+        $pluginName = LazuliTeleport::getInstance()->getName();
+        $lowerPluginName = strtolower($pluginName);
+        $internalName = $this->getInternalName();
+        $this->setPermission("$lowerPluginName.$internalName");
     }
 
     /**
@@ -78,4 +82,6 @@ abstract class BaseCommand extends CommandoBaseCommand
 
         return $session;
     }
+
+    abstract public static function getInternalName() : string;
 }
