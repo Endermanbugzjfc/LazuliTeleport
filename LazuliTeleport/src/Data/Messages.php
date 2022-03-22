@@ -29,6 +29,7 @@ class Messages
 
     public ?MessageEntry $requestSelf = null;
     public ?MessageEntry $internalServerError = null;
+    public ?MessageEntry $noTeleportationRequest = null;
 
     public ?MessageEntry $blockPlayer = null;
     public ?MessageEntry $unblockPlayer = null;
