@@ -215,26 +215,6 @@ class PlayerSession
     }
 
     /**
-     * @return Channel<null>|null
-     */
-    public function getTeleportationRequest()
-    {
-        return $this->teleportationRequest;
-    }
-
-    /**
-     * @param Channel<null>|null $teleportationRequest
-     *
-     * @return self
-     */
-    public function setTeleportationRequest($teleportationRequest)
-    {
-        $this->teleportationRequest = $teleportationRequest;
-
-        return $this;
-    }
-
-    /**
      * @param callable(bool $data) : void|null $formCallback Calls right after player submits the form, before any other messages are sent.
      * @param int[] $trace Recursion guard for {@link MessageEntry::$messageOnReject}. Holds SPL object IDs.
      */
