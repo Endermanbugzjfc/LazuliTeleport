@@ -133,10 +133,8 @@ class LazuliTeleport extends PluginBase
                 $commandProfiles
             ) : BaseCommand {
                 /**
-                 * Small workaround to get PHPStan coverage.
                  * @var class-string<BaseCommand> $class
                  */
-                $class = $class;
                 $defaults = new Commands();
                 $internalName = $class::getInternalName();
                 $default = $defaults->$internalName;
