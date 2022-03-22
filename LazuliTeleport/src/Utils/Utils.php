@@ -47,10 +47,14 @@ final class Utils
             ReflectionProperty::IS_PUBLIC
         );
         foreach ($properties as $property) {
-            if (!$property->isInitialized($valuesProvider)) {
+            if (
+                !$property->isInitialized($valuesProvider)
+                or
+                ($value = $property->getValue($valuesProvider)) === null
+            ) {
                 continue;
             }
-            $value = $property->getValue($valuesProvider);
+            
             $property->setValue($toBeOverriden, $value);
         }
     }
