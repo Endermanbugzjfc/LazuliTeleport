@@ -118,8 +118,9 @@ class LazuliTeleport extends PluginBase
             PermissionManager::getInstance()->addPermission($permissionInstance);
         }
 
-        $listener = new PlayerSessionManager();
-        $this->getServer()->getPluginManager()->registerEvents($listener, $this);
+        $playerSessionManager = new PlayerSessionManager();
+        $this->getServer()->getPluginManager()->registerEvents($playerSessionManager, $this);
+        $this->playerSessionManager = $playerSessionManager;
         if (!PacketHooker::isRegistered()) {
             PacketHooker::register($this);
         }
@@ -173,11 +174,16 @@ class LazuliTeleport extends PluginBase
         unset($this->singletonsHolder);
         unset($this->configObject);
         unset($this->permissionToMessagesMap);
+        unset($this->playerManager);
     }
+
+    protected PlayerSessionManager $playerSessionManager;
 
     public function getPlayerSession(
         Player $player
     ) : PlayerSession {
+        $arrayKey = PlayerSession::staticArrayKey($player);
+        return $this->playerSessionManager->playerSessions[$arrayKey];
     }
 
     public static function getInstance() : self
