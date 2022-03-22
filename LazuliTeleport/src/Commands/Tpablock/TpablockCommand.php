@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Endermanbugzjfc\LazuliTeleport\Commands;
+namespace Endermanbugzjfc\LazuliTeleport\Commands\Tpablock;
 
 use CortexPE\Commando\args\TextArgument;
 use Generator;
