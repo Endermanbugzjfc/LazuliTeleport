@@ -52,6 +52,13 @@ class SingletonsHolder
     public function waitFor(
         string $class
     ) : Generator {
+        /**
+         * @var T|null
+         */
+        $singleton = $this->singletons[$class] ?? null;
+        if ($singleton !== null) {
+            return $singleton;
+        }
         $this->queue[$class] = $channel = new Channel();
         return yield from $channel->receive();
     }
