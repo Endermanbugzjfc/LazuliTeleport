@@ -20,6 +20,6 @@ class BlockSubcommand extends BaseSubCommand
 
     public static function getInternalName() : string
     {
-        return "block";
+        return "tpablock.block";
     }
 }
