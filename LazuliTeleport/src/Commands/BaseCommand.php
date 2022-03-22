@@ -6,15 +6,15 @@ namespace Endermanbugzjfc\LazuliTeleport\Commands;
 
 use AssertionError;
 use CortexPE\Commando\BaseCommand as CommandoBaseCommand;
-use CortexPE\Commando\args\BaseArgument;
 use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
 use Generator;
-use SOFe\AwaitGenerator\Await;
-use Throwable;
 use pocketmine\command\CommandSender;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
+use SOFe\AwaitGenerator\Await;
+use Throwable;
+use function strtolower;
 
 abstract class BaseCommand extends CommandoBaseCommand
 {
@@ -86,4 +86,11 @@ abstract class BaseCommand extends CommandoBaseCommand
     }
 
     abstract public static function getInternalName() : string;
+
+    protected function registerSubCommandAndSetPermission(
+        BaseSubCommand $command
+    ) : void {
+        $this->registerSubCommand($command);
+        $command->setPermission("{$this->getPermission()}.{$command->getName()}");
+    }
 }
