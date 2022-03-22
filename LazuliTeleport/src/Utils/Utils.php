@@ -15,16 +15,19 @@ final class Utils
     }
 
     /**
-     * @param Channel<null>|null $channel
-     * @return Channel<null>|null
+     * @template T
+     * @param Channel<T>|null $channel
+     * @param T $value
+     * @return Channel<T>|null
      */
     public static function closeChannel(
-        ?Channel $channel
+        ?Channel $channel,
+        mixed $value
     ) : ?Channel {
         if ($channel !== null) {
             $queueSize = $channel->getReceiveQueueSize();
             for ($receiver = 0; $receiver < $queueSize; $receiver++) {
-                $channel->sendWithoutWait(null);
+                $channel->sendWithoutWait($value);
             }
         }
 
@@ -54,7 +57,7 @@ final class Utils
             ) {
                 continue;
             }
-            
+
             $property->setValue($toBeOverriden, $value);
         }
     }
