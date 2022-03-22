@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Commands;
 
+use CortexPE\Commando\args\TextArgument;
 use Generator;
 use pocketmine\command\CommandSender;
 
 class TpablockCommand extends BaseCommand
 {
+    public const PLAYERS = "Players (separate with comma)";
+
+    protected function prepare() : void {
+        $this->registerArgument(0, new TextArgument);
+    }
+
     /**
      * @param array|array<string,mixed|array<mixed>> $args
      * @phpstan-param array<string,mixed|array<mixed>> $args
@@ -18,7 +25,14 @@ class TpablockCommand extends BaseCommand
         string $aliasUsed,
         array $args
     ) : Generator {
-        // TODO: Implement onRun() method.
+        $session = $this->playerSession($sender);
+    }
+
+    public static function runWithSelectedTargets(
+        PlayerSession $session,
+        UuidInterface ...$targets
+    ) : void {
+
     }
 
     public static function getInternalName() : string
