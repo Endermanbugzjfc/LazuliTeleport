@@ -28,6 +28,7 @@ use function bin2hex;
 use function implode;
 use function in_array;
 use function spl_object_id;
+use function time;
 
 class PlayerSession
 {
@@ -375,13 +376,19 @@ class PlayerSession
     public function getInfo() : PlayerSessionInfo
     {
         $options = $this->getSpecificOptions();
+        $tpaDefaultCoolDown = (float)$options->tpaCoolDown;
+        $tpahereDefaultCoolDown = (float)$options->tpahereCoolDown;
+        $tpaLastUse = $this->getLastTpaUseTime() ?? time();
+        $tpahereLastUse = $this->getLastTpahereUseTime() ?? time();
+        $tpaCoolDown = time() - $tpaDefaultCoolDown;
+        $tpahereCoolDown = time() - $tpahereDefaultCoolDown;
         return new PlayerSessionInfo(
             new NumberInfo(1.0),
-            new DurationInfo(0.0), // TODO
-            new DurationInfo((float)$options->tpaCoolDown),
+            new DurationInfo($tpaCoolDown),
+            new DurationInfo($tpaDefaultCoolDown),
             new NumberInfo((float)$options->tpahereRequesteeLimit),
-            new DurationInfo(0.0), // TODO
-            new DurationInfo((float)$options->tpahereCoolDown),
+            new DurationInfo($tpahereCoolDown),
+            new DurationInfo($tpahereDefaultCoolDown),
             new DurationInfo((float)$options->waitDurationAfterAcceptRequest),
             new DurationInfo((float)$this->getForceModeWaitDuration()),
             new PlayerInfo($this->getPlayer())
