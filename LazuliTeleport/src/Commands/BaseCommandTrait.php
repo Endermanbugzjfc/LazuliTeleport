@@ -14,7 +14,7 @@ use pocketmine\player\Player;
 use SOFe\AwaitGenerator\Await;
 use Throwable;
 
-trait BaseCommand
+trait BaseCommandTrait
 {
     /**
      * @param array<string, scalar|Vector3> $args
