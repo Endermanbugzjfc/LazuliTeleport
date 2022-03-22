@@ -48,7 +48,8 @@ class Messages
     public ?string $actionBlock = null;
     public ?string $actionUnblock = null;
 
-    public static function getDefault() : self {
+    public static function getDefault() : self
+    {
         $self = new self();
         $formTitle = "{Bold}{DarkAqua}Teleportation Request";
         $receiveTpa = "{Aqua}{Requestor} {Gold}wants to teleport to you.";
@@ -90,6 +91,17 @@ class Messages
             EOT
         );
         $self->gotBlocked = MessageEntry::createChat("{Yellow}Force mode disabled.");
+
+        $self->playerFinderTitle = "{Bold}{DarkAqua}Player Finder";
+        $self->playerFinderLabel = "{Bold}{Gray}(Press \"Submit\" to proceed, press \"X\" to cancel.)";
+        $self->playerFinderPlaceholder = "Enter first few letters in player's name";
+        $self->playerFinderSearchResultHeader = "{Bold}{Gold}Found {Green}{ResultCount} {Gold}players:";
+        $self->playerFinderSearchResultEntry = "{Gold}{ResultPlayer}";
+        $self->playerFinderActionSelectorLabel = "{Aqua}Action: ";
+        $self->actionTpahere = "Tpahere";
+        $self->actionTpa = "Tpa";
+        $self->actionBlock = "Block";
+        $self->actionUnblock = "Unblock";
 
         return $self;
     }
