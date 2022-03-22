@@ -12,14 +12,15 @@ use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
 use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use Generator;
 use pocketmine\player\Player;
-use pocketmine\Server;
 use Ramsey\Uuid\UuidInterface;
 use RuntimeException;
 use SOFe\AwaitGenerator\Await;
 use SOFe\AwaitGenerator\Channel;
-use SOFe\InfoAPI\CommonInfo;
+use SOFe\InfoAPI\DurationInfo;
 use SOFe\InfoAPI\Info;
 use SOFe\InfoAPI\InfoAPI;
+use SOFe\InfoAPI\NumberInfo;
+use SOFe\InfoAPI\PlayerInfo;
 use Throwable;
 use Vecnavium\FormsUI\ModalForm;
 use function array_filter;
@@ -253,7 +254,7 @@ class PlayerSession
                 return;
             }
             $player = $this->getPlayer();
-            $info ??= new CommonInfo(Server::getInstance());
+            $info ??= $this->getInfo();
 
             $formTitle = InfoAPI::resolve($message->formTitle, $info);
             ;
@@ -343,5 +344,24 @@ class PlayerSession
         $this->displayMessage($message);
 
         $this->errorRecursionLock = false;
+    }
+
+    /**
+     * @return PlayerSessionInfo Do NOT reuse the same info instance. 
+     */
+    public function getInfo() : PlayerSessionInfo
+    {
+        $options = $this->getSpecificOptions();
+        return new PlayerSessionInfo(
+            new NumberInfo(1.0),
+            new DurationInfo(0.0), // TODO
+            new DurationInfo((float)$options->tpaCoolDown),
+            new NumberInfo((float)$options->tpahereRequesteeLimit),
+            new DurationInfo(0.0), // TODO
+            new DurationInfo((float)$options->tpahereCoolDown),
+            new DurationInfo((float)$options->waitDurationAfterAcceptRequest),
+            new DurationInfo((float)$this->getForceModeWaitDuration()),
+            new PlayerInfo($this->getPlayer())
+        );
     }
 }
