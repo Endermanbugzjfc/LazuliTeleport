@@ -47,6 +47,11 @@ class Messages
     public ?string $actionTpa = null;
     public ?string $actionBlock = null;
     public ?string $actionUnblock = null;
+    public ?string $forceModeToggleLabel = null;
+    public ?string $forceModeWaitDurationSliderLabel = null;
+    public ?string $forceModeWaitDurationSliderMin = null;
+    public ?string $forceModeWaitDurationSliderStep = null;
+    public ?string $forceModeWaitDurationSliderTotalSteps = null;
 
     public static function getDefault() : self
     {
