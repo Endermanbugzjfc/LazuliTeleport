@@ -13,7 +13,6 @@ class MessageEntry
     public ?int $fadeIn = null;
     public ?int $stay = null;
     public ?int $fadeOut = null;
-    public string $jukeboxPopup = "";
 
     public string $formTitle = "";
     public string $formBody = "";
