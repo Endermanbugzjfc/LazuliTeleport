@@ -81,7 +81,7 @@ class Messages
         $self->requesteeHasUnresolvedRequest = MessageEntry::createChat("{Red}self player has another teleportation request at the moment. Try again later!");
 
         $self->requestSelf = MessageEntry::createChat("{Red}Cannot send request to yourself!");
-        $self->internalServerError = MessageEntry::createChat("{Red}Sorry, an internal server error had occurred! Please report self problem to an admin.");
+        $self->internalServerError = MessageEntry::createChat("{Red}Sorry, an internal server error had occurred! Please report this problem to an admin.");
 
         $target = "{Aqua}{Target}";
         $block = "{Yellow}will not be able to send any tpa or tpahere requests";
