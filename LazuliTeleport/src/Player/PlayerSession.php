@@ -165,6 +165,44 @@ class PlayerSession
     }
 
     /**
+     * @var int|null Unix timestamp.
+     */
+    protected ?int $lastTpaUseTime = null;
+
+    /**
+     * @param int|null $time Null = current time.
+     */
+    public function setLastTpaUseTime(
+        ?int $time = null
+    ) : void {
+        $this->lastTpaUseTime = $time;
+    }
+
+    public function getLastTpaUseTime() : ?int
+    {
+        return $this->lastTpaUseTime;
+    }
+
+    /**
+     * @var int|null Unix timestamp.
+     */
+    protected ?int $lastTpahereUseTime = null;
+
+    /**
+     * @param int|null $time Null = current time.
+     */
+    public function setLastTpahereUseTime(
+        ?int $time = null
+    ) : void {
+        $this->lastTpahereUseTime = $time;
+    }
+
+    public function getLastTpahereUseTime() : ?int
+    {
+        return $this->lastTpahereUseTime;
+    }
+
+    /**
      * @return Generator<mixed, mixed, mixed, void>
      */
     public function awaitTpahereCoolDown() : Generator
