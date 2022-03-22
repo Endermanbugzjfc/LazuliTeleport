@@ -12,10 +12,14 @@ use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
 use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use Generator;
 use pocketmine\player\Player;
+use pocketmine\Server;
 use Ramsey\Uuid\UuidInterface;
 use RuntimeException;
 use SOFe\AwaitGenerator\Await;
 use SOFe\AwaitGenerator\Channel;
+use SOFe\InfoAPI\CommonInfo;
+use SOFe\InfoAPI\Info;
+use SOFe\InfoAPI\InfoAPI;
 use Throwable;
 use Vecnavium\FormsUI\ModalForm;
 use function array_filter;
@@ -235,23 +239,33 @@ class PlayerSession
      */
     public function displayMessage(
         ?MessageEntry $message,
+        ?Info $info = null,
         ?callable $formCallback = null,
-        array $trace
+        array $trace = []
     ) : void {
         Await::f2c(function () use (
             $message,
             $formCallback,
-            $trace
+            $trace,
+            $info
         ) : Generator {
             if ($message === null) {
                 return;
             }
             $player = $this->getPlayer();
+            $info ??= new CommonInfo(Server::getInstance());
 
-            $formTitle = $message->formTitle;
-            $formBody = $message->formBody;
+            $formTitle = InfoAPI::resolve($message->formTitle, $info);
+            ;
+            $formBody = InfoAPI::resolve($message->formBody, $info);
             $acceptButton = $message->acceptButton;
+            if ($acceptButton !== null) {
+                InfoAPI::resolve($acceptButton, $info);
+            }
             $rejectButton = $message->rejectButton;
+            if ($rejectButton !== null) {
+                $rejectButton = InfoAPI::resolve($rejectButton, $info);
+            }
             if (
                 $formTitle !== ""
                 or
@@ -287,14 +301,14 @@ class PlayerSession
                 }
             }
 
-            $chat = $message->chat;
+            $chat = InfoAPI::resolve($message->chat, $info);
             if ($chat !== "") {
                 $player->sendMessage($chat);
             }
 
-            $title = $message->title;
-            $subtitle = $message->subtitle;
-            $actionbar = $message->actionbar;
+            $title = InfoAPI::resolve($message->title, $info);
+            $subtitle = InfoAPI::resolve($message->subtitle, $info);
+            $actionbar = InfoAPI::resolve($message->actionbar, $info);
             if (
                 $title !== ""
                 or
@@ -306,7 +320,7 @@ class PlayerSession
                 $player->sendTitle($title, $subtitle, $fadeIn, $stay, $fadeOut);
             }
 
-            $actionbar = $message->actionbar;
+            $actionbar = InfoAPI::resolve($message->actionbar, $info);
             if ($actionbar !== "") {
                 $player->sendActionBarMessage($actionbar);
             }
