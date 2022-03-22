@@ -8,9 +8,9 @@ use CortexPE\Commando\PacketHooker;
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
 use Endermanbugzjfc\LazuliTeleport\Commands\BaseCommand;
-use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\TpablockCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpacceptCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaforceCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TparejectCommand;
@@ -23,15 +23,17 @@ use Endermanbugzjfc\LazuliTeleport\Player\PlayerSessionManager;
 use Endermanbugzjfc\LazuliTeleport\Player\TeleportationRequestContextInfo;
 use Endermanbugzjfc\LazuliTeleport\Utils\SingletonsHolder;
 use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
-use RuntimeException;
-use function array_map;
-use function file_exists;
-use function file_put_contents;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use RuntimeException;
+use function array_map;
+use function count;
+use function explode;
+use function file_exists;
+use function file_put_contents;
 
 class LazuliTeleport extends PluginBase
 {
@@ -134,8 +136,10 @@ class LazuliTeleport extends PluginBase
                  */
                 $defaults = new Commands();
                 $internalName = $class::getInternalName();
-                $default = $defaults->$internalName;
-                $profile = $commandProfiles->$internalName ?? null;
+                $explode = explode(".", $internalName);
+                $internalProfileName = $explode[count($explode) - 1];
+                $default = $defaults->$internalProfileName;
+                $profile = $commandProfiles->$internalProfileName ?? null;
                 if ($profile !== null) {
                     Utils::override($profile, $default);
                 } else {
