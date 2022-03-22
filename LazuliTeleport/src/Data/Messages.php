@@ -6,7 +6,7 @@ namespace Endermanbugzjfc\LazuliTeleport\Data;
 
 class Messages
 {
-    public ?MessageEntry $tpaRequestRecieve = null;
+    public ?MessageEntry $tpaRequestReceive = null;
     public ?MessageEntry $tpaRequestSend = null;
     public ?MessageEntry $tpaRequestAccepted = null;
     public ?MessageEntry $tpaRequestAcceptedWaiting = null;
@@ -14,7 +14,7 @@ class Messages
     public ?MessageEntry $tpaExceedRequesteeLimit = null;
     public ?MessageEntry $tpaCoolDown = null;
 
-    public ?MessageEntry $tpahereRequestRecieve = null;
+    public ?MessageEntry $tpahereRequestReceive = null;
     public ?MessageEntry $tpahereRequestSend = null;
     public ?MessageEntry $tpahereRequestAccepted = null;
     public ?MessageEntry $tpahereRequestAcceptedWaiting = null;
@@ -57,7 +57,7 @@ class Messages
         $receiveTpa = "{Aqua}{Requestor} {Gold}wants to teleport to you.";
         $currentlyAt = "\nHe is currently at {Green}{Requestor Player Position}";
         $commandHint = " {Italic}{DarkGray}(/tpaccept or /tpareject)";
-        $self->tpaRequestRecieve = MessageEntry::createForm($formTitle, $receiveTpa . $currentlyAt, $receiveTpa . $commandHint);
+        $self->tpaRequestReceive = MessageEntry::createForm($formTitle, $receiveTpa . $currentlyAt, $receiveTpa . $commandHint);
         $self->tpaRequestSend = $requestSend = MessageEntry::createChat("{Yellow}Waiting for {Gold}{Requestee}{Yellow}'s response to your {Green}{RequestType} {Yellow}request...");
         $self->tpaRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting to {Aqua}{Requestee}...");
         $self->tpaRequestAcceptedWaiting = MessageEntry::createChat("{Yellow}You will be teleporting to {Aqua}{Requestee} after {Green}{TeleportationWaitDuration}...");
@@ -67,7 +67,7 @@ class Messages
         $self->tpaCoolDown = MessageEntry::createChat("{Red}You must wait for {TpaCoolDown} more.");
 
         $receiveTpahere = "{Aqua}{Requestor} {Gold}wants to teleport you to him.";
-        $self->tpahereRequestRecieve = MessageEntry::createForm($formTitle, $receiveTpahere . $currentlyAt, $receiveTpahere . $commandHint);
+        $self->tpahereRequestReceive = MessageEntry::createForm($formTitle, $receiveTpahere . $currentlyAt, $receiveTpahere . $commandHint);
         $self->tpahereRequestSend = $requestSend;
         $self->tpahereRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting {Aqua}{Requestee} {Yellow}to you...");
         $self->tpahereRequestAcceptedWaiting = MessageEntry::createChat("{Aqua}{Requestee} {Yellow}will be teleporting to you after {Green}{WaitDuration}...");
