@@ -37,8 +37,13 @@ class Commands
                 "tpahere" => "Request teleporting another player to you",
                 "tpaccept" => "Accept a teleportation request",
                 "tpareject" => "Reject a teleportation request",
-                "tpablock" => "Block another player from sending you teleportation request",
                 "tpaforce" => "(Admin command) Automatically accept teleportation request you send",
+
+                "tpablock" => "Block another player from sending you teleportation request",
+                "list" => "List players blocked by you",
+                "block" => "Block one or more players",
+                "unblock" => "Unblock one or more players",
+
                 default => throw new RuntimeException("Unknown command \"$name\"")
             };
             $aliases = match ($name) {
