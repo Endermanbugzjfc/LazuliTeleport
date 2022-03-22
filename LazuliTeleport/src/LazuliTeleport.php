@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport;
 
-use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\PacketHooker;
 use Endermanbugzjfc\ConfigStruct\Emit;
 use Endermanbugzjfc\ConfigStruct\Parse;
+use Endermanbugzjfc\LazuliTeleport\Commands\BaseCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpablockCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpacceptCommand;
-use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaforceCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TparejectCommand;
@@ -25,17 +25,17 @@ use Endermanbugzjfc\LazuliTeleport\Player\PlayerSessionManager;
 use Endermanbugzjfc\LazuliTeleport\Player\TeleportationRequestContextInfo;
 use Endermanbugzjfc\LazuliTeleport\Utils\SingletonsHolder;
 use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
+use RuntimeException;
+use const ARRAY_FILTER_USE_BOTH;
+use function array_filter;
+use function file_exists;
+use function file_put_contents;
+use function strtolower;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
-use RuntimeException;
-use function array_filter;
-use function file_exists;
-use function file_put_contents;
-use function strtolower;
-use const ARRAY_FILTER_USE_BOTH;
 
 class LazuliTeleport extends PluginBase
 {
@@ -112,7 +112,7 @@ class LazuliTeleport extends PluginBase
          */
         [
             $this->configObject,
-            $this->commands
+            $commandProfiles
         ] = $objects;
 
         $pluginName = $this->getName();
@@ -128,32 +128,41 @@ class LazuliTeleport extends PluginBase
             PacketHooker::register($this);
         }
 
-        $commands = [
-            $this->createCommandFromProfile(
+        $commands = array_map(
+            function (string $class) use (
+                $commandProfiles
+            ) : BaseCommand {
+                /**
+                 * Small workaround to get PHPStan coverage.
+                 * @var class-string<BaseCommand> $class
+                 */
+                $class = $class;
+                $defaults = new Commands();
+                $internalName = $class::getInternalName();
+                $default = $defaults->$internalName;
+                $profile = $commandProfiles->$internalName ?? null;
+                if ($profile !== null) {
+                    Utils::override($profile, $default);
+                } else {
+                    $profile = $default;
+                }
+
+                return new $class(
+                    $this,
+                    $profile->name,
+                    $profile->description,
+                    $profile->aliases
+                );
+            }, [
                 TpaCommand::class,
-                "tpa"
-            ),
-            $this->createCommandFromProfile(
                 TpahereCommand::class,
-                "tpahere"
-            ),
-            $this->createCommandFromProfile(
                 TpacceptCommand::class,
-                "tpaccept"
-            ),
-            $this->createCommandFromProfile(
                 TparejectCommand::class,
-                "tpareject"
-            ),
-            $this->createCommandFromProfile(
                 TpablockCommand::class,
-                "tpablock"
-            ),
-            $this->createCommandFromProfile(
-                TpaforceCommand::class,
-                "tpaforce"
-            )
-        ];
+                TpaforceCommand::class
+            ]
+        );
+
         $this->getServer()->getCommandMap()->registerAll($pluginName, $commands);
 
         PlayerSessionInfo::init();
@@ -170,39 +179,6 @@ class LazuliTeleport extends PluginBase
         unset($this->singletonsHolder);
         unset($this->configObject);
         unset($this->permissionToMessagesMap);
-    }
-
-    /**
-     * Default values will be used if the user-defined profile does not have it.
-     * @template T of BaseCommand
-     * @phpstan-param class-string<T> $class
-     * @param string $name Command name to retrieve the profile and generate the permission.
-     * @return T
-     */
-    protected function createCommandFromProfile(
-        string $class,
-        string $name
-    ) : BaseCommand {
-        $defaults = new Commands();
-        $default = $defaults->$name;
-        $profiles = $this->getCommands();
-        $profile = $profiles->$name ?? null;
-        if ($profile !== null) {
-            $profile->name ??= $default->name;
-            $profile->description ??= $default->description;
-            $profile->aliases ??= $default->aliases;
-        } else {
-            $profile = $default;
-        }
-
-        $command = new $class(
-            $this,
-            $profile->name,
-            $profile->description,
-            $profile->aliases
-        );
-
-        return $command;
     }
 
     public function getPlayerSession(
