@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Commands\Tpablock;
 
-use CortexPE\Commando\args\TextArgument;
+use Endermanbugzjfc\LazuliTeleport\Commands\BaseCommand;
 use Generator;
 use pocketmine\command\CommandSender;
 
@@ -12,8 +12,15 @@ class TpablockCommand extends BaseCommand
 {
     public const PLAYERS = "Players (separate with comma)";
 
-    protected function prepare() : void {
-        $this->registerArgument(0, new TextArgument);
+    protected function asyncPrepare() : Generator
+    {
+        foreach ([
+            ListSubcommand::getInstance(),
+            BlockSubcommand::getInstance(),
+            UnblockSubcommand::getInstance()
+        ] as $command) {
+            $this->registerSubCommand(yield from $command);
+        }
     }
 
     /**
@@ -32,7 +39,6 @@ class TpablockCommand extends BaseCommand
         PlayerSession $session,
         UuidInterface ...$targets
     ) : void {
-
     }
 
     public static function getInternalName() : string

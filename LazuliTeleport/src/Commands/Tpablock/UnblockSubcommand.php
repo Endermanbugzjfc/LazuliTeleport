@@ -9,7 +9,7 @@ use Endermanbugzjfc\LazuliTeleport\Commands\TerminateCommandException;
 use Generator;
 use pocketmine\command\CommandSender;
 
-class BlockSubcommand extends BaseSubCommand
+class UnblockSubcommand extends BaseSubCommand
 {
     protected function asyncRun(
         CommandSender $sender,
@@ -21,6 +21,6 @@ class BlockSubcommand extends BaseSubCommand
 
     public static function getInternalName() : string
     {
-        return "tpablock.block";
+        return "tpablock.unblock";
     }
 }
