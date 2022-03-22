@@ -3,7 +3,7 @@
 namespace Endermanbugzjfc\LazuliTeleport\Data;
 
 class FormPage {
-	public bool $enabled = true;
+	public ?bool $enabled = true;
 
 	public ?string $title = null;
 
