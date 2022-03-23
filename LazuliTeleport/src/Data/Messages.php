@@ -50,7 +50,7 @@ class Messages
     public ?string $actionUnblock = null;
     public ?string $forceModeToggleLabel = null;
     public ?string $forceModeWaitDurationSliderLabel = null;
-    public ?string $playerFinderNoSelectedPlayer = null;
+    public ?string $playerFinderNoTargetsSelected = null;
 
     public static function getDefault() : self
     {
@@ -116,6 +116,7 @@ class Messages
         $self->actionUnblock = "Unblock";
         $self->forceModeToggleLabel = "{Aqua}(Admin) Force-accept request";
         $self->forceModeWaitDurationSliderLabel = "{Aqua}Teleportation wait duration";
+        $self->playerFinderNoTargetsSelected = "{Bold}{Red}Please select at least one player!";
 
         return $self;
     }
