@@ -50,6 +50,7 @@ class Messages
     public ?string $actionUnblock = null;
     public ?string $forceModeToggleLabel = null;
     public ?string $forceModeWaitDurationSliderLabel = null;
+    public ?string $playerFinderNoSelectedPlayer = null;
 
     public static function getDefault() : self
     {
