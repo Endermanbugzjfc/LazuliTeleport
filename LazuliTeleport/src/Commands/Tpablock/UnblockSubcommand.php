@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Endermanbugzjfc\LazuliTeleport\Commands\Tpablock;
 
 use Endermanbugzjfc\LazuliTeleport\Commands\BaseSubCommand;
-use Endermanbugzjfc\LazuliTeleport\Commands\TerminateCommandException;
+use Endermanbugzjfc\LazuliTeleport\Player\PlayerFinderActionInterface;
+use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
 use Generator;
 use pocketmine\command\CommandSender;
+use Ramsey\Uuid\UuidInterface;
 
-class UnblockSubcommand extends BaseSubCommand
+class UnblockSubcommand extends BaseSubCommand implements PlayerFinderActionInterface
 {
     protected function asyncRun(
         CommandSender $sender,
@@ -22,5 +24,17 @@ class UnblockSubcommand extends BaseSubCommand
     public static function getInternalName() : string
     {
         return "tpablock.unblock";
+    }
+
+    public function getMaxTargetsLimit() : int
+    {
+        // TODO: Implement getMaxTargetsLimit() method.
+    }
+
+    public function runWithSelectedTargets(
+        PlayerSession $session,
+        UuidInterface ...$targets
+    ) : void {
+        // TODO: Implement runWithSelectedTargets() method.
     }
 }

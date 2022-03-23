@@ -35,12 +35,6 @@ class TpablockCommand extends BaseCommand
         $session = $this->playerSession($sender);
     }
 
-    public static function runWithSelectedTargets(
-        PlayerSession $session,
-        UuidInterface ...$targets
-    ) : void {
-    }
-
     public static function getInternalName() : string
     {
         return "tpablock";
