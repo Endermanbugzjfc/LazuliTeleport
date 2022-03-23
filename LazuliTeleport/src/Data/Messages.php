@@ -48,6 +48,8 @@ class Messages
     public ?string $actionTpa = null;
     public ?string $actionBlock = null;
     public ?string $actionUnblock = null;
+    public ?string $actionBlockAll = null;
+    public ?string $actionUnblockAll = null;
     public ?string $forceModeToggleLabel = null;
     public ?string $forceModeWaitDurationSliderLabel = null;
     public ?string $playerFinderNoTargetsSelected = null;
