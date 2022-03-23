@@ -16,19 +16,29 @@ use Ramsey\Uuid\UuidInterface;
 use RuntimeException;
 use SOFe\AwaitGenerator\Await;
 use SOFe\AwaitGenerator\Channel;
+use SOFe\InfoAPI\AnonInfo;
 use SOFe\InfoAPI\DurationInfo;
 use SOFe\InfoAPI\Info;
 use SOFe\InfoAPI\InfoAPI;
 use SOFe\InfoAPI\NumberInfo;
 use SOFe\InfoAPI\PlayerInfo;
+use SOFe\InfoAPI\StringInfo;
 use Throwable;
+use Vecnavium\FormsUI\CustomForm;
 use Vecnavium\FormsUI\ModalForm;
 use function array_filter;
+use function array_unique;
 use function bin2hex;
+use function count;
+use function explode;
 use function implode;
 use function in_array;
+use function sort;
 use function spl_object_id;
+use function stripos;
+use function strtolower;
 use function time;
+use const SORT_STRING;
 
 class PlayerSession
 {
@@ -399,5 +409,114 @@ class PlayerSession
             new DurationInfo((float)$this->getForceModeWaitDuration()),
             new PlayerInfo($this->getPlayer())
         );
+    }
+
+    public function openPlayerFinder(
+        PlayerFinderActionInterface $action,
+        string $searchBarDefaultValue = "",
+        ?callable $sort = null,
+        ?callable $filter = null,
+        ?callable $actionExit = null
+    ) : void {
+        Await::f2c(function () use (
+            $action,
+            $searchBarDefaultValue,
+            $sort,
+            $filter,
+            $actionExit
+        ) : Generator {
+            $playerFinder = "playerFinder";
+            $found = null;
+            if ($searchBarDefaultValue !== "") {
+                $explode = explode(" ", $searchBarDefaultValue);
+                $keywords = array_unique($explode);
+
+                $names = LazuliTeleport::getInstance()->getAllPlayerNames();
+                $found = [];
+                foreach ($names as $name) {
+                    foreach ($keywords as $keyword) {
+                        $stripos = stripos($name, $keyword);
+                        if ($stripos === false) {
+                            continue;
+                        }
+                        $found[] = $name;
+                    }
+                }
+                if ($filter !== null) {
+                    $filter($found);
+                }
+                if ($sort !== null) {
+                    $sort($found);
+                } else {
+                    sort($found, SORT_STRING);
+                }
+            }
+            $resultToggle = "resultToggle.";
+            yield from Await::promise(function ($then) use (
+                $action,
+                $searchBarDefaultValue,
+                $sort,
+                $filter,
+                $actionExit,
+
+                $playerFinder,
+                $found,
+                $resultToggle
+            ) {
+                $pluginName = LazuliTeleport::getInstance()->getName();
+                $player = $this->getPlayer();
+                $messages = $this->getMessages();
+                $info = $this->getInfo();
+
+                $form = new CustomForm($then);
+                $title = $messages->playerFinderTitle ?? "";
+                $form->setTitle(InfoAPI::resolve($title, $info));
+
+                $label = $messages->playerFinderLabel ?? "";
+                $labelResolve = InfoAPI::resolve($label, $info);
+                $placeholder = $messages->playerFinderPlaceholder ?? "";
+                $placeholderResolve = InfoAPI::resolve($placeholder, $info);
+                $form->addInput($labelResolve, $placeholderResolve, $searchBarDefaultValue, $playerFinder);
+
+                if ($found !== null) {
+                    $resultHeader = $messages->playerFinderSearchResultHeader            ;
+                    $resultNamespace = "$pluginName.PlayerFinder";
+                    if ($resultHeader !== null) {
+                        $resultCount = count($found);
+                        $resultHeaderInfo = new class(
+                            $resultNamespace,
+                            [
+                                "ResultCount" => new NumberInfo($resultCount)
+                            ],
+                            [
+                                $info
+                            ]
+                        ) extends AnonInfo {
+                        };
+                        $resultHeaderResolve = InfoAPI::resolve($resultHeader, $resultHeaderInfo);
+                        $form->addLabel($resultHeaderResolve);
+                    }
+                    foreach ($found as $name) {
+                        $entry = $messages->playerFinderSearchResultEntry ?? "{ResultPlayer}";
+                        $entryInfo = new class(
+                            $resultNamespace,
+                            [
+                                "ResultPlayer" => new StringInfo($name)
+                            ],
+                            [
+                                $info
+                            ]
+                        ) extends AnonInfo {
+                        };
+                        $entryResolve = InfoAPI::resolve($entry, $entryInfo);
+                        $exact = strtolower($searchBarDefaultValue) === strtolower($name);
+                        $form->addToggle($entryResolve, $exact, $resultToggle . $name);
+                    }
+                }
+
+
+                $player->sendForm($form);
+            });
+        });
     }
 }
