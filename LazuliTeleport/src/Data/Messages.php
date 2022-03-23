@@ -116,6 +116,8 @@ class Messages
         $self->actionTpa = "Tpa";
         $self->actionBlock = "Block";
         $self->actionUnblock = "Unblock";
+        $self->actionBlock = "Block All";
+        $self->actionUnblock = "Unblock All";
         $self->forceModeToggleLabel = "{Aqua}(Admin) Force-accept request";
         $self->forceModeWaitDurationSliderLabel = "{Aqua}Teleportation wait duration";
         $self->playerFinderNoTargetsSelected = "{Bold}{Red}Please select at least one player!";
