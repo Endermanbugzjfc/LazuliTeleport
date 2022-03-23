@@ -33,7 +33,7 @@ class UnblockSubcommand extends BaseSubCommand implements PlayerFinderActionInte
 
     public function runWithSelectedTargets(
         PlayerSession $session,
-        UuidInterface ...$targets
+        string ...$targets
     ) : void {
         // TODO: Implement runWithSelectedTargets() method.
     }

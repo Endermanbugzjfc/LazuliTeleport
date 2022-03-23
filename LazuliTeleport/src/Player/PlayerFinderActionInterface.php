@@ -11,7 +11,7 @@ interface PlayerFinderActionInterface
 {
     public function runWithSelectedTargets(
         PlayerSession $session,
-        UuidInterface ...$targets
+        string ...$targets
     ) : void;
 
     public function getActionDisplayName(

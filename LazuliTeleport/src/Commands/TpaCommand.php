@@ -36,7 +36,7 @@ class TpaCommand extends BaseCommand implements PlayerFinderActionInterface
 
     public function runWithSelectedTargets(
         PlayerSession $session,
-        UuidInterface ...$targets
+        string ...$targets
     ) : void {
         // TODO: Implement runWithSelectedTargets() method.
     }
