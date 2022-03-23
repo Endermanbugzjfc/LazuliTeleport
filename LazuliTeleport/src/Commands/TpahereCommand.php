@@ -40,4 +40,17 @@ class TpahereCommand extends BaseCommand implements PlayerFinderActionInterface
     ) : void {
         // TODO: Implement runWithSelectedTargets() method.
     }
+
+    public function getActionDisplayName(PlayerSession $session) : string
+    {
+        // TODO: Implement getActionDisplayName() method.
+    }
+
+    public function isActionAvailable(
+        PlayerSession $session,
+        UuidInterface ...$targets
+    ) : Generator
+    {
+        // TODO: Implement isActionAvailable() method.
+    }
 }

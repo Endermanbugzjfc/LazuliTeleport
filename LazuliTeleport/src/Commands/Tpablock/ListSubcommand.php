@@ -37,4 +37,17 @@ class ListSubcommand extends BaseSubCommand implements PlayerFinderActionInterfa
     ) : void {
         // TODO: Implement runWithSelectedTargets() method.
     }
+
+    public function getActionDisplayName(PlayerSession $session) : string
+    {
+        // TODO: Implement getActionDisplayName() method.
+    }
+
+    public function isActionAvailable(
+        PlayerSession $session,
+        UuidInterface ...$targets
+    ) : Generator
+    {
+        // TODO: Implement isActionAvailable() method.
+    }
 }
