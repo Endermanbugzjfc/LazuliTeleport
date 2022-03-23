@@ -334,11 +334,7 @@ class PlayerSession
                 $messageOnReject = $message->messageOnReject;
                 if ($messageOnReject !== null) {
                     $id = spl_object_id($messageOnReject);
-                    if (in_array(
-                        $id,
-                        $trace,
-                        true
-                    )) {
+                    if (in_array($id, $trace, true)) {
                         $permissionsList = implode(", ", $this->inheritedGroupsPermission);
                         $err = new RuntimeException("Recursive message detected, the problemetic config is among $permissionsList");
                         $this->error($err);
