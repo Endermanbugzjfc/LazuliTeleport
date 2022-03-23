@@ -53,6 +53,11 @@ class PlayerSessionManager implements Listener
             $event
         ) : Generator {
             $player = $event->getPlayer();
+
+            if (!$player->hasPlayedBefore()) {
+                $this->allPlayerNames[] = $player->getName();
+            }
+
             $arrayKey = "";
             yield from Await::promise(function ($then) use (
                 $player,
