@@ -11,7 +11,7 @@ use Generator;
 use pocketmine\command\CommandSender;
 use Ramsey\Uuid\UuidInterface;
 
-class ListSubcommand extends BaseSubCommand implements PlayerFinderActionInterface
+class ListSubcommand extends BaseSubCommand
 {
     protected function asyncRun(
         CommandSender $sender,
@@ -24,30 +24,5 @@ class ListSubcommand extends BaseSubCommand implements PlayerFinderActionInterfa
     public static function getInternalName() : string
     {
         return "tpablock.list";
-    }
-
-    public function getMaxTargetsLimit() : int
-    {
-        // TODO: Implement getMaxTargetsLimit() method.
-    }
-
-    public function runWithSelectedTargets(
-        PlayerSession $session,
-        UuidInterface ...$targets
-    ) : void {
-        // TODO: Implement runWithSelectedTargets() method.
-    }
-
-    public function getActionDisplayName(PlayerSession $session) : string
-    {
-        // TODO: Implement getActionDisplayName() method.
-    }
-
-    public function isActionAvailable(
-        PlayerSession $session,
-        UuidInterface ...$targets
-    ) : Generator
-    {
-        // TODO: Implement isActionAvailable() method.
     }
 }
