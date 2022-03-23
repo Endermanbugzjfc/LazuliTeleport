@@ -9,6 +9,10 @@ use Ramsey\Uuid\UuidInterface;
 
 interface PlayerFinderActionInterface
 {
+    /**
+     * @param PlayerSession $session
+     * @param string ...$targets Player names. Case might not be accurate. All offline player's names are in lowercase.
+     */
     public function runWithSelectedTargets(
         PlayerSession $session,
         string ...$targets
