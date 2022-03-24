@@ -6,11 +6,14 @@ namespace Endermanbugzjfc\LazuliTeleport\Commands;
 
 use AssertionError;
 use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
+use Endermanbugzjfc\LazuliTeleport\Player\PlayerFinderActionInterface;
 use Endermanbugzjfc\LazuliTeleport\Player\PlayerSession;
+use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use Generator;
 use pocketmine\command\CommandSender;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
+use RuntimeException;
 use SOFe\AwaitGenerator\Await;
 use Throwable;
 use function strtolower;
@@ -95,6 +98,24 @@ trait BaseCommandTrait
         }
 
         return $session;
+    }
+
+    /**
+     * @throws PlayerNotFoundException
+     */
+    final protected function findPlayer(
+        ?PlayerSession $session = null,
+        string $input
+    ) : string {
+        if (!$this instanceof PlayerFinderActionInterface) {
+            throw new RuntimeException("Command finds player but does not implement" . PlayerFinderActionInterface::class);
+        }
+
+        $names = LazuliTeleport::getInstance()->getAllPlayerNames();
+        $index = Utils::getStringByPrefix($names, $input);
+        if ($index === null) {
+            throw PlayerNotFoundException::create($session, $this,$input);
+        }
     }
 
     abstract public static function getInternalName() : string;
