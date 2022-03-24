@@ -26,14 +26,9 @@ class BlockSubcommand extends BaseSubCommand implements PlayerFinderActionInterf
         return "tpablock.block";
     }
 
-    public function getMaxTargetsLimit() : int
-    {
-        // TODO: Implement getMaxTargetsLimit() method.
-    }
-
     public function runWithSelectedTargets(
         PlayerSession $session,
-        string ...$targets
+        array $targets
     ) : void {
         // TODO: Implement runWithSelectedTargets() method.
     }
@@ -45,7 +40,7 @@ class BlockSubcommand extends BaseSubCommand implements PlayerFinderActionInterf
 
     public function isActionAvailable(
         PlayerSession $session,
-        UuidInterface ...$targets
+        array $targets
     ) : Generator
     {
         // TODO: Implement isActionAvailable() method.

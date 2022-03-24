@@ -806,7 +806,7 @@ class PlayerSession
                 $newActionIndex = $data[$actionSelector] ?? null;
                 if ($newActionIndex !== null) {
                     $newAction = $actions[(int)$newActionIndex] ?? $action;
-                    $newAction->runWithSelectedTargets($this, ...$selections);
+                    $newAction->runWithSelectedTargets($this, $selections);
                     break;
                 }
             }
