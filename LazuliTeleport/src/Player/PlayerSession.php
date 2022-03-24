@@ -35,6 +35,7 @@ use Vecnavium\FormsUI\ModalForm;
 use function array_diff;
 use function array_filter;
 use function array_map;
+use function array_merge;
 use function array_slice;
 use function array_unique;
 use function bin2hex;
@@ -643,9 +644,12 @@ class PlayerSession
                             $block,
                             $tpahere,
                             $unblock,
-                            ...$noBuiltInActions
                         ]
                     };
+                    $availableActions = array_merge(
+                        $availableActions,
+                        $noBuiltInActions
+                    );
                 }
                 /**
                  * @var array{Player, array<int|string, scalar>|null}
