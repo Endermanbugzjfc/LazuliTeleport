@@ -457,6 +457,19 @@ class PlayerSession
     }
 
     /**
+     * @return Generator<mixed, mixed, mixed, bool>
+     */
+    public function hasForceModePermission() : Generator
+    {
+        $tpaforce = yield from TpaforceCommand::getInstance();
+        $permission = $tpaforce->getPermission();
+        if ($permission === null) {
+            return true;
+        }
+        return $this->getPlayer()->hasPermission($permission);
+    }
+
+    /**
      * @param PlayerFinderActionInterface[] $actions
      * @return PlayerFinderActionInterface[]
      */
@@ -508,7 +521,6 @@ class PlayerSession
             $infoNamespace = "$pluginName.PlayerFinder";
             $names = LazuliTeleport::getInstance()->getAllPlayerNames();
             $availableActions = null;
-            $tpaforce = yield from TpaforceCommand::getInstance();
             $oldForceMode = $this->getForceMode();
             $oldWaitduration = $this->getForceModeWaitDuration();
             $config = LazuliTeleport::getInstance()->getConfigObject();
@@ -622,6 +634,7 @@ class PlayerSession
                 if ($resultHeader !== null) {
                     $resultHeader = InfoAPI::resolve($resultHeader, $searchContext);
                 }
+                $canForceMode = yield from $this->hasForceModePermission();
                 /**
                  * @var array{Player, array<int|string, scalar>|null}
                  */
@@ -635,12 +648,14 @@ class PlayerSession
                     $found,
                     $player,
                     $availableActions,
-                    $tpaforce,
                     $oldForceMode,
                     $oldWaitduration,
                     $waitDurationMin,
                     $waitDurationStep,
                     $waitDurationSteps,
+
+                    // Async:
+                    $canForceMode,
 
                     // Message caches:
                     $title,
@@ -699,12 +714,7 @@ class PlayerSession
                         }
                         $middleIndex = Utils::getArrayMiddleIndex($sliderActionNames);
                         $form->addStepSlider($actionSelectorName, $sliderActionNames, $middleIndex, $actionSelector);
-                        $tpaforcePermission = $tpaforce->getPermission();
-                        if (
-                            $tpaforcePermission === null
-                            or
-                            $this->getPlayer()->hasPermission($tpaforcePermission)
-                        ) {
+                        if ($canForceMode) {
                             $form->addToggle($forceModeName, $oldForceMode, $forceMode);
                             $form->addSlider($waitDurationName, $waitDurationMin, $waitDurationMin + $waitDurationStep * $waitDurationSteps, $waitDurationStep, $oldWaitduration, $waitDuration);
                         }
