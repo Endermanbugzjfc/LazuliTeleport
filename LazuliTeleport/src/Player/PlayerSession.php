@@ -17,10 +17,11 @@ use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
 use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use Generator;
 use pocketmine\player\Player;
-use Ramsey\Uuid\UuidInterface;
+use poggit\libasynql\DataConnector;
 use RuntimeException;
 use SOFe\AwaitGenerator\Await;
 use SOFe\AwaitGenerator\Channel;
+use SOFe\AwaitGenerator\Loading;
 use SOFe\InfoAPI\AnonInfo;
 use SOFe\InfoAPI\DurationInfo;
 use SOFe\InfoAPI\Info;
@@ -53,6 +54,7 @@ class PlayerSession
         protected Player $player,
         protected Closure $onClose
     ) {
+        // TODO: Load block list.
         /**
          * Group refers to {@link PermissionDependentOption} here.
          * Groups that do not matchc the player's permission will be omitted.
@@ -113,43 +115,53 @@ class PlayerSession
         $this->messages = $messages;
     }
 
-    /**
-     * @return Generator<mixed, mixed, mixed, void>
-     */
-    public function addBlockedPlayer(
-        UuidInterface $uuid,
-        string $name
-    ) : Generator {
-    }
-
-    /**
-     * @return Generator<mixed, mixed, mixed, void>
-     */
-    public function removeBlockedPlayerByUniqueId(
-        UuidInterface $uuid
-    ) : Generator {
-    }
-
-    /**
-     * @return Generator<mixed, mixed, mixed, void>
-     */
-    public function removeBlockedPlayerByName(
-        string $name
-    ) : Generator {
-    }
-
-    /**
-     * @return string[]
-     * @phpstan-return array<string, string> Key = player unique ID string in 16 bytes. Value = player name.
-     */
-    public function getBlockedPlayers() : array
+    private function connector() : DataConnector
     {
+        return LazuliTeleport::getInstance()->getDataConnector();
+    }
+
+    public function addBlockedPlayer(
+        string $name,
+        ?callable $then = null,
+        ?callable $catch = null
+    ) : void {
+        $connector = $this->connector();
+        $connector->executeChange("block_list.add", [
+            "player" => $this->dbKey(),
+            "target" => $name
+        ], $then, $catch
+        );
+    }
+
+    public function removeBlockedPlayerByName(
+        string $name,
+        ?callable $then = null,
+        ?callable $catch = null
+    ) : void {
+        $connector = $this->connector();
+        $connector->executeChange("block_list.remove", [
+            "player" => $this->dbKey(),
+            "target" => $name
+        ], $then, $catch);
+    }
+
+    /**
+     * @var Loading<string[]>
+     */
+    protected Loading $blockedPlayers;
+
+    /**
+     * @return Generator<mixed, mixed, mixed, string[]> Player names. Notice that the text case of name might not be exact.
+     */
+    public function getBlockedPlayers() : Generator
+    {
+        return yield from $this->blockedPlayers->get();
     }
 
     public function isNameBlocked(
         string $name
-    ) : bool {
-        $blocked = $this->getBlockedPlayers();
+    ) : Generator {
+        $blocked = yield from $this->getBlockedPlayers();
         return in_array($name, $blocked, true);
     }
 
@@ -516,7 +528,7 @@ class PlayerSession
                     $selectionsCount === 1 => [
                         $tpahere,
                         $tpa,
-                        $this->isNameBlocked($selections[0])
+                        yield from $this->isNameBlocked($selections[0])
                             ? $unblock
                             : $block
                     ],
