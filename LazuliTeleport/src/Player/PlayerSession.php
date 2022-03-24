@@ -534,6 +534,7 @@ class PlayerSession
                     // Caches:
                     $searchContext,
                     $found,
+                    $player,
 
                     // Message caches:
                     $title,
