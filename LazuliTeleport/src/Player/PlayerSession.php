@@ -506,7 +506,7 @@ class PlayerSession
                         ]
                     ) extends AnonInfo {
                     };
-                    $entriesResolved[] = InfoAPI::resolve($entry);
+                    $entriesResolved[] = InfoAPI::resolve($entry, $entryInfo);
                 }
                 if ($err !== null) {
                     $err = InfoAPI::resolve($err, $searchContext);
