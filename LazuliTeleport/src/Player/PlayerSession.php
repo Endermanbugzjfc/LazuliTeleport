@@ -700,7 +700,7 @@ class PlayerSession
                             $this->getPlayer()->hasPermission($tpaforcePermission)
                         ) {
                             $form->addToggle($forceModeName, $oldForceMode, $forceMode);
-                            $form->addSlider($waitDurationName, $waitDurationMin ?? 0, $waitDurationMin + $waitDurationStep * $waitDurationSteps, $waitDurationStep ?? 1, $oldWaitduration, $waitDuration);
+                            $form->addSlider($waitDurationName, $waitDurationMin, $waitDurationMin + $waitDurationStep * $waitDurationSteps, $waitDurationStep, $oldWaitduration, $waitDuration);
                         }
                     }
 
