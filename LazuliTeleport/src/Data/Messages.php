@@ -37,7 +37,7 @@ class Messages
     public ?MessageEntry $requestSelf = null;
     public ?MessageEntry $internalServerError = null;
     public ?MessageEntry $noTeleportationRequest = null;
-    public ?MessageEntry $offlineRequestBanned = null;
+    public ?MessageEntry $cannotMakeOfflineRequest = null;
 
     public ?MessageEntry $blockPlayer = null;
     public ?MessageEntry $unblockPlayer = null;
@@ -159,6 +159,7 @@ class Messages
         $self->requestSelf = MessageEntry::createChat("{Red}Cannot send request to yourself!");
         $self->internalServerError = MessageEntry::createChat("{Red}Sorry, an internal server error had occurred! Please report this problem to an admin.");
         $self->noTeleportationRequest = MessageEntry::createActionbar("{Red}You have no teleportation request.");
+        $self->cannotMakeOfflineRequest = MessageEntry::createActionbar("{Red}You do not have the permission to make an offline request.");
 
         $target = "{Aqua}{Target}";
         $block = "{Yellow}will not be able to send any tpa or tpahere requests";
