@@ -6,8 +6,10 @@ namespace Endermanbugzjfc\LazuliTeleport\Player;
 
 use Closure;
 use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\BlockSubcommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\TpablockCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\UnblockSubcommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaforceCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Data\MessageEntry;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
@@ -488,6 +490,7 @@ class PlayerSession
             $availableActions = null;
             $oldForceMode = $this->getForceMode();
             $oldWaitduration = $this->getForceModeWaitDuration();
+            $options = $this->getSpecificOptions();
             $waitDurationMin = $options->waitDurationFormSliderMin;
             $waitDurationStep = $options->waitDurationFormSliderStep;
             $waitDurationSteps = $options->waitDurationFormSliderTotalSteps;
@@ -675,8 +678,17 @@ class PlayerSession
                         }
                         $middleIndex = Utils::getArrayMiddleIndex($sliderActionNames);
                         $form->addStepSlider($actionSelectorName, $sliderActionNames, $middleIndex);
-                        $form->addToggle($forceModeName, $oldForceMode, $forceMode);
-                        $form->addSlider($waitDurationName, $waitDurationMin, $waitDurationMin + $waitDurationStep * $waitDurationSteps, $waitDurationStep, $oldWaitduration, $waitDuration);
+                        $tpablock = yield from TpablockCommand::getInstance();
+                        $tpaforce = yield from TpaforceCommand::getInstance();
+                        $tpaforcePermission = $tpaforce->getPermission();
+                        if (
+                            $tpaforcePermission === null
+                            or
+                            $this->getPlayer()->hasPermission($tpaforcePermission)
+                        ) {
+                            $form->addToggle($forceModeName, $oldForceMode, $forceMode);
+                            $form->addSlider($waitDurationName, $waitDurationMin ?? 0, $waitDurationMin + $waitDurationStep * $waitDurationSteps, $waitDurationStep ?? 1, $oldWaitduration, $waitDuration);
+                        }
                     }
 
                     $player->sendForm($form);
