@@ -468,7 +468,10 @@ class PlayerSession
         string $search = "",
         array $selections = [],
     ) : void {
-        Await::f2c(function () use (
+        /**
+         * @var callable(): Generator
+         */
+        $coroutine = function () use (
             $actions,
             $action,
             $search,
@@ -736,6 +739,7 @@ class PlayerSession
                     break;
                 }
             }
-        });
+        };
+        Await::f2c($coroutine);
     }
 }
