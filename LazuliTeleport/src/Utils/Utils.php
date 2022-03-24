@@ -7,6 +7,7 @@ namespace Endermanbugzjfc\LazuliTeleport\Utils;
 use ReflectionClass;
 use ReflectionProperty;
 use SOFe\AwaitGenerator\Channel;
+use function count;
 
 final class Utils
 {
@@ -60,5 +61,18 @@ final class Utils
 
             $property->setValue($toBeOverriden, $value);
         }
+    }
+
+    /**
+     * Return the index that is closer to left if the elements count is even.
+     * @param mixed[] $array
+     */
+    public static function getArrayMiddleIndex(
+        array $array
+    ) : int {
+        // Credit: https://thisinterestsme.com/middle-index-php-array/
+        $lastIndex = count($array) - 1;
+        $divided = $lastIndex / 2;
+        return (int)$divided;
     }
 }
