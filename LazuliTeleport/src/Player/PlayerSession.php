@@ -546,7 +546,7 @@ class PlayerSession
                     $selectionsCount === 1 => [
                         $tpahere,
                         $tpa,
-                        yield from $this->isNameBlocked($selections[0])
+                        (yield from $this->isNameBlocked($selections[0]))
                             ? $unblock
                             : $block
                     ],
