@@ -307,7 +307,7 @@ class PlayerSession
     }
 
     /**
-     * @param callable(bool $data) : void|null $formCallback Calls right after player submits the form, before any other messages are sent.
+     * @param callable(bool $data) : bool|null $formCallback Calls right after player submits the form, before any other messages are sent.
      * @param int[] $trace Recursion guard for {@link MessageEntry::$messageOnReject}. Holds SPL object IDs.
      */
     public function displayMessage(
@@ -355,7 +355,10 @@ class PlayerSession
                 });
                 [, $data] = $formResult;
                 if ($formCallback !== null) {
-                    $formCallback($data);
+                    $ok = $formCallback($data);
+                }
+                if ($ok ?? $data) {
+                    return;
                 }
                 $messageOnReject = $message->messageOnReject;
                 if ($messageOnReject !== null) {
