@@ -501,13 +501,26 @@ class PlayerSession
     }
 
     /**
+     * @return Generator<mixed, mixed, mixed, PlayerFinderActionInterface[]>
+     */
+    private static function getBuiltInActions() : Generator
+    {
+        return [
+            yield from TpaCommand::getInstance(),
+            yield from TpahereCommand::getInstance(),
+            yield from BlockSubcommand::getInstance(),
+            yield from UnblockSubcommand::getInstance()
+        ];
+    }
+
+    /**
      * @param PlayerFinderActionInterface[] $actions
      * @param string $search Empty (empty string) = all players will be listed.
      * @param string[] $selections
      */
     public function openPlayerFinder(
-        array $actions,
         PlayerFinderActionInterface $action,
+        ?array $actions = null,
         string $search = "",
         array $selections = [],
     ) : void {
@@ -630,6 +643,7 @@ class PlayerSession
                             }
                         }
                     }
+                    $actions ??= yield from $this->getBuiltInActions();
                     $availableActions = [];
                     foreach ($actions as $actionInstance) {
                         $actionAvailable = yield from $action->isActionAvailable($this);
