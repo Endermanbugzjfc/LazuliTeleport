@@ -67,7 +67,7 @@ class Messages
         $currentlyAt = "\nHe is currently at {Green}{RequestorPosition}";
         $commandHint = " {Italic}{DarkGray}(/tpaccept or /tpareject)";
         $self->tpaRequestReceive = MessageEntry::createForm($formTitle, $receiveTpa . $currentlyAt, $receiveTpa . $commandHint);
-        $self->tpaRequestSend = $requestSend = MessageEntry::createChat("{Yellow}Waiting for {Gold}{Requestee}{Yellow}'s response to your {Green}{RequestType} {Yellow}request...");
+        $self->tpaRequestSend = $requestSend = MessageEntry::createChat("{Yellow}Waiting for {Aqua}{Requestee}{Yellow}'s response to your {Green}{RequestType} {Yellow}request...");
         $self->tpaRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting to {Aqua}{Requestee}...");
         $self->tpaRequestAcceptedWaiting = MessageEntry::createChat("{Yellow}You will be teleporting to {Aqua}{Requestee} after {Green}{TeleportationWaitDuration}...");
         $self->tpaRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting to {Aqua}{Requestee}...");
