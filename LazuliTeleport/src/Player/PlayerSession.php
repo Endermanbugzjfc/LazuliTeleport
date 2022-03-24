@@ -34,7 +34,6 @@ use Vecnavium\FormsUI\CustomForm;
 use Vecnavium\FormsUI\ModalForm;
 use function array_diff;
 use function array_filter;
-use function array_map;
 use function array_merge;
 use function array_slice;
 use function array_unique;
@@ -512,7 +511,7 @@ class PlayerSession
      * @param PlayerFinderActionInterface[] $actions
      */
     public function openPlayerFinder(
-        PlayerFinderActionInterface $action,
+        ?PlayerFinderActionInterface $action = null,
         string $search = "",
         array $selections = [],
         ?callable $filter = null,
@@ -643,7 +642,7 @@ class PlayerSession
                     $actions ??= yield from $this->getBuiltInActions();
                     $availableActions = [];
                     foreach ($actions as $actionInstance) {
-                        $actionAvailable = yield from $action->isActionAvailable($this);
+                        $actionAvailable = yield from $actionInstance->isActionAvailable($this, $selections);
                         if ($actionAvailable) {
                             $availableActions[] = $actionInstance;
                         }
@@ -686,6 +685,7 @@ class PlayerSession
                     $search,
                     $noTarget,
                     $selections,
+                    $action,
 
                     // Caches:
                     $found,
@@ -741,10 +741,17 @@ class PlayerSession
                         $form->addToggle($resolved, $selected, "$resultEntry.$name");
                     }
                     if ($availableActions !== null) {
-                        $actionNames = array_map(
-                            fn(PlayerFinderActionInterface $action) : string => $action->getActionDisplayName($this),
-                            $availableActions
-                        );
+                        $actionIndex = null;
+                        foreach ($availableActions as $index => $availableAction) {
+                            $actionNames[] = $availableAction->getActionDisplayName($this);
+                            if (
+                                $action !== null
+                                and
+                                $availableAction instanceof $action
+                            ) {
+                                $actionIndex = (int)$index;
+                            }
+                        }
                         $sliderActionNames = [];
                         foreach ($actionNames as $index => $actionName) {
                             $left = array_slice($actionNames, 0, $index);
@@ -756,7 +763,7 @@ class PlayerSession
                             $sliderActionNames[] = "{DarkGray}$leftList {Gold}$actionName {DarkGray}$rightList";
                         }
                         $middleIndex = Utils::getArrayMiddleIndex($sliderActionNames);
-                        $form->addStepSlider($actionSelectorName, $sliderActionNames, $middleIndex, $actionSelector);
+                        $form->addStepSlider($actionSelectorName, $sliderActionNames, $actionIndex ?? $middleIndex, $actionSelector);
                         if ($canForceMode) {
                             $form->addToggle($forceModeName, $oldForceMode, $forceMode);
                             $form->addSlider($waitDurationName, $waitDurationMin, $waitDurationMin + $waitDurationStep * $waitDurationSteps, $waitDurationStep, $oldWaitduration, $waitDuration);
@@ -806,6 +813,9 @@ class PlayerSession
                 $newActionIndex = $data[$actionSelector] ?? null;
                 if ($newActionIndex !== null) {
                     $newAction = $actions[(int)$newActionIndex] ?? $action;
+                    if ($newAction === null) {
+                        continue;
+                    }
                     $newAction->runWithSelectedTargets($this, $selections);
                     break;
                 }
