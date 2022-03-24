@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Utils;
 
+use pocketmine\Server;
 use ReflectionClass;
 use ReflectionProperty;
 use SOFe\AwaitGenerator\Channel;
 use function count;
+use function stripos;
+use function strlen;
+use function strtolower;
+use const PHP_INT_MAX;
 
 final class Utils
 {
@@ -74,5 +79,35 @@ final class Utils
         $lastIndex = count($array) - 1;
         $divided = $lastIndex / 2;
         return (int)$divided;
+    }
+
+    /**
+     * A modified version of {@link Server::getPlayerByPrefix()}.
+     * @template T
+     * @param string[] $candidates
+     * @phpstan-param array<T, string> $candidates Case-insensitive.
+     * @return T|null Index of $candidates.
+     */
+    public function getStringByPrefix(
+        array $candidates,
+        string $find
+    ) : mixed {
+        $found = null;
+        $find = strtolower($find);
+        $delta = PHP_INT_MAX;
+        foreach ($candidates as $index => $candidate) {
+            if (stripos($candidate, $find) === 0) {
+                $curDelta = strlen($candidate) - strlen($find);
+                if ($curDelta < $delta) {
+                    $found = $index;
+                    $delta = $curDelta;
+                }
+                if ($curDelta === 0) {
+                    break;
+                }
+            }
+        }
+
+        return $found;
     }
 }
