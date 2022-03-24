@@ -618,6 +618,18 @@ class PlayerSession
 
                 $availableActions = null;
                 if ($selections !== []) {
+                    $server = $this->getPlayer()->getServer();
+                    $canOffline = yield from $this->hasOfflineRequestPermission();
+                    $selectedOffline = false;
+                    if (!$canOffline) {
+                        foreach ($selections as $selection) {
+                            $target = $server->getPlayerExact($selection);
+                            if ($target === null) {
+                                $selectedOffline = true;
+                                break;
+                            }
+                        }
+                    }
                     $availableActions = [];
                     foreach ($actions as $actionInstance) {
                         $actionAvailable = yield from $action->isActionAvailable($this);
@@ -632,13 +644,17 @@ class PlayerSession
                     $block = yield from BlockSubcommand::getInstance();
                     $unblock = yield from UnblockSubcommand::getInstance();
                     $selectionsCount = count($selections);
+                    $blockOrUnblock = (yield from $this->isNameBlocked($selections[0]))
+                        ? $unblock
+                        : $block;
                     $availableActions = match (true) {
+                        $selectedOffline => [
+                            $blockOrUnblock
+                        ], // One selection, includes offline player (triggers only if player does not have the permission make offline requests).
                         $selectionsCount === 1 => [
                             $tpahere,
                             $tpa,
-                            (yield from $this->isNameBlocked($selections[0]))
-                                ? $unblock
-                                : $block
+                            $blockOrUnblock
                         ],
                         default => [
                             $block,
