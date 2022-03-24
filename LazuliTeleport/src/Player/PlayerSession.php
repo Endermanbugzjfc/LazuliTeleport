@@ -486,6 +486,11 @@ class PlayerSession
             $infoNamespace = "$pluginName.PlayerFinder";
             $names = LazuliTeleport::getInstance()->getAllPlayerNames();
             $availableActions = null;
+            $oldForceMode = $this->getForceMode();
+            $oldWaitduration = $this->getForceModeWaitDuration();
+            $waitDurationMin = $options->waitDurationFormSliderMin;
+            $waitDurationStep = $options->waitDurationFormSliderStep;
+            $waitDurationSteps = $options->waitDurationFormSliderTotalSteps;
             if ($selections !== []) {
                 $availableActions = [];
                 foreach ($actions as $actionInstance) {
@@ -530,6 +535,10 @@ class PlayerSession
             $entry = $messages->playerFinderSearchResultEntry ?? "";
             $actionSelectorName = $messages->playerFinderActionSelectorLabel ?? "";
             $actionSelectorName = InfoAPI::resolve($placeholder, $info);
+            $forceModeName = $messages->forceModeToggleLabel ?? "";
+            $forceModeName = InfoAPI::resolve($forceModeName, $info);
+            $waitDurationName = $messages->forceModeWaitDurationSliderLabel ?? "";
+            $waitDurationName = InfoAPI::resolve($waitDurationName, $info);
 
             /**
              * I use loops rather than recursive function calls for user-controlled stuff (a form in this case).
@@ -603,6 +612,11 @@ class PlayerSession
                     $found,
                     $player,
                     $availableActions,
+                    $oldForceMode,
+                    $oldWaitduration,
+                    $waitDurationMin,
+                    $waitDurationStep,
+                    $waitDurationSteps,
 
                     // Message caches:
                     $title,
@@ -611,6 +625,8 @@ class PlayerSession
                     $placeholder,
                     $resultHeader,
                     $actionSelectorName,
+                    $forceModeName,
+                    $waitDurationName,
 
                     // Element labels:
                     $searchBar,
@@ -659,6 +675,8 @@ class PlayerSession
                         }
                         $middleIndex = Utils::getArrayMiddleIndex($sliderActionNames);
                         $form->addStepSlider($actionSelectorName, $sliderActionNames, $middleIndex);
+                        $form->addToggle($forceModeName, $oldForceMode, $forceMode);
+                        $form->addSlider($waitDurationName, $waitDurationMin, $waitDurationMin + $waitDurationStep * $waitDurationSteps, $waitDurationStep, $oldWaitduration, $waitDuration);
                     }
 
                     $player->sendForm($form);
@@ -691,8 +709,6 @@ class PlayerSession
                     $noTarget = true;
                     continue;
                 }
-                $oldForceMode = $this->getForceMode();
-                $oldWaitduration = $this->getForceModeWaitDuration();
 
                 $newForceMode = $data[$forceMode] ?? null;
                 if ($newForceMode !== null) {
