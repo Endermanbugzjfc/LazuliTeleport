@@ -32,7 +32,11 @@ class TpablockCommand extends BaseCommand
         string $aliasUsed,
         array $args
     ) : Generator {
+        yield from [];
+
+        $block = yield from BlockSubcommand::getInstance();
         $session = $this->playerSession($sender);
+        $session->openPlayerFinder($block);
     }
 
     public static function getInternalName() : string
