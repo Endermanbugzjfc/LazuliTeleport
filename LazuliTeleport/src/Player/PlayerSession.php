@@ -488,6 +488,7 @@ class PlayerSession
             $infoNamespace = "$pluginName.PlayerFinder";
             $names = LazuliTeleport::getInstance()->getAllPlayerNames();
             $availableActions = null;
+            $tpaforce = yield from TpaforceCommand::getInstance();
             $oldForceMode = $this->getForceMode();
             $oldWaitduration = $this->getForceModeWaitDuration();
             $options = $this->getSpecificOptions();
@@ -615,6 +616,7 @@ class PlayerSession
                     $found,
                     $player,
                     $availableActions,
+                    $tpaforce,
                     $oldForceMode,
                     $oldWaitduration,
                     $waitDurationMin,
@@ -637,7 +639,7 @@ class PlayerSession
                     $actionSelector,
                     $forceMode,
                     $waitDuration
-                ) {
+                ) : void {
                     $form = new CustomForm($then);
                     $form->setTitle($title);
                     if (
@@ -678,8 +680,6 @@ class PlayerSession
                         }
                         $middleIndex = Utils::getArrayMiddleIndex($sliderActionNames);
                         $form->addStepSlider($actionSelectorName, $sliderActionNames, $middleIndex);
-                        $tpablock = yield from TpablockCommand::getInstance();
-                        $tpaforce = yield from TpaforceCommand::getInstance();
                         $tpaforcePermission = $tpaforce->getPermission();
                         if (
                             $tpaforcePermission === null
