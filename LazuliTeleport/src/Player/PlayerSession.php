@@ -28,6 +28,8 @@ use Vecnavium\FormsUI\CustomForm;
 use Vecnavium\FormsUI\ModalForm;
 use function array_diff;
 use function array_filter;
+use function array_map;
+use function array_slice;
 use function array_unique;
 use function bin2hex;
 use function count;
@@ -453,6 +455,13 @@ class PlayerSession
             $info = $this->getInfo();
             $infoNamespace = "$pluginName.PlayerFinder";
             $names = LazuliTeleport::getInstance()->getAllPlayerNames();
+            $availableActions = null;
+            if ($selections !== []) {
+                $availableActions = array_filter(
+                    $actions,
+                    fn(PlayerFinderActionInterface $action) : bool => yield from $action->isActionAvailable($this)
+                );
+            }
 
             $title = $messages->playerFinderTitle ?? "";
             $title = InfoAPI::resolve($title, $info);
@@ -463,6 +472,9 @@ class PlayerSession
             $placeholder = InfoAPI::resolve($placeholder, $info);
             $resultHeader = $messages->playerFinderSearchResultHeader;
             $entry = $messages->playerFinderSearchResultEntry ?? "";
+            $entry = $messages->playerFinderSearchResultEntry ?? "";
+            $actionSelectorName = $messages->playerFinderActionSelectorLabel ?? "";
+            $actionSelectorName = InfoAPI::resolve($placeholder, $info);
 
             /**
              * I use loops rather than recursive function calls for user-controlled stuff (a form in this case).
@@ -535,6 +547,7 @@ class PlayerSession
                     $searchContext,
                     $found,
                     $player,
+                    $availableActions,
 
                     // Message caches:
                     $title,
@@ -572,6 +585,23 @@ class PlayerSession
                             $selected = $search === $name;
                         }
                         $form->addToggle($resolved, $selected, "$resultEntry.$name");
+                    }
+                    if ($availableActions !== null) {
+                        $actionNames = array_map(
+                            fn(PlayerFinderActionInterface $action) : string => $action->getDisplayName()
+                        );
+                        $sliderActionNames = [];
+                        foreach ($actionNames as $index => $actionName) {
+                            $left = array_slice($actionNames, 0, $index);
+                            $right = array_slice($actionNames, $index + 1);
+
+                            $leftList = implode(" ", $left);
+                            $rightList = implode(" ", $right);
+
+                            $sliderActionNames[] = "{DarkGray}$leftList {Gold}$actionName {DarkGray}$rightList";
+                        }
+                        $middleIndex = Utils::getArrayMiddleIndex($sliderActionNames);
+                        $form->addStepSlider($actionSelectorName, $sliderActionNames, $middleIndex);
                     }
 
                     $player->sendForm($form);
@@ -616,10 +646,12 @@ class PlayerSession
                     $this->setForceModeWaitDuration((int)$newWaitDuration);
                 }
 
-                $newActionIndex = (int)$data[$actionSelector];
-                $newAction = $actions[$newActionIndex] ?? $action;
-                $newAction->runWithSelectedTargets($this, ...$selections);
-                break;
+                $newActionIndex = (int)$data[$actionSelector] ?? null;
+                if ($newActionIndex !== null) {
+                    $newAction = $actions[$newActionIndex] ?? $action;
+                    $newAction->runWithSelectedTargets($this, ...$selections);
+                    break;
+                }
             }
         });
     }
