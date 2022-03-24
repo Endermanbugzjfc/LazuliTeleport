@@ -643,7 +643,8 @@ class PlayerSession
                     }
                     if ($availableActions !== null) {
                         $actionNames = array_map(
-                            fn(PlayerFinderActionInterface $action) : string => $action->getDisplayName()
+                            fn(PlayerFinderActionInterface $action) : string => $action->getDisplayName(),
+                            $availableActions
                         );
                         $sliderActionNames = [];
                         foreach ($actionNames as $index => $actionName) {
