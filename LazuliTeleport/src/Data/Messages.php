@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Data;
 
+use function str_replace;
+
 class Messages
 {
     public ?MessageEntry $tpaRequestReceive = null;
@@ -61,21 +63,53 @@ class Messages
 
     public static function getDefault() : self
     {
-        $self = new self();
-
+        // Parts:
         $formTitle = "{Bold}{DarkAqua}Teleportation Request";
-        $receiveTpa = "{Aqua}{Requestor} {Gold}wants to teleport to you.";
-        $currentlyAt = "\nHe is currently at {Green}{RequestorPosition}";
-        $commandHint = " {Italic}{DarkGray}(/tpaccept or /tpareject)";
-        $self->tpaRequestReceive = MessageEntry::createForm($formTitle, $receiveTpa . $currentlyAt, $receiveTpa . $commandHint);
-        $self->tpaRequestReceiveOffline = MessageEntry::createForm($formTitle, $receiveTpa . $currentlyAt . "{Gold}but offline.", $receiveTpa . $commandHint);
+        $tpaReceiveBase = "{Aqua}{Requestor} {Gold}wants to teleport to you";
+        $tpaReceive = $tpaReceiveBase . "."; // Receive.
+        $tpaReceiveOffline = $tpaReceiveBase . " {Time Elapsed} ago."; // Receive offline.
+        $tpaSend[0] = "{Yellow}Waiting for {Aqua}{Requestee}{Yellow}'s response to your {Green}Tpa {Yellow}request..."; // Send.
+        $tpaSend[1] = "{Aqua}{Requestee} is now offline, he will recieve your {Green}Tpa {Yellow}request once he comes online."; // Send offline.
 
         $sendFormTitle = $formTitle . " Sent";
+        $position = ".\nPosition: {Green}{RequestorPosition}";
+        $tpahereReceiveBase = "{Aqua}{Requestor} {Gold}wants to teleport you to him";
+        $tpahereReceive = $tpahereReceiveBase . $position; // Receive.
+        $tpahereReceiveOffline = $tpahereReceiveBase . " {Time Elapsed} ago" . $position; // Receive offline.
+        foreach ($tpaSend as $index => $text) {
+            $tpahereSend[$index] = str_replace("Tpa", "Tpahere", $text);
+        }
+        $commandHint = "\n{Italic}{DarkGray}(/tpaccept or /tpareject)";
         $cancelButton = "{Red}Cancel Request (Press Escape)";
-        $requestSendRaw = "{Yellow}Waiting for {Gold}{Requestee}{Yellow}'s response to your {Green}{RequestType} {Yellow}request...";
         $cancelled = MessageEntry::createChat("{Yellow}Teleportation cancelled.");
-        $self->tpaRequestSend = $requestSend = MessageEntry::createForm($sendFormTitle, $requestSendRaw, $cancelled, null, $cancelButton);
-        $self->tpaRequestSendOffline = $requestSend = MessageEntry::createForm("{Aqua}{Requestee}{Yellow} is offline at the moment. He will receive the request once he comes online.");
+
+        $self = new self();
+        $self->tpaRequestReceive = MessageEntry::createForm(
+            $formTitle,
+            $tpaReceive,
+            $tpaReceive . $commandHint
+        );
+        $self->tpaRequestReceiveOffline = MessageEntry::createForm(
+            $formTitle,
+            $tpaReceiveOffline,
+            $tpaReceiveOffline . $commandHint
+        );
+        $self->tpaRequestSend = MessageEntry::createForm(
+            $sendFormTitle,
+            $tpaSend[0],
+            $tpaSend[0] . $commandHint,
+            $cancelled,
+            null,
+            $cancelButton
+        );
+        $self->tpaRequestSendOffline = MessageEntry::createForm(
+            $sendFormTitle,
+            $tpaSend[1],
+            $tpaSend[1] . $commandHint,
+            $cancelled,
+            null,
+            $cancelButton
+        );
         $self->tpaRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting to {Aqua}{Requestee}...");
         $self->tpaRequestAcceptedWaiting = MessageEntry::createChat("{Yellow}You will be teleporting to {Aqua}{Requestee} after {Green}{TeleportationWaitDuration}...");
         $self->tpaRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting to {Aqua}{Requestee}...");
@@ -83,9 +117,32 @@ class Messages
         $self->tpaExceedRequesteeLimit = MessageEntry::createChat("{Red}You cannot teleport to more than {TpaRequesteeLimit} players!");
         $self->tpaCoolDown = MessageEntry::createChat("{Red}You must wait for {TpaCoolDown} more.");
 
-        $receiveTpahere = "{Aqua}{Requestor} {Gold}wants to teleport you to him.";
-        $self->tpahereRequestReceive = MessageEntry::createForm($formTitle, $receiveTpahere . $currentlyAt, $receiveTpahere . $commandHint);
-        $self->tpahereRequestSend = $requestSend;
+        $self->tpahereRequestReceive = MessageEntry::createForm(
+            $formTitle,
+            $tpahereReceive,
+            $tpahereReceive . $commandHint
+        );
+        $self->tpahereRequestReceiveOffline = MessageEntry::createForm(
+            $formTitle,
+            $tpahereReceiveOffline,
+            $tpahereReceiveOffline . $commandHint
+        );
+        $self->tpahereRequestSend = MessageEntry::createForm(
+            $sendFormTitle,
+            $tpahereSend[0],
+            $tpahereSend[0] . $commandHint,
+            $cancelled,
+            null,
+            $cancelButton
+        );
+        $self->tpahereRequestSendOffline = MessageEntry::createForm(
+            $sendFormTitle,
+            $tpahereSend[1],
+            $tpahereSend[1] . $commandHint,
+            $cancelled,
+            null,
+            $cancelButton
+        );
         $self->tpahereRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting {Aqua}{Requestee} {Yellow}to you...");
         $self->tpahereRequestAcceptedWaiting = MessageEntry::createChat("{Aqua}{Requestee} {Yellow}will be teleporting to you after {Green}{WaitDuration}...");
         $self->tpahereRequestRejected = MessageEntry::createChat("{Red}{Requestee} rejected your tpahere request.");
@@ -95,7 +152,7 @@ class Messages
         $self->teleportationCancelledRequstor = $cancelled;
         $self->teleportationCancelledRequstorMoved = MessageEntry::createChat("{Yellow}Teleportation cancelled because you moved.");
         $self->teleportationCancelledRequstee = MessageEntry::createChat("{Aqua}{Requestor} {Yellow}cancelled the teleportation. {Italic}{DarkGray}(By accident?)");
-        $self->requestorHasUnresolvedRequest = MessageEntry::createChat("{Red}Sorry, you must wait until the previous requestee responses you!");
+        $self->requestorHasUnresolvedRequest = MessageEntry::createChat("{Red}Sorry, you must cancel the previous request or wait until the requestee responses you!");
         $self->requesteeHasUnresolvedRequest = MessageEntry::createChat("{Red}self player has another teleportation request at the moment. Try again later!");
 
         $self->requestSelf = MessageEntry::createChat("{Red}Cannot send request to yourself!");
