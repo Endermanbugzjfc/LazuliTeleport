@@ -447,11 +447,15 @@ class PlayerSession
             $actionSelector = "actionSelector";
             $forceMode = "forceMode";
             $waitDuration = "waitDuration";
+            /**
+             * I use loops rather than recursive function calls for user-controlled stuff (a form in this case).
+             * Player can just put your server in hell by unstoppably pressing the submit button and cause segmentation fault (core dump) due to stack overflow.
+             */
             while (true) {
                 /**
-                 * @var array<int|string, scalar> $data
+                 * @var array{Player, array<int|string, scalar>|null}
                  */
-                [, $data] = yield from Await::promise(function ($then) use (
+                $formResult = yield from Await::promise(function ($then) use (
                     $search,
 
                     $searchBar,
@@ -475,62 +479,63 @@ class PlayerSession
                     $placeholderResolve = InfoAPI::resolve($placeholder, $info);
                     $form->addInput($labelResolve, $placeholderResolve, $search, $searchBar);
 
-                    if ($found !== null) {
-                        $resultHeader = $messages->playerFinderSearchResultHeader            ;
-                        $resultNamespace = "$pluginName.PlayerFinder";
-                        if ($resultHeader !== null) {
-                            $resultCount = count($found);
-                            $resultHeaderInfo = new class(
-                                $resultNamespace,
-                                [
-                                    "ResultCount" => new NumberInfo($resultCount)
-                                ],
-                                [
-                                    $info
-                                ]
-                            ) extends AnonInfo {
-                            };
-                            $resultHeaderResolve = InfoAPI::resolve($resultHeader, $resultHeaderInfo);
-                            $form->addLabel($resultHeaderResolve);
-                        }
-                        $explode = explode(" ", $search);
-                        $keywords = array_unique($explode);
+                    $resultHeader = $messages->playerFinderSearchResultHeader            ;
+                    $resultNamespace = "$pluginName.PlayerFinder";
+                    if ($resultHeader !== null) {
+                        $resultCount = count($found);
+                        $resultHeaderInfo = new class(
+                            $resultNamespace,
+                            [
+                                "ResultCount" => new NumberInfo($resultCount)
+                            ],
+                            [
+                                $info
+                            ]
+                        ) extends AnonInfo {
+                        };
+                        $resultHeaderResolve = InfoAPI::resolve($resultHeader, $resultHeaderInfo);
+                        $form->addLabel($resultHeaderResolve);
+                    }
+                    $explode = explode(" ", $search);
+                    $keywords = array_unique($explode);
 
-                        $names = LazuliTeleport::getInstance()->getAllPlayerNames();
-                        $found = [];
-                        foreach ($names as $name) {
-                            foreach ($keywords as $keyword) {
-                                $stripos = stripos($name, $keyword);
-                                if ($stripos === false) {
-                                    continue;
-                                }
-                                $found[] = $name;
+                    $names = LazuliTeleport::getInstance()->getAllPlayerNames();
+                    $found = [];
+                    foreach ($names as $name) {
+                        foreach ($keywords as $keyword) {
+                            $stripos = stripos($name, $keyword);
+                            if ($stripos === false) {
+                                continue;
                             }
-                        }
-                        static::playerFinderFilter($found);
-                        static::playerFinderSorter($found);
-
-                        foreach ($found as $name) {
-                            $entry = $messages->playerFinderSearchResultEntry ?? "{ResultPlayer}";
-                            $entryInfo = new class(
-                                $resultNamespace,
-                                [
-                                    "ResultPlayer" => new StringInfo($name)
-                                ],
-                                [
-                                    $info
-                                ]
-                            ) extends AnonInfo {
-                            };
-                            $entryResolve = InfoAPI::resolve($entry, $entryInfo);
-                            $exact = strtolower($search) === strtolower($name);
-                            $form->addToggle($entryResolve, $exact, "$resultEntry.$name");
+                            $found[] = $name;
                         }
                     }
+                    static::playerFinderFilter($found);
+                    static::playerFinderSorter($found);
 
+                    foreach ($found as $name) {
+                        $entry = $messages->playerFinderSearchResultEntry ?? "{ResultPlayer}";
+                        $entryInfo = new class(
+                            $resultNamespace,
+                            [
+                                "ResultPlayer" => new StringInfo($name)
+                            ],
+                            [
+                                $info
+                            ]
+                        ) extends AnonInfo {
+                        };
+                        $entryResolve = InfoAPI::resolve($entry, $entryInfo);
+                        $exact = strtolower($search) === strtolower($name);
+                        $form->addToggle($entryResolve, $exact, "$resultEntry.$name");
+                    }
 
                     $player->sendForm($form);
                 });
+                [, $data] = $formResult;
+                if ($data === null) {
+                    continue;
+                }
                 $newSearch = (string)$data[$searchBar];
                 if ($search !== $newSearch) {
                     $search = $newSearch;
@@ -549,6 +554,10 @@ class PlayerSession
                 }
                 if (array_diff($selections, $newSelections) !== []) {
                     $selections = $newSelections;
+                    continue;
+                }
+                if ($selections === []) {
+                    $noTarget = true;
                     continue;
                 }
                 $oldForceMode = $this->getForceMode();
