@@ -527,37 +527,6 @@ class PlayerSession
             $waitDurationMin = $config->waitDurationSliderMin;
             $waitDurationStep = $config->waitDurationSliderStep;
             $waitDurationSteps = $config->waitDurationSliderTotalSteps;
-            if ($selections !== []) {
-                $availableActions = [];
-                foreach ($actions as $actionInstance) {
-                    $actionAvailable = yield from $action->isActionAvailable($this);
-                    if ($actionAvailable) {
-                        $availableActions[] = $actionInstance;
-                    }
-                }
-                $noBuiltInActions = self::noBuiltInActions($availableActions);
-
-                $tpa = yield from TpaCommand::getInstance();
-                $tpahere = yield from TpahereCommand::getInstance();
-                $block = yield from BlockSubcommand::getInstance();
-                $unblock = yield from UnblockSubcommand::getInstance();
-                $selectionsCount = count($selections);
-                $availableActions = match (true) {
-                    $selectionsCount === 1 => [
-                        $tpahere,
-                        $tpa,
-                        (yield from $this->isNameBlocked($selections[0]))
-                            ? $unblock
-                            : $block
-                    ],
-                    default => [
-                        $block,
-                        $tpahere,
-                        $unblock,
-                        ...$noBuiltInActions
-                    ]
-                };
-            }
 
             $title = $messages->playerFinderTitle ?? "";
             $title = InfoAPI::resolve($title, $info);
@@ -635,6 +604,39 @@ class PlayerSession
                     $resultHeader = InfoAPI::resolve($resultHeader, $searchContext);
                 }
                 $canForceMode = yield from $this->hasForceModePermission();
+
+
+                if ($selections !== []) {
+                    $availableActions = [];
+                    foreach ($actions as $actionInstance) {
+                        $actionAvailable = yield from $action->isActionAvailable($this);
+                        if ($actionAvailable) {
+                            $availableActions[] = $actionInstance;
+                        }
+                    }
+                    $noBuiltInActions = self::noBuiltInActions($availableActions);
+
+                    $tpa = yield from TpaCommand::getInstance();
+                    $tpahere = yield from TpahereCommand::getInstance();
+                    $block = yield from BlockSubcommand::getInstance();
+                    $unblock = yield from UnblockSubcommand::getInstance();
+                    $selectionsCount = count($selections);
+                    $availableActions = match (true) {
+                        $selectionsCount === 1 => [
+                            $tpahere,
+                            $tpa,
+                            (yield from $this->isNameBlocked($selections[0]))
+                                ? $unblock
+                                : $block
+                        ],
+                        default => [
+                            $block,
+                            $tpahere,
+                            $unblock,
+                            ...$noBuiltInActions
+                        ]
+                    };
+                }
                 /**
                  * @var array{Player, array<int|string, scalar>|null}
                  */
