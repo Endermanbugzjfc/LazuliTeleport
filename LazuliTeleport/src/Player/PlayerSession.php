@@ -446,10 +446,6 @@ class PlayerSession
             $actionSelector = "actionSelector";
             $forceMode = "forceMode";
             $waitDuration = "waitDuration";
-            /**
-             * I use loops rather than recursive function calls for user-controlled stuff (a form in this case).
-             * Player can just put your server in hell by unstoppably pressing the submit button and cause segmentation fault (core dump) due to stack overflow.
-             */
             $noTarget = false;
             $pluginName = LazuliTeleport::getInstance()->getName();
             $player = $this->getPlayer();
@@ -468,6 +464,10 @@ class PlayerSession
             $resultHeader = $messages->playerFinderSearchResultHeader;
             $entry = $messages->playerFinderSearchResultEntry ?? "";
 
+            /**
+             * I use loops rather than recursive function calls for user-controlled stuff (a form in this case).
+             * Player can just put your server in hell by unstoppably pressing the submit button and cause segmentation fault (core dump) due to stack overflow.
+             */
             while (true) {
                 $keywords = explode(" ", $search);
                 $keywords = array_unique($keywords);
