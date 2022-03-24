@@ -443,7 +443,16 @@ class PlayerSession
     private static function noBuiltInActions(
         array $actions
     ) : array {
-        // TODO
+        return array_filter(
+            $actions,
+            fn(PlayerFinderActionInterface $action) : bool => match ($action::class) {
+                TpaCommand::class => false,
+                TpahereCommand::class => false,
+                BlockSubcommand::class => true,
+                UnblockSubcommand::class => true,
+                default => true
+            }
+        );
     }
 
     /**
