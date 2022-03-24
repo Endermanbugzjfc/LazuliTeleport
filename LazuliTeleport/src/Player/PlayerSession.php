@@ -407,19 +407,30 @@ class PlayerSession
         );
     }
 
+    /**
+     * @param string[] &$names
+     */
+    protected static function playerFinderFilter(
+        array &$names
+    ) : void {
+    }
+
+    /**
+     * @param string[] &$names
+     */
+    protected static function playerFinderSorter(
+        array &$names
+    ) : void {
+        sort($names, SORT_STRING);
+    }
+
     public function openPlayerFinder(
         PlayerFinderActionInterface $action,
-        string $searchBarDefaultValue = "",
-        ?callable $sort = null,
-        ?callable $filter = null,
-        ?callable $actionExit = null
+        string $searchBarDefaultValue = ""
     ) : void {
         Await::f2c(function () use (
             $action,
-            $searchBarDefaultValue,
-            $sort,
-            $filter,
-            $actionExit
+            $searchBarDefaultValue
         ) : Generator {
             $playerFinder = "playerFinder";
             $found = null;
@@ -451,9 +462,6 @@ class PlayerSession
             yield from Await::promise(function ($then) use (
                 $action,
                 $searchBarDefaultValue,
-                $sort,
-                $filter,
-                $actionExit,
 
                 $playerFinder,
                 $found,
