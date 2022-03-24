@@ -470,6 +470,17 @@ class PlayerSession
     }
 
     /**
+     * @return Generator<mixed, mixed, mixed, bool>
+     */
+    public function hasOfflineRequestPermission() : Generator
+    {
+        $options = $this->getSpecificOptions();
+        return $options->allowOfflineRequests;
+
+        yield from [];
+    }
+
+    /**
      * @param PlayerFinderActionInterface[] $actions
      * @return PlayerFinderActionInterface[]
      */
