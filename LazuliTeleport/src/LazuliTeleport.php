@@ -202,6 +202,11 @@ class LazuliTeleport extends PluginBase
         unset($this->configObject);
         unset($this->permissionToMessagesMap);
         unset($this->playerManager);
+        $connector = $this->dataConnector ?? null;
+        if ($connector !== null) {
+            $connector->close();
+        }
+        unset($this->dataConnector);
     }
 
     protected PlayerSessionManager $playerSessionManager;
