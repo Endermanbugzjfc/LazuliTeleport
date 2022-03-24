@@ -12,5 +12,7 @@ abstract class TerminateCommandException extends Exception
     public function handle(
         CommandSender $sender
     ) : void {
+        $message = $this->getMessage();
+        $sender->sendMessage($message);
     }
 }
