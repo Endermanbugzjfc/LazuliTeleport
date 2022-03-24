@@ -8,7 +8,8 @@
     "cortexpe/commando": "dev-PM4",
     "sof3/await-generator": "^3.4",
     "sof3/infoapi": "^1.2",
-    "vecnavium/formsui": "^1.1"
+    "vecnavium/formsui": "^1.1",
+    "sof3/libasynql": "^4.0"
   },
   "autoload": {
     "psr-4": {
