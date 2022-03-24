@@ -443,14 +443,6 @@ class PlayerSession
     /**
      * @param string[] &$names
      */
-    protected static function playerFinderFilter(
-        array &$names
-    ) : void {
-    }
-
-    /**
-     * @param string[] &$names
-     */
     protected static function playerFinderSorter(
         array &$names
     ) : void {
@@ -514,15 +506,17 @@ class PlayerSession
     }
 
     /**
-     * @param PlayerFinderActionInterface[] $actions
+     * @param callable(string &$names) : void $filter
      * @param string $search Empty (empty string) = all players will be listed.
      * @param string[] $selections
+     * @param PlayerFinderActionInterface[] $actions
      */
     public function openPlayerFinder(
         PlayerFinderActionInterface $action,
-        ?array $actions = null,
         string $search = "",
         array $selections = [],
+        ?callable $filter = null,
+        ?array $actions = null,
     ) : void {
         /**
          * @var callable(): Generator
@@ -531,7 +525,8 @@ class PlayerSession
             $actions,
             $action,
             $search,
-            $selections
+            $selections,
+            $filter
         ) : Generator {
             $searchBar = "searchBar";
             $resultEntry = "resultEntry";
@@ -592,7 +587,9 @@ class PlayerSession
                         $class->name = $name;
                     }
                 }
-                static::playerFinderFilter($found);
+                if ($filter !== null) {
+                    $filter($found);
+                }
                 static::playerFinderSorter($found);
                 $resultCount = count($found);
                 $searchContext = new class(
