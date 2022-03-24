@@ -63,7 +63,7 @@ class Messages
         $self = new self();
         $formTitle = "{Bold}{DarkAqua}Teleportation Request";
         $receiveTpa = "{Aqua}{Requestor} {Gold}wants to teleport to you.";
-        $currentlyAt = "\nHe is currently at {Green}{Requestor Player Position}";
+        $currentlyAt = "\nHe is currently at {Green}{RequestorPosition}";
         $commandHint = " {Italic}{DarkGray}(/tpaccept or /tpareject)";
         $self->tpaRequestReceive = MessageEntry::createForm($formTitle, $receiveTpa . $currentlyAt, $receiveTpa . $commandHint);
         $self->tpaRequestSend = $requestSend = MessageEntry::createChat("{Yellow}Waiting for {Gold}{Requestee}{Yellow}'s response to your {Green}{RequestType} {Yellow}request...");
