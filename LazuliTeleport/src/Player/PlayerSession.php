@@ -471,14 +471,20 @@ class PlayerSession
             while (true) {
                 $keywords = explode(" ", $search);
                 $keywords = array_unique($keywords);
-                $found = $entriesResolved = [];
+                // Being a gopher here. Using class as data structure.
+                $foundClass = (new class() {
+                    public string $name;
+                    public string $resolved;
+                })::class;
+                $found = [];
                 foreach ($names as $name) {
                     foreach ($keywords as $keyword) {
                         $stripos = stripos($name, $keyword);
                         if ($stripos === false) {
                             continue;
                         }
-                        $found[] = $name;
+                        $found[] = $class = new $foundClass();
+                        $class->name = $name;
                     }
                 }
                 static::playerFinderFilter($found);
@@ -495,7 +501,8 @@ class PlayerSession
                     ]
                 ) extends AnonInfo {
                 };
-                foreach ($found as $name) {
+                foreach ($found as $foundInstance) {
+                    $name = $foundInstance->name;
                     $entryInfo = new class(
                         $infoNamespace,
                         [
@@ -506,7 +513,8 @@ class PlayerSession
                         ]
                     ) extends AnonInfo {
                     };
-                    $entriesResolved[] = InfoAPI::resolve($entry, $entryInfo);
+                    $resolved = InfoAPI::resolve($entry, $entryInfo);
+                    $foundInstance->resolved = $resolved;
                 }
                 if ($err !== null) {
                     $err = InfoAPI::resolve($err, $searchContext);
@@ -521,11 +529,11 @@ class PlayerSession
                     // Arguments:
                     $search,
                     $noTarget,
+                    $selections,
 
                     // Caches:
                     $searchContext,
                     $found,
-                    $entriesResolved,
 
                     // Message caches:
                     $title,
@@ -554,14 +562,15 @@ class PlayerSession
                     if ($resultHeader !== null) {
                         $form->addLabel($resultHeader);
                     }
-                    foreach ($found as $index => $name) {
-                        $entryResolved = $entriesResolved[$index]();
+                    foreach ($found as $foundInstance) {
+                        $name = $foundInstance->name;
+                        $resolved = $foundInstance->resolved;
                         if (in_array($name, $selections, true)) {
                             $selected = true;
                         } else {
                             $selected = $search === $name;
                         }
-                        $form->addToggle($entryResolved, $selected, "$resultEntry.$name");
+                        $form->addToggle($resolved, $selected, "$resultEntry.$name");
                     }
 
                     $player->sendForm($form);
