@@ -6,7 +6,6 @@ namespace Endermanbugzjfc\LazuliTeleport\Player;
 
 use Closure;
 use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\BlockSubcommand;
-use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\TpablockCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\UnblockSubcommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaforceCommand;
