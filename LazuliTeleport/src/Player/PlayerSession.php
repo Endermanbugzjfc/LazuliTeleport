@@ -679,7 +679,7 @@ class PlayerSession
                             $sliderActionNames[] = "{DarkGray}$leftList {Gold}$actionName {DarkGray}$rightList";
                         }
                         $middleIndex = Utils::getArrayMiddleIndex($sliderActionNames);
-                        $form->addStepSlider($actionSelectorName, $sliderActionNames, $middleIndex);
+                        $form->addStepSlider($actionSelectorName, $sliderActionNames, $middleIndex, $actionSelector);
                         $tpaforcePermission = $tpaforce->getPermission();
                         if (
                             $tpaforcePermission === null
