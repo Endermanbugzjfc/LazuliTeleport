@@ -612,7 +612,6 @@ class PlayerSession
                     $selections,
 
                     // Caches:
-                    $searchContext,
                     $found,
                     $player,
                     $availableActions,
