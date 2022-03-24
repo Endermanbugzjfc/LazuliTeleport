@@ -62,12 +62,20 @@ class Messages
     public static function getDefault() : self
     {
         $self = new self();
+
         $formTitle = "{Bold}{DarkAqua}Teleportation Request";
         $receiveTpa = "{Aqua}{Requestor} {Gold}wants to teleport to you.";
         $currentlyAt = "\nHe is currently at {Green}{RequestorPosition}";
         $commandHint = " {Italic}{DarkGray}(/tpaccept or /tpareject)";
         $self->tpaRequestReceive = MessageEntry::createForm($formTitle, $receiveTpa . $currentlyAt, $receiveTpa . $commandHint);
-        $self->tpaRequestSend = $requestSend = MessageEntry::createChat("{Yellow}Waiting for {Aqua}{Requestee}{Yellow}'s response to your {Green}{RequestType} {Yellow}request...");
+        $self->tpaRequestReceiveOffline = MessageEntry::createForm($formTitle, $receiveTpa . $currentlyAt . "{Gold}but offline.", $receiveTpa . $commandHint);
+
+        $sendFormTitle = $formTitle . " Sent";
+        $cancelButton = "{Red}Cancel Request (Press Escape)";
+        $requestSendRaw = "{Yellow}Waiting for {Gold}{Requestee}{Yellow}'s response to your {Green}{RequestType} {Yellow}request...";
+        $cancelled = MessageEntry::createChat("{Yellow}Teleportation cancelled.");
+        $self->tpaRequestSend = $requestSend = MessageEntry::createForm($sendFormTitle, $requestSendRaw, $cancelled, null, $cancelButton);
+        $self->tpaRequestSendOffline = $requestSend = MessageEntry::createForm("{Aqua}{Requestee}{Yellow} is offline at the moment. He will receive the request once he comes online.");
         $self->tpaRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting to {Aqua}{Requestee}...");
         $self->tpaRequestAcceptedWaiting = MessageEntry::createChat("{Yellow}You will be teleporting to {Aqua}{Requestee} after {Green}{TeleportationWaitDuration}...");
         $self->tpaRequestAccepted = MessageEntry::createChat("{Yellow}Teleporting to {Aqua}{Requestee}...");
@@ -84,7 +92,7 @@ class Messages
         $self->tpahereExceedRequesteeLimit = MessageEntry::createChat("{Red}Your teleport-license only allows teleporting at most {Green}{TpahereRequesteeLimit} {Red}players at the same time!");
         $self->tpahereCoolDown = MessageEntry::createChat("{Red}You must wait for {TpahereCoolDown} more.");
 
-        $self->teleportationCancelledRequstor = MessageEntry::createChat("{Yellow}Teleportation cancelled.");
+        $self->teleportationCancelledRequstor = $cancelled;
         $self->teleportationCancelledRequstorMoved = MessageEntry::createChat("{Yellow}Teleportation cancelled because you moved.");
         $self->teleportationCancelledRequstee = MessageEntry::createChat("{Aqua}{Requestor} {Yellow}cancelled the teleportation. {Italic}{DarkGray}(By accident?)");
         $self->requestorHasUnresolvedRequest = MessageEntry::createChat("{Red}Sorry, you must wait until the previous requestee responses you!");
