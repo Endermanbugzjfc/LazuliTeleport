@@ -38,6 +38,7 @@ class Messages
     public ?MessageEntry $internalServerError = null;
     public ?MessageEntry $noTeleportationRequest = null;
     public ?MessageEntry $cannotTeleportOfflinePlayer = null;
+    public ?MessageEntry $playerNotFound = null;
 
     public ?MessageEntry $blockPlayer = null;
     public ?MessageEntry $unblockPlayer = null;
