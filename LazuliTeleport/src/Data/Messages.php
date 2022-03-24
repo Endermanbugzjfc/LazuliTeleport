@@ -27,6 +27,7 @@ class Messages
     public ?MessageEntry $tpahereCoolDown = null;
 
     public ?MessageEntry $teleportationCancelledRequstor = null;
+    public ?MessageEntry $teleportationCancelledRequstorMoved = null;
     public ?MessageEntry $teleportationCancelledRequstee = null;
     public ?MessageEntry $requestorHasUnresolvedRequest = null;
     public ?MessageEntry $requesteeHasUnresolvedRequest = null;
@@ -83,7 +84,8 @@ class Messages
         $self->tpahereExceedRequesteeLimit = MessageEntry::createChat("{Red}Your teleport-license only allows teleporting at most {Green}{TpahereRequesteeLimit} {Red}players at the same time!");
         $self->tpahereCoolDown = MessageEntry::createChat("{Red}You must wait for {TpahereCoolDown} more.");
 
-        $self->teleportationCancelledRequstor = MessageEntry::createChat("{Yellow}Teleportation cancelled because you moved.");
+        $self->teleportationCancelledRequstor = MessageEntry::createChat("{Yellow}Teleportation cancelled.");
+        $self->teleportationCancelledRequstorMoved = MessageEntry::createChat("{Yellow}Teleportation cancelled because you moved.");
         $self->teleportationCancelledRequstee = MessageEntry::createChat("{Aqua}{Requestor} {Yellow}cancelled the teleportation. {Italic}{DarkGray}(By accident?)");
         $self->requestorHasUnresolvedRequest = MessageEntry::createChat("{Red}Sorry, you must wait until the previous requestee responses you!");
         $self->requesteeHasUnresolvedRequest = MessageEntry::createChat("{Red}self player has another teleportation request at the moment. Try again later!");
