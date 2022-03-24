@@ -7,7 +7,9 @@ namespace Endermanbugzjfc\LazuliTeleport\Data;
 class Messages
 {
     public ?MessageEntry $tpaRequestReceive = null;
+    public ?MessageEntry $tpaRequestReceiveOffline = null;
     public ?MessageEntry $tpaRequestSend = null;
+    public ?MessageEntry $tpaRequestSendOffline = null;
     public ?MessageEntry $tpaRequestAccepted = null;
     public ?MessageEntry $tpaRequestAcceptedWaiting = null;
     public ?MessageEntry $tpaRequestRejected = null;
@@ -15,7 +17,9 @@ class Messages
     public ?MessageEntry $tpaCoolDown = null;
 
     public ?MessageEntry $tpahereRequestReceive = null;
+    public ?MessageEntry $tpahereRequestReceiveOffline = null;
     public ?MessageEntry $tpahereRequestSend = null;
+    public ?MessageEntry $tpahereRequestSendOffline = null;
     public ?MessageEntry $tpahereRequestAccepted = null;
     public ?MessageEntry $tpahereRequestAcceptedWaiting = null;
     public ?MessageEntry $tpahereRequestRejected = null;
