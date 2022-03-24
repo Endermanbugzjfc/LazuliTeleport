@@ -37,6 +37,8 @@ class PermissionDependentOption
     public ?int $waitDurationFormSliderStep = null;
     public ?int $waitDurationFormSliderTotalSteps = null;
 
+    public ?bool $allowOfflineRequests = null;
+
     public static function getDefault() : self
     {
         $self = new self();
