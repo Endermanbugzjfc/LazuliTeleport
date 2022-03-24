@@ -30,6 +30,8 @@ class PluginConfig
     public int $waitDurationSliderStep = 1;
     public int $waitDurationSliderTotalSteps = 0;
 
+    public bool $pressEscapeToCancelRequest = false;
+
     public function __construct()
     {
         $pluginName = LazuliTeleport::getInstance()->getName();
