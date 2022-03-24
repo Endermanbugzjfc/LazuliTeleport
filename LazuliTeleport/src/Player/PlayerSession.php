@@ -451,12 +451,14 @@ class PlayerSession
              * I use loops rather than recursive function calls for user-controlled stuff (a form in this case).
              * Player can just put your server in hell by unstoppably pressing the submit button and cause segmentation fault (core dump) due to stack overflow.
              */
+            $noTarget = false;
             while (true) {
                 /**
                  * @var array{Player, array<int|string, scalar>|null}
                  */
                 $formResult = yield from Await::promise(function ($then) use (
                     $search,
+                    $noTarget,
 
                     $searchBar,
                     $resultEntry,
@@ -472,6 +474,15 @@ class PlayerSession
                     $form = new CustomForm($then);
                     $title = $messages->playerFinderTitle ?? "";
                     $form->setTitle(InfoAPI::resolve($title, $info));
+
+                    $err = $messages->playerFinderNoTargetsSelected;
+                    if (
+                        $noTarget
+                        and
+                        $err !== null
+                    ) {
+                        $form->addLabel(InfoAPI::resolve($err, $info));
+                    }
 
                     $label = $messages->playerFinderLabel ?? "";
                     $labelResolve = InfoAPI::resolve($label, $info);
