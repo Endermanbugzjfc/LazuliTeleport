@@ -471,7 +471,7 @@ class PlayerSession
             while (true) {
                 $keywords = explode(" ", $search);
                 $keywords = array_unique($keywords);
-                $found = [];
+                $found = $entriesResolved = [];
                 foreach ($names as $name) {
                     foreach ($keywords as $keyword) {
                         $stripos = stripos($name, $keyword);
