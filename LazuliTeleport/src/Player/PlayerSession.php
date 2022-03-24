@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Endermanbugzjfc\LazuliTeleport\Player;
 
 use Closure;
+use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\BlockSubcommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\UnblockSubcommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
+use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
 use Endermanbugzjfc\LazuliTeleport\Data\MessageEntry;
 use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\Data\PermissionDependentOption;
@@ -139,6 +143,12 @@ class PlayerSession
      */
     public function getBlockedPlayers() : array
     {
+    }
+
+    public function isNameBlocked(
+        string $name
+    ) : bool {
+        // TODO
     }
 
     /**
@@ -428,6 +438,16 @@ class PlayerSession
 
     /**
      * @param PlayerFinderActionInterface[] $actions
+     * @return PlayerFinderActionInterface[]
+     */
+    private static function noBuiltInActions(
+        array $actions
+    ) : array {
+        // TODO
+    }
+
+    /**
+     * @param PlayerFinderActionInterface[] $actions
      * @param string $search Empty (empty string) = all players will be listed.
      * @param string[] $selections
      */
@@ -457,10 +477,35 @@ class PlayerSession
             $names = LazuliTeleport::getInstance()->getAllPlayerNames();
             $availableActions = null;
             if ($selections !== []) {
-                $availableActions = array_filter(
-                    $actions,
-                    fn(PlayerFinderActionInterface $action) : bool => yield from $action->isActionAvailable($this)
-                );
+                $availableActions = [];
+                foreach ($actions as $actionInstance) {
+                    $actionAvailable = yield from $action->isActionAvailable($this);
+                    if ($actionAvailable) {
+                        $availableActions[] = $actionInstance;
+                    }
+                }
+                $noBuiltInActions = self::noBuiltInActions($availableActions);
+
+                $tpa = yield from TpaCommand::getInstance();
+                $tpahere = yield from TpahereCommand::getInstance();
+                $block = yield from BlockSubcommand::getInstance();
+                $unblock = yield from UnblockSubcommand::getInstance();
+                $selectionsCount = count($selections);
+                $availableActions = match (true) {
+                    $selectionsCount === 1 => [
+                        $tpahere,
+                        $tpa,
+                        $this->isNameBlocked($selections[0])
+                            ? $unblock
+                            : $block
+                    ],
+                    default => [
+                        $block,
+                        $tpahere,
+                        $unblock,
+                        ...$noBuiltInActions
+                    ]
+                };
             }
 
             $title = $messages->playerFinderTitle ?? "";
