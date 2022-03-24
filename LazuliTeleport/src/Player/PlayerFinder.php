@@ -8,6 +8,7 @@ use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\BlockSubcommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\Tpablock\UnblockSubcommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpaCommand;
 use Endermanbugzjfc\LazuliTeleport\Commands\TpahereCommand;
+use Endermanbugzjfc\LazuliTeleport\Data\Messages;
 use Endermanbugzjfc\LazuliTeleport\LazuliTeleport;
 use Endermanbugzjfc\LazuliTeleport\Utils\Utils;
 use Generator;
@@ -119,21 +120,22 @@ class PlayerFinder
             $waitDurationStep = $config->waitDurationSliderStep;
             $waitDurationSteps = $config->waitDurationSliderTotalSteps;
 
-            $title = $messages->playerFinderTitle ?? "";
+            $missingInDefault = Messages::missingInDefault();
+            $title = $messages->playerFinderTitle ?? throw $missingInDefault;
             $title = InfoAPI::resolve($title, $info);
             $err = $messages->playerFinderNoTargetsSelected;
-            $label = $messages->playerFinderLabel ?? "";
+            $label = $messages->playerFinderLabel ?? throw $missingInDefault;
             $label = InfoAPI::resolve($label, $info);
-            $placeholder = $messages->playerFinderPlaceholder ?? "";
+            $placeholder = $messages->playerFinderPlaceholder ?? throw $missingInDefault;
             $placeholder = InfoAPI::resolve($placeholder, $info);
             $resultHeader = $messages->playerFinderSearchResultHeader;
-            $entry = $messages->playerFinderSearchResultEntry ?? "";
-            $entry = $messages->playerFinderSearchResultEntry ?? "";
-            $actionSelectorName = $messages->playerFinderActionSelectorLabel ?? "";
+            $entry = $messages->playerFinderSearchResultEntry ?? throw $missingInDefault;
+            $entry = $messages->playerFinderSearchResultEntry ?? throw $missingInDefault;
+            $actionSelectorName = $messages->playerFinderActionSelectorLabel ?? throw $missingInDefault;
             $actionSelectorName = InfoAPI::resolve($placeholder, $info);
-            $forceModeName = $messages->forceModeToggleLabel ?? "";
+            $forceModeName = $messages->forceModeToggleLabel ?? throw $missingInDefault;
             $forceModeName = InfoAPI::resolve($forceModeName, $info);
-            $waitDurationName = $messages->forceModeWaitDurationSliderLabel ?? "";
+            $waitDurationName = $messages->forceModeWaitDurationSliderLabel ?? throw $missingInDefault;
             $waitDurationName = InfoAPI::resolve($waitDurationName, $info);
 
             /**

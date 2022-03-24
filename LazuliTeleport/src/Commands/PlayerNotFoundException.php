@@ -43,7 +43,7 @@ class PlayerNotFoundException extends TerminateCommandException
             ]
         ) extends AnonInfo {
         };
-        $self = new self(InfoAPI::resolve($consoleMessage->chat ?? "", $consoleInfo));
+        $self = new self(InfoAPI::resolve($consoleMessage->chat ?? throw new \RuntimeException("Default message has missing entry"), $consoleInfo));
         $self->session = $session;
         $self->action = $action;
         $self->input = $input;

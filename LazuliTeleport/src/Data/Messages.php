@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Endermanbugzjfc\LazuliTeleport\Data;
 
+use RuntimeException;
+use function RuntimeException;
 use function str_replace;
 
 class Messages
@@ -207,5 +209,10 @@ class Messages
         $self->playerFinderNoTargetsSelected = "{Bold}{Red}Please select at least one player!";
 
         return $self;
+    }
+
+    public function missingInDefault() : RuntimeException
+    {
+        return RuntimeException("Default message has missing entry");
     }
 }
