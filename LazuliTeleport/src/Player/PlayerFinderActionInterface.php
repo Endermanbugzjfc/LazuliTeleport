@@ -22,7 +22,7 @@ interface PlayerFinderActionInterface
 
     /**
      * @return Generator<mixed, mixed, mixed, bool>
-     * @param string[] See {@link PlayerFinderActionInterface::runWithSelectedTargets()}.
+     * @param string[] $targets See {@link PlayerFinderActionInterface::runWithSelectedTargets()}.
      */
     public function isActionAvailable(
         PlayerSession $session,
