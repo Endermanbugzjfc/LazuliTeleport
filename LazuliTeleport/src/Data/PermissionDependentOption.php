@@ -33,10 +33,6 @@ class PermissionDependentOption
 
     public ?bool $enablePlayerFinder = null;
 
-    public ?int $waitDurationFormSliderMin = null;
-    public ?int $waitDurationFormSliderStep = null;
-    public ?int $waitDurationFormSliderTotalSteps = null;
-
     public ?bool $allowOfflineRequests = null;
 
     public static function getDefault() : self
@@ -46,10 +42,6 @@ class PermissionDependentOption
         $self->tpahereRequesteeLimit = 0;
         $self->tpaCoolDown = $self->tpahereCoolDown = 10;
         $self->enablePlayerFinder = true;
-
-        $self->waitDurationFormSliderMin = 0;
-        $self->waitDurationFormSliderStep = 1;
-        $self->waitDurationFormSliderTotalSteps = 20;
 
         $self->allowOfflineRequests = true;
 

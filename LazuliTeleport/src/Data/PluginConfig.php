@@ -26,6 +26,10 @@ class PluginConfig
     #[ListType(PermissionDependentOption::class)]
     public array $permissionDependentOptions = [];
 
+    public int $waitDurationSliderMin = 0;
+    public int $waitDurationSliderStep = 1;
+    public int $waitDurationSliderTotalSteps = 0;
+
     public function __construct()
     {
         $pluginName = LazuliTeleport::getInstance()->getName();

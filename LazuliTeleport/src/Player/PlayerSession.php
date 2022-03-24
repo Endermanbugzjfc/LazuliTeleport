@@ -505,10 +505,10 @@ class PlayerSession
             $tpaforce = yield from TpaforceCommand::getInstance();
             $oldForceMode = $this->getForceMode();
             $oldWaitduration = $this->getForceModeWaitDuration();
-            $options = $this->getSpecificOptions();
-            $waitDurationMin = $options->waitDurationFormSliderMin;
-            $waitDurationStep = $options->waitDurationFormSliderStep;
-            $waitDurationSteps = $options->waitDurationFormSliderTotalSteps;
+            $config = LazuliTeleport::getInstance()->getConfigObject();
+            $waitDurationMin = $config->waitDurationSliderMin;
+            $waitDurationStep = $config->waitDurationSliderStep;
+            $waitDurationSteps = $config->waitDurationSliderTotalSteps;
             if ($selections !== []) {
                 $availableActions = [];
                 foreach ($actions as $actionInstance) {
