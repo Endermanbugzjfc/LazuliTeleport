@@ -609,6 +609,7 @@ class PlayerSession
                     $label,
                     $placeholder,
                     $resultHeader,
+                    $actionSelectorName,
 
                     // Element labels:
                     $searchBar,
