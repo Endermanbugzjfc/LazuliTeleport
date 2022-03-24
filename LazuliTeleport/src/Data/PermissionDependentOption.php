@@ -51,6 +51,8 @@ class PermissionDependentOption
         $self->waitDurationFormSliderStep = 1;
         $self->waitDurationFormSliderTotalSteps = 20;
 
+        $self->allowOfflineRequests = true;
+
         return $self;
     }
 }
