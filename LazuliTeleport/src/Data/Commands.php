@@ -17,6 +17,7 @@ class Commands
     public CommandProfile $tpareject;
     public CommandProfile $tpaforce;
     public CommandProfile $tpacancel;
+    public CommandProfile $tpaopen;
 
     public CommandProfile $tpablock;
     #[KeyName("tpablock.list")]
@@ -45,6 +46,7 @@ class Commands
                 "list" => "List players blocked by you",
                 "block" => "Block one or more players",
                 "unblock" => "Unblock one or more players",
+                "tpaopen" => "Allow / disallow everyone to send teleportation requests to you",
 
                 default => throw new RuntimeException("Unknown command \"$name\"")
             };
@@ -60,7 +62,12 @@ class Commands
                 "tpacancel", => [
                     "tpcancel",
                     "tpwithdraw",
-                    "tpawithdraw",
+                    "tpawithdraw"
+                ],
+                "tpaopen" => [
+                    "tpopen",
+                    "tpaclose",
+                    "tpclose"
                 ],
                 default => []
             };
