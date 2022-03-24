@@ -447,124 +447,127 @@ class PlayerSession
             $actionSelector = "actionSelector";
             $forceMode = "forceMode";
             $waitDuration = "waitDuration";
-            /**
-             * @var array<int|string, scalar> $data
-             */
-            [, $data] = yield from Await::promise(function ($then) use (
-                $search,
+            while (true) {
+                /**
+                 * @var array<int|string, scalar> $data
+                 */
+                [, $data] = yield from Await::promise(function ($then) use (
+                    $search,
 
-                $searchBar,
-                $resultEntry,
-                $actionSelector,
-                $forceMode,
-                $waitDuration
-            ) {
-                $pluginName = LazuliTeleport::getInstance()->getName();
-                $player = $this->getPlayer();
-                $messages = $this->getMessages();
-                $info = $this->getInfo();
+                    $searchBar,
+                    $resultEntry,
+                    $actionSelector,
+                    $forceMode,
+                    $waitDuration
+                ) {
+                    $pluginName = LazuliTeleport::getInstance()->getName();
+                    $player = $this->getPlayer();
+                    $messages = $this->getMessages();
+                    $info = $this->getInfo();
 
-                $form = new CustomForm($then);
-                $title = $messages->playerFinderTitle ?? "";
-                $form->setTitle(InfoAPI::resolve($title, $info));
+                    $form = new CustomForm($then);
+                    $title = $messages->playerFinderTitle ?? "";
+                    $form->setTitle(InfoAPI::resolve($title, $info));
 
-                $label = $messages->playerFinderLabel ?? "";
-                $labelResolve = InfoAPI::resolve($label, $info);
-                $placeholder = $messages->playerFinderPlaceholder ?? "";
-                $placeholderResolve = InfoAPI::resolve($placeholder, $info);
-                $form->addInput($labelResolve, $placeholderResolve, $search, $searchBar);
+                    $label = $messages->playerFinderLabel ?? "";
+                    $labelResolve = InfoAPI::resolve($label, $info);
+                    $placeholder = $messages->playerFinderPlaceholder ?? "";
+                    $placeholderResolve = InfoAPI::resolve($placeholder, $info);
+                    $form->addInput($labelResolve, $placeholderResolve, $search, $searchBar);
 
-                if ($found !== null) {
-                    $resultHeader = $messages->playerFinderSearchResultHeader            ;
-                    $resultNamespace = "$pluginName.PlayerFinder";
-                    if ($resultHeader !== null) {
-                        $resultCount = count($found);
-                        $resultHeaderInfo = new class(
-                            $resultNamespace,
-                            [
-                                "ResultCount" => new NumberInfo($resultCount)
-                            ],
-                            [
-                                $info
-                            ]
-                        ) extends AnonInfo {
-                        };
-                        $resultHeaderResolve = InfoAPI::resolve($resultHeader, $resultHeaderInfo);
-                        $form->addLabel($resultHeaderResolve);
-                    }
-                    $explode = explode(" ", $search);
-                    $keywords = array_unique($explode);
+                    if ($found !== null) {
+                        $resultHeader = $messages->playerFinderSearchResultHeader            ;
+                        $resultNamespace = "$pluginName.PlayerFinder";
+                        if ($resultHeader !== null) {
+                            $resultCount = count($found);
+                            $resultHeaderInfo = new class(
+                                $resultNamespace,
+                                [
+                                    "ResultCount" => new NumberInfo($resultCount)
+                                ],
+                                [
+                                    $info
+                                ]
+                            ) extends AnonInfo {
+                            };
+                            $resultHeaderResolve = InfoAPI::resolve($resultHeader, $resultHeaderInfo);
+                            $form->addLabel($resultHeaderResolve);
+                        }
+                        $explode = explode(" ", $search);
+                        $keywords = array_unique($explode);
 
-                    $names = LazuliTeleport::getInstance()->getAllPlayerNames();
-                    $found = [];
-                    foreach ($names as $name) {
-                        foreach ($keywords as $keyword) {
-                            $stripos = stripos($name, $keyword);
-                            if ($stripos === false) {
-                                continue;
+                        $names = LazuliTeleport::getInstance()->getAllPlayerNames();
+                        $found = [];
+                        foreach ($names as $name) {
+                            foreach ($keywords as $keyword) {
+                                $stripos = stripos($name, $keyword);
+                                if ($stripos === false) {
+                                    continue;
+                                }
+                                $found[] = $name;
                             }
-                            $found[] = $name;
+                        }
+                        static::playerFinderFilter($found);
+                        static::playerFinderSorter($found);
+
+                        foreach ($found as $name) {
+                            $entry = $messages->playerFinderSearchResultEntry ?? "{ResultPlayer}";
+                            $entryInfo = new class(
+                                $resultNamespace,
+                                [
+                                    "ResultPlayer" => new StringInfo($name)
+                                ],
+                                [
+                                    $info
+                                ]
+                            ) extends AnonInfo {
+                            };
+                            $entryResolve = InfoAPI::resolve($entry, $entryInfo);
+                            $exact = strtolower($search) === strtolower($name);
+                            $form->addToggle($entryResolve, $exact, "$resultEntry.$name");
                         }
                     }
-                    static::playerFinderFilter($found);
-                    static::playerFinderSorter($found);
 
-                    foreach ($found as $name) {
-                        $entry = $messages->playerFinderSearchResultEntry ?? "{ResultPlayer}";
-                        $entryInfo = new class(
-                            $resultNamespace,
-                            [
-                                "ResultPlayer" => new StringInfo($name)
-                            ],
-                            [
-                                $info
-                            ]
-                        ) extends AnonInfo {
-                        };
-                        $entryResolve = InfoAPI::resolve($entry, $entryInfo);
-                        $exact = strtolower($search) === strtolower($name);
-                        $form->addToggle($entryResolve, $exact, "$resultEntry.$name");
+
+                    $player->sendForm($form);
+                });
+                $newSearch = (string)$data[$searchBar];
+                if ($search !== $newSearch) {
+                    $search = $newSearch;
+                    continue;
+                }
+                $newSelections = [];
+                foreach ($data as $k => $v) {
+                    $explode = explode(".", (string)$k);
+                    if ($explode[0] !== $resultEntry) {
+                        continue;
                     }
+                    if (!$v) {
+                        continue;
+                    }
+                    $newSelections[] = $explode[1] ?? "";
                 }
-
-
-                $player->sendForm($form);
-            });
-            $newSearch = (string)$data[$searchBar];
-            if ($search !== $newSearch) {
-                $this->openPlayerFinder($action, $newSearch);
-                return;
-            }
-            $newSelections = [];
-            foreach ($data as $k => $v) {
-                $explode = explode(".", (string)$k);
-                if ($explode[0] !== $resultEntry) {
+                if (array_diff($selections, $newSelections) !== []) {
+                    $selections = $newSelections;
                     continue;
                 }
-                if (!$v) {
-                    continue;
+                $oldForceMode = $this->getForceMode();
+                $oldWaitduration = $this->getForceModeWaitDuration();
+
+                $newForceMode = $data[$forceMode] ?? null;
+                if ($newForceMode !== null) {
+                    $this->setForceMode((bool)$newForceMode);
                 }
-                $newSelections[] = $explode[1] ?? "";
-            }
-            if (array_diff($selections, $newSelections) !== []) {
-                $this->openPlayerFinder($action, $search, $newSelections);
-                return;
-            }
-            $oldForceMode = $this->getForceMode();
-            $oldWaitduration = $this->getForceModeWaitDuration();
+                $newWaitDuration = $data[$waitDuration] ?? null;
+                if ($newWaitDuration !== null) {
+                    $this->setForceModeWaitDuration((int)$newWaitDuration);
+                }
 
-            $newForceMode = $data[$forceMode] ?? null;
-            if ($newForceMode !== null) {
-                $this->setForceMode((bool)$newForceMode);
+                $newActionIndex = (int)$data[$actionSelector];
+                $newAction = $actions[$newActionIndex] ?? $action;
+                $newAction->runWithSelectedTargets($this, ...$selections);
+                break;
             }
-            $newWaitDuration = $data[$waitDuration] ?? null;
-            if ($newWaitDuration !== null) {
-                $this->setForceModeWaitDuration((int)$newWaitDuration);
-            }
-
-            $newActionIndex = (int)$data[$actionSelector];
-            $newAction = $actions[$newActionIndex] ?? $action;
-            $newAction->runWithSelectedTargets($this, ...$selections);
         });
     }
 }
