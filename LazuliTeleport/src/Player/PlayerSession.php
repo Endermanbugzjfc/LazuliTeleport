@@ -26,6 +26,7 @@ use SOFe\InfoAPI\StringInfo;
 use Throwable;
 use Vecnavium\FormsUI\CustomForm;
 use Vecnavium\FormsUI\ModalForm;
+use function array_diff;
 use function array_filter;
 use function array_unique;
 use function bin2hex;
@@ -424,48 +425,39 @@ class PlayerSession
         sort($names, SORT_STRING);
     }
 
+    /**
+     * @param PlayerFinderActionInterface[] $actions
+     * @param string $search Empty (empty string) = all players will be listed.
+     * @param string[] $selections
+     */
     public function openPlayerFinder(
+        array $actions,
         PlayerFinderActionInterface $action,
-        string $searchBarDefaultValue = ""
+        string $search = "",
+        array $selections = [],
     ) : void {
         Await::f2c(function () use (
+            $actions,
             $action,
-            $searchBarDefaultValue
+            $search,
+            $selections
         ) : Generator {
-            $playerFinder = "playerFinder";
-            $found = null;
-            if ($searchBarDefaultValue !== "") {
-                $explode = explode(" ", $searchBarDefaultValue);
-                $keywords = array_unique($explode);
+            $searchBar = "searchBar";
+            $resultEntry = "resultEntry";
+            $actionSelector = "actionSelector";
+            $forceMode = "forceMode";
+            $waitDuration = "waitDuration";
+            /**
+             * @var array<int|string, scalar> $data
+             */
+            [, $data] = yield from Await::promise(function ($then) use (
+                $search,
 
-                $names = LazuliTeleport::getInstance()->getAllPlayerNames();
-                $found = [];
-                foreach ($names as $name) {
-                    foreach ($keywords as $keyword) {
-                        $stripos = stripos($name, $keyword);
-                        if ($stripos === false) {
-                            continue;
-                        }
-                        $found[] = $name;
-                    }
-                }
-                if ($filter !== null) {
-                    $filter($found);
-                }
-                if ($sort !== null) {
-                    $sort($found);
-                } else {
-                    sort($found, SORT_STRING);
-                }
-            }
-            $resultToggle = "resultToggle.";
-            yield from Await::promise(function ($then) use (
-                $action,
-                $searchBarDefaultValue,
-
-                $playerFinder,
-                $found,
-                $resultToggle
+                $searchBar,
+                $resultEntry,
+                $actionSelector,
+                $forceMode,
+                $waitDuration
             ) {
                 $pluginName = LazuliTeleport::getInstance()->getName();
                 $player = $this->getPlayer();
@@ -480,7 +472,7 @@ class PlayerSession
                 $labelResolve = InfoAPI::resolve($label, $info);
                 $placeholder = $messages->playerFinderPlaceholder ?? "";
                 $placeholderResolve = InfoAPI::resolve($placeholder, $info);
-                $form->addInput($labelResolve, $placeholderResolve, $searchBarDefaultValue, $playerFinder);
+                $form->addInput($labelResolve, $placeholderResolve, $search, $searchBar);
 
                 if ($found !== null) {
                     $resultHeader = $messages->playerFinderSearchResultHeader            ;
@@ -500,6 +492,23 @@ class PlayerSession
                         $resultHeaderResolve = InfoAPI::resolve($resultHeader, $resultHeaderInfo);
                         $form->addLabel($resultHeaderResolve);
                     }
+                    $explode = explode(" ", $search);
+                    $keywords = array_unique($explode);
+
+                    $names = LazuliTeleport::getInstance()->getAllPlayerNames();
+                    $found = [];
+                    foreach ($names as $name) {
+                        foreach ($keywords as $keyword) {
+                            $stripos = stripos($name, $keyword);
+                            if ($stripos === false) {
+                                continue;
+                            }
+                            $found[] = $name;
+                        }
+                    }
+                    static::playerFinderFilter($found);
+                    static::playerFinderSorter($found);
+
                     foreach ($found as $name) {
                         $entry = $messages->playerFinderSearchResultEntry ?? "{ResultPlayer}";
                         $entryInfo = new class(
@@ -513,14 +522,49 @@ class PlayerSession
                         ) extends AnonInfo {
                         };
                         $entryResolve = InfoAPI::resolve($entry, $entryInfo);
-                        $exact = strtolower($searchBarDefaultValue) === strtolower($name);
-                        $form->addToggle($entryResolve, $exact, $resultToggle . $name);
+                        $exact = strtolower($search) === strtolower($name);
+                        $form->addToggle($entryResolve, $exact, "$resultEntry.$name");
                     }
                 }
 
 
                 $player->sendForm($form);
             });
+            $newSearch = (string)$data[$searchBar];
+            if ($search !== $newSearch) {
+                $this->openPlayerFinder($action, $newSearch);
+                return;
+            }
+            $newSelections = [];
+            foreach ($data as $k => $v) {
+                $explode = explode(".", (string)$k);
+                if ($explode[0] !== $resultEntry) {
+                    continue;
+                }
+                if (!$v) {
+                    continue;
+                }
+                $newSelections[] = $explode[1] ?? "";
+            }
+            if (array_diff($selections, $newSelections) !== []) {
+                $this->openPlayerFinder($action, $search, $newSelections);
+                return;
+            }
+            $oldForceMode = $this->getForceMode();
+            $oldWaitduration = $this->getForceModeWaitDuration();
+
+            $newForceMode = $data[$forceMode] ?? null;
+            if ($newForceMode !== null) {
+                $this->setForceMode((bool)$newForceMode);
+            }
+            $newWaitDuration = $data[$waitDuration] ?? null;
+            if ($newWaitDuration !== null) {
+                $this->setForceModeWaitDuration((int)$newWaitDuration);
+            }
+
+            $newActionIndex = (int)$data[$actionSelector];
+            $newAction = $actions[$newActionIndex] ?? $action;
+            $newAction->runWithSelectedTargets($this, ...$selections);
         });
     }
 }
