@@ -31,6 +31,8 @@ use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use poggit\libasynql\DataConnector;
+use poggit\libasynql\libasynql;
 use RuntimeException;
 use function array_map;
 use function count;
@@ -123,6 +125,16 @@ class LazuliTeleport extends PluginBase
             PermissionManager::getInstance()->addPermission($permissionInstance);
         }
 
+        $this->getLogger()->info("Initialising for player block-list and other user settings...");
+        $databaseYml = "database.yml";
+        $this->saveResource($databaseYml);
+        $databaseConfig = (new Config($databaseYml))->getAll();
+        $this->dataConnector = libasynql::create($this, $databaseConfig, [
+            "mysql" => "sql/mysql.sql",
+            "sqlite" => "sql/sqlite.sql",
+        ]);
+        $this->getLogger()->info("Completed");
+
         $playerSessionManager = new PlayerSessionManager();
         $this->getServer()->getPluginManager()->registerEvents($playerSessionManager, $this);
         $this->playerSessionManager = $playerSessionManager;
@@ -204,6 +216,13 @@ class LazuliTeleport extends PluginBase
     public function getAllPlayerNames() : array
     {
         return $this->playerSessionManager->allPlayerNames;
+    }
+
+    protected DataConnector $dataConnector;
+
+    public function getDataConnector() : DataConnector
+    {
+        return $this->dataConnector;
     }
 
     public static function getInstance() : self
