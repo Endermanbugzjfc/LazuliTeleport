@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Endermanbugzjfc\LazuliTeleport\Data;
 
 use RuntimeException;
-use function RuntimeException;
 use function str_replace;
 
 class Messages
@@ -211,8 +210,8 @@ class Messages
         return $self;
     }
 
-    public function missingInDefault() : RuntimeException
+    public static function missingInDefault() : RuntimeException
     {
-        return RuntimeException("Default message has missing entry");
+        return new RuntimeException("Default message has missing entry");
     }
 }
