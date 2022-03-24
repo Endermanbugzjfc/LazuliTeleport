@@ -148,7 +148,8 @@ class PlayerSession
     public function isNameBlocked(
         string $name
     ) : bool {
-        // TODO
+        $blocked = $this->getBlockedPlayers();
+        return in_array($name, $blocked, true);
     }
 
     /**
