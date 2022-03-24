@@ -475,10 +475,10 @@ class PlayerSession
      */
     public function hasOfflineRequestPermission() : Generator
     {
-        $options = $this->getSpecificOptions();
-        return $options->allowOfflineRequests;
-
         yield from [];
+
+        $options = $this->getSpecificOptions();
+        return $options->allowOfflineRequests ?? false;
     }
 
     /**
