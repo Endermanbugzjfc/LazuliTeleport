@@ -24,14 +24,8 @@ final class TeleportationRequestContextInfo extends Info
         protected PositionInfo $requesteePosition,
         protected TimeInfo $requestSendTime,
         protected DurationInfo $teleportationWaitDuration,
-
-        protected bool $blocked
+        protected StringInfo $requestType,
     ) {
-    }
-
-    public function getBlocked() : bool
-    {
-        return $this->blocked;
     }
 
     public function toString() : string
@@ -83,6 +77,12 @@ final class TeleportationRequestContextInfo extends Info
             DurationInfo::class,
             "$pluginName.TeleportationRequest.TeleportationWaitDuration",
             fn(self $info) : DurationInfo => $info->teleportationWaitDuration
+        );
+        InfoAPI::provideInfo(
+            self::class,
+            StringInfo::class,
+            "$pluginName.TeleportationRequest.RequestType",
+            fn(self $info) : StringInfo => $info->requestType
         );
         InfoAPI::provideFallback(
             self::class,
