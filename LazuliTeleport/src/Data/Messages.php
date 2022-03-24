@@ -26,7 +26,6 @@ class Messages
     public ?MessageEntry $teleportationCancelledRequstee = null;
     public ?MessageEntry $requestorHasUnresolvedRequest = null;
     public ?MessageEntry $requesteeHasUnresolvedRequest = null;
-    public ?MessageEntry $cannotTeleportOfflinePlayer = null;
 
     public ?MessageEntry $requestSelf = null;
     public ?MessageEntry $internalServerError = null;
