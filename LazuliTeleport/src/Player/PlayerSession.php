@@ -691,9 +691,9 @@ class PlayerSession
                     $this->setForceModeWaitDuration((int)$newWaitDuration);
                 }
 
-                $newActionIndex = (int)$data[$actionSelector] ?? null;
+                $newActionIndex = $data[$actionSelector] ?? null;
                 if ($newActionIndex !== null) {
-                    $newAction = $actions[$newActionIndex] ?? $action;
+                    $newAction = $actions[(int)$newActionIndex] ?? $action;
                     $newAction->runWithSelectedTargets($this, ...$selections);
                     break;
                 }
