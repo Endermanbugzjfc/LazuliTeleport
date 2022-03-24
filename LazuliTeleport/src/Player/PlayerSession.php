@@ -520,7 +520,6 @@ class PlayerSession
             $info = $this->getInfo();
             $infoNamespace = "$pluginName.PlayerFinder";
             $names = LazuliTeleport::getInstance()->getAllPlayerNames();
-            $availableActions = null;
             $oldForceMode = $this->getForceMode();
             $oldWaitduration = $this->getForceModeWaitDuration();
             $config = LazuliTeleport::getInstance()->getConfigObject();
@@ -605,7 +604,7 @@ class PlayerSession
                 }
                 $canForceMode = yield from $this->hasForceModePermission();
 
-
+                $availableActions = null;
                 if ($selections !== []) {
                     $availableActions = [];
                     foreach ($actions as $actionInstance) {
