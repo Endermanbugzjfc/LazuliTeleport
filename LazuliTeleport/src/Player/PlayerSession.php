@@ -172,7 +172,7 @@ class PlayerSession
     /**
      * @return Generator<mixed, mixed, mixed, bool|null> Null = there is no teleportation request. True = accepted.
      */
-    public function awaitTeleportationRequestToBeResolve() : Generator
+    public function awaitTeleportationRequestToBeResolved() : Generator
     {
         return yield from $this->teleportationRequest?->receive()
             ?? [];
@@ -181,7 +181,7 @@ class PlayerSession
     /**
      * @throws TooManyTeleportationRequestException
      */
-    public function newTeleportationRequestToBeResolve() : void
+    public function newTeleportationRequestToBeResolved() : void
     {
         if ($this->teleportationRequest !== null) {
             throw new TooManyTeleportationRequestException("Try to create a new teleportation request when there is already one");
