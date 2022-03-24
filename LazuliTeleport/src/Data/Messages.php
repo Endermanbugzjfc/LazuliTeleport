@@ -84,6 +84,8 @@ class Messages
         $commandHint = "\n{Italic}{DarkGray}(/tpaccept or /tpareject)";
         $cancelButton = "{Red}Cancel Request (Press Escape)";
         $cancelled = MessageEntry::createChat("{Yellow}Teleportation cancelled.");
+        $failedToExecuteCommand = "{Bold}{Red}Failed To Execute Command";
+        $openPlayerFinderButton = "{DarkAqua}Open Player Finder";
 
         $self = new self();
         $self->tpaRequestReceive = MessageEntry::createForm(
@@ -161,7 +163,14 @@ class Messages
         $self->internalServerError = MessageEntry::createChat("{Red}Sorry, an internal server error had occurred! Please report this problem to an admin.");
         $self->noTeleportationRequest = MessageEntry::createActionbar("{Red}You have no teleportation request.");
         $self->cannotTeleportOfflinePlayer = MessageEntry::createChat("{Red}You do not have the permission to teleport offline player(s) {Requestee}.");
-        $self->playerNotFound = MessageEntry::createChat("{Red}No player has been found using keywords \"{Input}\".");
+        $playerNotFound = "{Red}No player has been found using keywords \"{Input}\".";
+        $self->playerNotFound = MessageEntry::createForm(
+            $failedToExecuteCommand,
+            $playerNotFound,
+            $playerNotFound,
+            null,
+            $openPlayerFinderButton
+        );
 
         $target = "{Aqua}{Target}";
         $block = "{Yellow}will not be able to send any tpa or tpahere requests";
