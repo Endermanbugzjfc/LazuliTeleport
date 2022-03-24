@@ -158,6 +158,9 @@ class PlayerSession
         return yield from $this->blockedPlayers->get();
     }
 
+    /**
+     * @return Generator<mixed, mixed, mixed, bool>
+     */
     public function isNameBlocked(
         string $name
     ) : Generator {
