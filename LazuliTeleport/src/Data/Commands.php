@@ -16,6 +16,7 @@ class Commands
     public CommandProfile $tpaccept;
     public CommandProfile $tpareject;
     public CommandProfile $tpaforce;
+    public CommandProfile $tpacancel;
 
     public CommandProfile $tpablock;
     #[KeyName("tpablock.list")]
@@ -38,6 +39,7 @@ class Commands
                 "tpaccept" => "Accept a teleportation request",
                 "tpareject" => "Reject a teleportation request",
                 "tpaforce" => "(Admin command) Automatically accept teleportation request you send",
+                "tpacancel" => "Cancel your last teleportation request",
 
                 "tpablock" => "Block another player from sending you teleportation request",
                 "list" => "List players blocked by you",
@@ -54,6 +56,11 @@ class Commands
                     "tpreject",
                     "tpadeny",
                     "tpdeny"
+                ],
+                "tpacancel", => [
+                    "tpcancel",
+                    "tpwithdraw",
+                    "tpawithdraw",
                 ],
                 default => []
             };
