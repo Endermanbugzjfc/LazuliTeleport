@@ -2,7 +2,7 @@
   "name": "endermanbugzjfc/lazuliteleport",
   "type": "project",
   "license": "MIT",
-  "require": {
+  "require-dev": {
     "pocketmine/pocketmine-mp": "^4.0",
     "endermanbugzjfc/configstruct": "^2.0.0-BETA2",
     "cortexpe/commando": "dev-PM4",

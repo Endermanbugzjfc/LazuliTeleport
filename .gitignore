@@ -1,0 +1,6 @@
+# Sublime Text user files
+*.sublime-project
+*.sublime-workspace
+
+# PHP
+vendor
