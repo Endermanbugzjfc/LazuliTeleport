@@ -5,7 +5,7 @@
   "require-dev": {
     "pocketmine/pocketmine-mp": "^4.0",
     "endermanbugzjfc/configstruct": "^2.0.0-BETA2",
-    "cortexpe/commando": "dev-PM4",
+    "cortexpe/commando": "dev-master",
     "sof3/await-generator": "^3.4",
     "sof3/infoapi": "^1.2",
     "vecnavium/formsui": "^1.1",
